@@ -3,6 +3,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Requested at runtime only when the user taps the voice-message button. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Required by Android WebView/Chromium to route microphone capture. -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Do not exclude devices without a microphone; the rest of the game works. -->
