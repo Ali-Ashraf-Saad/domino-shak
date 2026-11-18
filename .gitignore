@@ -1,0 +1,83 @@
+# Local machine configuration
+local.properties
+*.local
+*.local.properties
+
+# Signing credentials and private keys (never commit)
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.key
+*.pem
+key.properties
+upload-key.properties
+upload-keystore.jks
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.secret
+*.token
+.netrc
+.npmrc
+service-account*.json
+google-services.json
+GoogleService-Info.plist
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+coverage/
+*.class
+app.*.symbols
+app.*.map.json
+
+# Android / Gradle caches (keep gradle/wrapper/gradle-wrapper.jar)
+.gradle/
+.kotlin/
+.cxx/
+android/app/debug/
+android/app/profile/
+android/app/release/
+captures/
+
+# Node
+node_modules/
+
+# IDE and editors
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+.history/
+.atom/
+.swiftpm/
+
+# OS temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs, backups, and temporary files
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# Raw device/debug logs are not uploaded; summarized test reports are kept.
+domino_shak_app/test_evidence/*logcat.txt
+domino_shak_app/test_evidence/*cdp_events*.jsonl
+
+# The privacy-policy site is maintained in its own repository.
+privacy_site/.git/

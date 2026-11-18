@@ -1,0 +1,71 @@
+{
+  "environment": "two headless desktop Chrome peers (localhost:8081 and localhost:8082), same bundled app copy",
+  "terms_gate": {
+    "host_overlay": true,
+    "guest_overlay": true,
+    "both_in_game": true
+  },
+  "pids": {
+    "host_local": "p-mwm65dma-4fjejwq9",
+    "guest_local": "p-mwm68p7u-pdi7iyyp",
+    "distinct": true,
+    "host_sees_guest": true,
+    "guest_sees_host": true,
+    "host_seat_buttons": 1,
+    "guest_seat_buttons": 1
+  },
+  "seat_report_dialog": {
+    "opened": true,
+    "has_reasons": true
+  },
+  "chat_report_ui": {
+    "received": true,
+    "report_buttons": 1,
+    "block_buttons": 1,
+    "report_pid_is_guest": true
+  },
+  "report_dialog": {
+    "opened": true,
+    "reasons": true,
+    "outbox": [
+      {
+        "id": "r-mwm69wsq-v70k",
+        "ts": 1795009440842,
+        "room": "UGCX",
+        "reporter": "p-mwm65dma-4fjejwq9",
+        "type": "player",
+        "pid": "p-mwm68p7u-pdi7iyyp",
+        "name": "WebGuest",
+        "reason": "harass",
+        "snippet": "ugc-cross-hello"
+      }
+    ],
+    "toast": "اتسجّل البلاغ على جهازك"
+  },
+  "block_confirm": {
+    "hidden": false,
+    "text": "تحظر WebGuest؟ رسائله هتتخفى\n\nلأ\nأيوه، حظر",
+    "stored": [
+      "p-mwm68p7u-pdi7iyyp"
+    ],
+    "target_matches_guest": true,
+    "prior_messages_purged": true
+  },
+  "block_filter": {
+    "badge_before": {
+      "hidden": true,
+      "text": "٠"
+    },
+    "badge_after": {
+      "hidden": true,
+      "text": "٠"
+    },
+    "new_text_present": false,
+    "chat_count": 1
+  },
+  "gameplay_smoke": {
+    "guest_received_host_text": true,
+    "host_errors": [],
+    "guest_errors": []
+  }
+}

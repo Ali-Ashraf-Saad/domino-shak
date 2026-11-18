@@ -1,0 +1,50 @@
+{
+  "pid": "\"p-mwm5v8yy-bu83nh56\"",
+  "pid_stable": false,
+  "terms_gate_create": {
+    "screen": "home",
+    "overlay_on": true,
+    "has_terms": true,
+    "prohibited_listed": true,
+    "english_note": true,
+    "decline_stays_home": true,
+    "accept_without_check_blocked": true,
+    "accepted_reaches_lobby": true,
+    "terms_stored": "true"
+  },
+  "community_rules_home": {
+    "overlay_on": true,
+    "has_rules": true
+  },
+  "settings_links": {
+    "all_present": true
+  },
+  "blocked_ui": {
+    "shows_pid": true,
+    "has_unblock": true,
+    "after_unblock": []
+  },
+  "reports_ui": {
+    "shows_report": true,
+    "has_export": true,
+    "outbox_count": 1,
+    "copy_toast": "اتنسخ"
+  },
+  "privacy_page": {
+    "url": "http://localhost:8080/PRIVACY_POLICY.html",
+    "arabic_heading": true,
+    "english_heading": true,
+    "has_ugc_section": true,
+    "has_contact_placeholder": true,
+    "back_hook": true,
+    "back_url": "http://localhost:8080/index.html",
+    "back_to_index": true,
+    "home_link_works": true
+  },
+  "gameplay_smoke": {
+    "plays": 1,
+    "hand": 6,
+    "board": 1,
+    "exceptions": 0
+  }
+}

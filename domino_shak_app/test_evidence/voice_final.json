@@ -1,0 +1,26 @@
+{
+  "phone_to_emulator": {
+    "record_info": "● بيسجّل 0:03",
+    "emu_voice_count_before": 5,
+    "emu_received": 5,
+    "playback": {
+      "before": 5,
+      "clicked": true,
+      "playing_class_active": true
+    }
+  },
+  "emulator_to_phone": {
+    "record_info": "● بيسجّل 0:03",
+    "phone_voice_count_before": 1,
+    "phone_received": 1,
+    "playback": {
+      "before": 2,
+      "clicked": true,
+      "playing_class_active": false
+    }
+  },
+  "hardware_mic": {
+    "phone_original_getUserMedia": "OK",
+    "emulator_original_getUserMedia": "OK"
+  }
+}

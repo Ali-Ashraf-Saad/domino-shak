@@ -1,0 +1,81 @@
+{
+  "test": "Voice messages - real device / emulator",
+  "date": "2026-11-18",
+  "devices": {
+    "phone": "RZ8T30GA9ZX (SM_A525F, Android 14, API 34)",
+    "emulator": "emulator-5554 (sdk_gphone64_x86_64, Android 14, API 34, -allow-host-audio)"
+  },
+  "origin": "http://localhost:8080",
+  "real_microphone": {
+    "status": "FAILED - hardware/audio-source limitation, not an app logic failure",
+    "phone": {
+      "android_permission_granted": true,
+      "webview_audioCapture_permission": "granted via CDP Browser.grantPermissions",
+      "getUserMedia_result": "NotReadableError: Could not start audio source",
+      "audio_flinger": "Input device: 0 (AUDIO_DEVICE_NONE)"
+    },
+    "emulator": {
+      "android_permission_granted": true,
+      "webview_audioCapture_permission": "granted via CDP Browser.grantPermissions",
+      "getUserMedia_result": "NotReadableError: Could not start audio source",
+      "audio_flinger": "Input device: 0 (AUDIO_DEVICE_NONE); -allow-host-audio did not expose an input device",
+      "host_microphone": "arecord -D hw:0,0 produced 507452 bytes in 3 s, so the host itself has a working capture device"
+    },
+    "evidence": [
+      "voice_phone_01_permission_dialog.png",
+      "voice_phone_denied_handling.png",
+      "voice_test_salvage.json"
+    ]
+  },
+  "permission_flow": {
+    "tap_mic_button": "Native Android microphone permission dialog appeared on the phone (screenshot captured)",
+    "after_grant": "window.__dsMicReady became true; the app attempted getUserMedia",
+    "denied_state": {
+      "android_permission": "granted=false, flags=[USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|ONE_TIME]",
+      "app_behavior": "No recording started; game screen remained usable; bridge shows a denial toast",
+      "evidence": "voice_phone_denied_handling.png, voice_test_salvage.json"
+    }
+  },
+  "synthetic_audio_pipeline": {
+    "method": "DevTools-only Runtime.evaluate patch of navigator.mediaDevices.getUserMedia to return a fresh WebAudio oscillator MediaStream per call. No app or website source was modified. This verifies message plumbing only, NOT microphone capture or audible content.",
+    "note": "A shared MediaStream was initially reused and its track ended after the first recording; the patch was corrected to create a new stream for every getUserMedia() call.",
+    "phone_to_emulator": {
+      "result": "PASS (synthetic)",
+      "recorded_label": "● بيسجّل 0:05",
+      "received_duration_labels": ["٧ ث", "٥ ث"],
+      "delivery": "Receiver unread badge incremented; message appeared in chat after opening the panel",
+      "playback": "PASS - .vplay click activated the playing class on the emulator",
+      "evidence": ["voice_phone_to_emulator_received.png", "voice_phone_to_emulator_playing.png", "voice_final_p2e_emu_playing.png"]
+    },
+    "emulator_to_phone": {
+      "result": "PASS (synthetic)",
+      "recorded_label": "● بيسجّل 0:04",
+      "received_duration_labels": ["٦ ث", "٤ ث"],
+      "delivery": "Receiver unread badge incremented; message appeared in chat after opening the panel",
+      "playback": "PASS - .vplay click activated the playing class on the phone",
+      "evidence": ["voice_emulator_to_phone_received.png", "voice_emulator_to_phone_playing.png", "voice_final_e2p_phone_playing.png", "voice_final_phone_playback.png"]
+    },
+    "max_duration": {
+      "result": "PASS (synthetic)",
+      "expected": "Auto-send at 30 seconds",
+      "observed": "Recording row auto-closed; received voice message labelled ٣٠ ث on both devices",
+      "evidence": ["voice_phone_max_auto_sent.png", "voice_final_max_recording.png"]
+    },
+    "repeated_recordings": {
+      "result": "PASS (synthetic)",
+      "observed": "Two consecutive short recordings (about 1.2 s and 1.5 s) both sent and received; failed when reusing a stopped stream, fixed by a fresh stream per call",
+      "duration_labels": ["٣ ث", "٣ ث"],
+      "evidence": ["voice_phone_recording.png", "voice_emulator_06_messages.png"]
+    },
+    "playback_controls": {
+      "result": "PASS",
+      "note": "Initial helper used JavaScript array index -1 and always returned false; after fixing the helper, .vplay click activated the playing class on both devices. This was a test-harness bug, not an app bug."
+    }
+  },
+  "limitations": [
+    "No real microphone sample was captured on either device; audio-source errors are environmental (no input device exposed).",
+    "Audibility of playback content was not verified; only the playback UI state was verified.",
+    "A host migration occurred during one 30-second run; repeated-record delivery in that specific run was inconclusive, but repeated recordings passed in the earlier run.",
+    "Synthetic audio must not be reported as real voice verification."
+  ]
+}

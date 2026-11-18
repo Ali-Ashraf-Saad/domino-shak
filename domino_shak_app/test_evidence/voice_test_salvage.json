@@ -1,0 +1,183 @@
+{
+  "room": {
+    "phone": {
+      "screen": "game",
+      "room": "VOICE1",
+      "lob_count": "",
+      "status": "دورك — اختار رقم وانزل",
+      "mine": {
+        "line": "V\nمعاك ١٤ قطعة",
+        "name": "معاك ١٤ قطعة"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "VoiceHost",
+          "count": "١٤ قطعة",
+          "status": "",
+          "turn": false,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "27",
+        "26",
+        "17",
+        "25",
+        "16",
+        "11",
+        "15",
+        "10",
+        "4",
+        "14",
+        "9",
+        "8",
+        "7",
+        "1"
+      ],
+      "board": [],
+      "history": [
+        "VoiceGuest يبدأ — معاه الدبل ستة"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "VoiceGuest",
+        "toks": [
+          "dmnshk-tok-VOICE1",
+          "dmnshk-tok-EMUHOST",
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "emulator": {
+      "screen": "game",
+      "room": "VOICE1",
+      "lob_count": "٢ من ٢",
+      "status": "دور VoiceGuest",
+      "mine": {
+        "line": "V\n👑\nمعاك ١٤ قطعة",
+        "name": "معاك ١٤ قطعة"
+      },
+      "players": [
+        {
+          "seat": "1",
+          "name": "VoiceGuest",
+          "count": "١٤ قطعة",
+          "status": "دوره",
+          "turn": true,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "24",
+        "21",
+        "12",
+        "6",
+        "23",
+        "20",
+        "5",
+        "22",
+        "19",
+        "18",
+        "3",
+        "13",
+        "2",
+        "0"
+      ],
+      "board": [],
+      "history": [
+        "VoiceGuest يبدأ — معاه الدبل ستة"
+      ],
+      "chat": [
+        "V\nVoiceGuest\n٠٣:٠٤ م\n▶\n٣ ث",
+        "VoiceGuest فصل من الطاولة",
+        "VoiceGuest رجع للطاولة"
+      ],
+      "badge": {
+        "hidden": true,
+        "text": "٠"
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "VoiceHost",
+        "toks": [
+          "dmnshk-tok-EMUHOST",
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    }
+  },
+  "voice_messages": {
+    "phone": [],
+    "emulator": [
+      {
+        "cls": "cm",
+        "txt": "V\nVoiceGuest\n٠٣:٠٣ م\n▶\n٧ ث",
+        "voice": true,
+        "dur": "٧ ث"
+      },
+      {
+        "cls": "cm me",
+        "txt": "V\nإنت\n٠٣:٠٤ م\n▶\n٦ ث",
+        "voice": true,
+        "dur": "٦ ث"
+      },
+      {
+        "cls": "cm",
+        "txt": "V\nVoiceGuest\n٠٣:٠٤ م\n▶\n٣٠ ث",
+        "voice": true,
+        "dur": "٣٠ ث"
+      },
+      {
+        "cls": "cm",
+        "txt": "V\nVoiceGuest\n٠٣:٠٤ م\n▶\n٣ ث",
+        "voice": true,
+        "dur": "٣ ث"
+      },
+      {
+        "cls": "cm new",
+        "txt": "V\nVoiceGuest\n٠٣:٠٤ م\n▶\n٣ ث",
+        "voice": true,
+        "dur": "٣ ث"
+      }
+    ]
+  },
+  "playback": {
+    "phone": {
+      "clicked": false,
+      "playing_class_active": false
+    },
+    "emulator": {
+      "clicked": false,
+      "playing_class_active": false
+    }
+  },
+  "denied_handling": {
+    "permission_line": "android.permission.RECORD_AUDIO: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|ONE_TIME]",
+    "toast": "VoiceGuest رجع للطاولة",
+    "screen": "game",
+    "mic_ready": false,
+    "recording_row_hidden": true
+  }
+}

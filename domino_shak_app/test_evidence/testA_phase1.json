@@ -1,0 +1,809 @@
+{
+  "host_lobby": {
+    "screen": "lobby",
+    "url": "http://localhost:8080/index.html",
+    "roomCode": "PHONE1",
+    "roomTag": "",
+    "lobCount": "١ من ٢",
+    "lobHint": "ابعت كود الطاولة لصحابك — اللعبة هتبدأ أول ما الطاولة تكمل.",
+    "status": "",
+    "last": "",
+    "claim": "",
+    "mine": {
+      "line": "",
+      "name": ""
+    },
+    "seats": [],
+    "hand": [],
+    "board": [],
+    "hist": [],
+    "chat": [],
+    "badge": {
+      "hidden": true,
+      "text": ""
+    },
+    "chatOpen": false,
+    "overlay": {
+      "on": false,
+      "text": ""
+    },
+    "ask": {
+      "hidden": true,
+      "text": "لأأيوه"
+    },
+    "net": {
+      "hidden": true,
+      "text": ""
+    },
+    "actions": [],
+    "toast": "",
+    "storage": {
+      "name": "PhoneHost",
+      "toks": []
+    }
+  },
+  "guest_join": {
+    "screen": "lobby",
+    "url": "http://localhost:8080/index.html",
+    "roomCode": "PHONE1",
+    "roomTag": "",
+    "lobCount": "",
+    "lobHint": "بيتوصّل بالطاولة…",
+    "status": "",
+    "last": "",
+    "claim": "",
+    "mine": {
+      "line": "",
+      "name": ""
+    },
+    "seats": [],
+    "hand": [],
+    "board": [],
+    "hist": [],
+    "chat": [],
+    "badge": {
+      "hidden": true,
+      "text": ""
+    },
+    "chatOpen": false,
+    "overlay": {
+      "on": false,
+      "text": ""
+    },
+    "ask": {
+      "hidden": true,
+      "text": "لأأيوه"
+    },
+    "net": {
+      "hidden": true,
+      "text": ""
+    },
+    "actions": [],
+    "toast": "",
+    "storage": {
+      "name": "EmulGuest",
+      "toks": [
+        "dmnshk-tok-PHONE1"
+      ]
+    }
+  },
+  "start_phone": {
+    "screen": "game",
+    "room": "PHONE1",
+    "lob_count": "٢ من ٢",
+    "status": "دور EmulGuest",
+    "mine": {
+      "line": "P\n👑\nمعاك ١٤ قطعة",
+      "name": "معاك ١٤ قطعة"
+    },
+    "players": [
+      {
+        "seat": "1",
+        "name": "EmulGuest",
+        "count": "١٤ قطعة",
+        "status": "دوره",
+        "turn": true,
+        "off": false,
+        "finished": false
+      }
+    ],
+    "hand_ids": [
+      "26",
+      "24",
+      "21",
+      "12",
+      "25",
+      "22",
+      "19",
+      "15",
+      "10",
+      "18",
+      "9",
+      "3",
+      "2",
+      "7"
+    ],
+    "board": [],
+    "history": [
+      "EmulGuest يبدأ — معاه الدبل ستة"
+    ],
+    "chat": [],
+    "badge": {
+      "hidden": true,
+      "text": ""
+    },
+    "overlay": {
+      "on": false,
+      "text": ""
+    },
+    "net": {
+      "hidden": true,
+      "text": ""
+    },
+    "storage": {
+      "name": "PhoneHost",
+      "toks": []
+    }
+  },
+  "start_emu": {
+    "screen": "game",
+    "room": "PHONE1",
+    "lob_count": "٢ من ٢",
+    "status": "دورك — اختار رقم وانزل",
+    "mine": {
+      "line": "E\nمعاك ١٤ قطعة",
+      "name": "معاك ١٤ قطعة"
+    },
+    "players": [
+      {
+        "seat": "0",
+        "name": "PhoneHost",
+        "count": "١٤ قطعة",
+        "status": "",
+        "turn": false,
+        "off": false,
+        "finished": false
+      }
+    ],
+    "hand_ids": [
+      "27",
+      "17",
+      "6",
+      "23",
+      "20",
+      "16",
+      "11",
+      "5",
+      "4",
+      "14",
+      "13",
+      "8",
+      "1",
+      "0"
+    ],
+    "board": [],
+    "history": [
+      "EmulGuest يبدأ — معاه الدبل ستة"
+    ],
+    "chat": [],
+    "badge": {
+      "hidden": true,
+      "text": ""
+    },
+    "overlay": {
+      "on": false,
+      "text": ""
+    },
+    "net": {
+      "hidden": true,
+      "text": ""
+    },
+    "storage": {
+      "name": "EmulGuest",
+      "toks": [
+        "dmnshk-tok-PHONE1"
+      ]
+    }
+  },
+  "plays": [
+    {
+      "tile": {
+        "id": "27",
+        "label": "قطعة 6 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "26",
+        "label": "قطعة 5 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "23",
+        "label": "قطعة 4 و 5",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": true,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "24",
+        "label": "قطعة 4 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "17",
+        "label": "قطعة 2 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    }
+  ],
+  "after_plays_phone": {
+    "screen": "game",
+    "room": "PHONE1",
+    "lob_count": "٢ من ٢",
+    "status": "دورك — انزل على ستات أو شك أو تخطّى",
+    "mine": {
+      "line": "P\n👑\nمعاك ١٢ قطعة",
+      "name": "معاك ١٢ قطعة"
+    },
+    "players": [
+      {
+        "seat": "1",
+        "name": "EmulGuest",
+        "count": "١١ قطعة",
+        "status": "",
+        "turn": false,
+        "off": false,
+        "finished": false
+      }
+    ],
+    "hand_ids": [
+      "21",
+      "12",
+      "25",
+      "22",
+      "19",
+      "15",
+      "10",
+      "18",
+      "9",
+      "3",
+      "2",
+      "7"
+    ],
+    "board": [
+      {
+        "name": "EmulGuest",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "PhoneHost",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "EmulGuest",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "PhoneHost",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "EmulGuest",
+        "tiles": 1,
+        "last": true
+      }
+    ],
+    "history": [
+      "EmulGuest نزّل قطعة وادّعى ستات"
+    ],
+    "chat": [],
+    "badge": {
+      "hidden": true,
+      "text": ""
+    },
+    "overlay": {
+      "on": false,
+      "text": ""
+    },
+    "net": {
+      "hidden": true,
+      "text": ""
+    },
+    "storage": {
+      "name": "PhoneHost",
+      "toks": []
+    }
+  },
+  "after_plays_emu": {
+    "screen": "game",
+    "room": "PHONE1",
+    "lob_count": "٢ من ٢",
+    "status": "دور PhoneHost",
+    "mine": {
+      "line": "E\nمعاك ١١ قطعة",
+      "name": "معاك ١١ قطعة"
+    },
+    "players": [
+      {
+        "seat": "0",
+        "name": "PhoneHost",
+        "count": "١٢ قطعة",
+        "status": "دوره",
+        "turn": true,
+        "off": false,
+        "finished": false
+      }
+    ],
+    "hand_ids": [
+      "6",
+      "20",
+      "16",
+      "11",
+      "5",
+      "4",
+      "14",
+      "13",
+      "8",
+      "1",
+      "0"
+    ],
+    "board": [
+      {
+        "name": "EmulGuest",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "PhoneHost",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "EmulGuest",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "PhoneHost",
+        "tiles": 1,
+        "last": false
+      },
+      {
+        "name": "EmulGuest",
+        "tiles": 1,
+        "last": true
+      }
+    ],
+    "history": [
+      "EmulGuest نزّل قطعة وادّعى ستات"
+    ],
+    "chat": [],
+    "badge": {
+      "hidden": true,
+      "text": ""
+    },
+    "overlay": {
+      "on": false,
+      "text": ""
+    },
+    "net": {
+      "hidden": true,
+      "text": ""
+    },
+    "storage": {
+      "name": "EmulGuest",
+      "toks": [
+        "dmnshk-tok-PHONE1"
+      ]
+    }
+  },
+  "chat_guest_to_host_badge": {
+    "hidden": false,
+    "text": "١"
+  },
+  "chat_guest_to_host": {
+    "guest": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "٢ من ٢",
+      "status": "دور PhoneHost",
+      "mine": {
+        "line": "E\nمعاك ١١ قطعة",
+        "name": "معاك ١١ قطعة"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "PhoneHost",
+          "count": "١٢ قطعة",
+          "status": "دوره",
+          "turn": true,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "6",
+        "20",
+        "16",
+        "11",
+        "5",
+        "4",
+        "14",
+        "13",
+        "8",
+        "1",
+        "0"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [
+        "E\nإنت\n٠٢:٤٧ م\nmessagesync-1"
+      ],
+      "badge": {
+        "hidden": true,
+        "text": "٠"
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "EmulGuest",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "host": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "٢ من ٢",
+      "status": "دورك — انزل على ستات أو شك أو تخطّى",
+      "mine": {
+        "line": "P\n👑\nمعاك ١٢ قطعة",
+        "name": "معاك ١٢ قطعة"
+      },
+      "players": [
+        {
+          "seat": "1",
+          "name": "EmulGuest",
+          "count": "١١ قطعة",
+          "status": "",
+          "turn": false,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "21",
+        "12",
+        "25",
+        "22",
+        "19",
+        "15",
+        "10",
+        "18",
+        "9",
+        "3",
+        "2",
+        "7"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [
+        "E\nEmulGuest\n٠٢:٤٧ م\nmessagesync-1"
+      ],
+      "badge": {
+        "hidden": true,
+        "text": "٠"
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "PhoneHost",
+        "toks": []
+      }
+    }
+  },
+  "chat_host_to_guest": {
+    "phone": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "٢ من ٢",
+      "status": "دورك — انزل على ستات أو شك أو تخطّى",
+      "mine": {
+        "line": "P\n👑\nمعاك ١٢ قطعة",
+        "name": "معاك ١٢ قطعة"
+      },
+      "players": [
+        {
+          "seat": "1",
+          "name": "EmulGuest",
+          "count": "١١ قطعة",
+          "status": "",
+          "turn": false,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "21",
+        "12",
+        "25",
+        "22",
+        "19",
+        "15",
+        "10",
+        "18",
+        "9",
+        "3",
+        "2",
+        "7"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [
+        "E\nEmulGuest\n٠٢:٤٧ م\nmessagesync-1",
+        "P\nإنت\n٠٢:٤٧ م\nلعبة حلوة",
+        "P\nإنت\n٠٢:٤٧ م\n🔥"
+      ],
+      "badge": {
+        "hidden": true,
+        "text": "٠"
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "PhoneHost",
+        "toks": []
+      }
+    },
+    "emulator": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "٢ من ٢",
+      "status": "دور PhoneHost",
+      "mine": {
+        "line": "E\nمعاك ١١ قطعة",
+        "name": "معاك ١١ قطعة"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "PhoneHost",
+          "count": "١٢ قطعة",
+          "status": "دوره",
+          "turn": true,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "6",
+        "20",
+        "16",
+        "11",
+        "5",
+        "4",
+        "14",
+        "13",
+        "8",
+        "1",
+        "0"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [
+        "E\nإنت\n٠٢:٤٧ م\nmessagesync-1",
+        "P\nPhoneHost\n٠٢:٤٧ م\nلعبة حلوة",
+        "P\nPhoneHost\n٠٢:٤٧ م\n🔥"
+      ],
+      "badge": {
+        "hidden": true,
+        "text": "٠"
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "EmulGuest",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    }
+  },
+  "hand_before_drop": {
+    "phone": [
+      "21",
+      "12",
+      "25",
+      "22",
+      "19",
+      "15",
+      "10",
+      "18",
+      "9",
+      "3",
+      "2",
+      "7"
+    ],
+    "emulator": [
+      "6",
+      "20",
+      "16",
+      "11",
+      "5",
+      "4",
+      "14",
+      "13",
+      "8",
+      "1",
+      "0"
+    ]
+  }
+}

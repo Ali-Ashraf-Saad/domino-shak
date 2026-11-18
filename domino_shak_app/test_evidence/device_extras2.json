@@ -1,0 +1,13 @@
+{
+  "clipboard_paste": {
+    "pasted_value": "",
+    "expected": "CLIP1"
+  },
+  "back_from_game_error": "phone wait timed out: document.querySelector('.screen.on')?.id==='game' — last=False",
+  "android_versions_available": {
+    "phone": "14",
+    "emulator": "14",
+    "installed_avds": "Small_Phone",
+    "android_15_16_tested": false
+  }
+}

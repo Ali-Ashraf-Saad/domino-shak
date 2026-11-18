@@ -1,0 +1,73 @@
+{
+  "instrumentation": "ok",
+  "settings_open_clicked": true,
+  "settings_overlay": {
+    "on": true,
+    "text": "الإعدادات\nتأكيد قبل الشك\nتأكيد قبل التخطّي\nالتشغيل التلقائي للرسائل الصوتية\nالأصوات\nمستوى الصوت\nالاهتزاز\nإبقاء الشاشة شغالة أثناء اللعب\nتقليل الحركة\nاخرج من الطاولة\nتمام"
+  },
+  "settings_interactions": {
+    "vibrate_calls": [
+      40
+    ],
+    "oscillator_calls": 2,
+    "wake_lock_requests": [
+      "screen"
+    ],
+    "stored_settings": "{\"confirmDoubt\":true,\"confirmPass\":true,\"sound\":true,\"vol\":0.7,\"calm\":false,\"autoVoice\":true,\"haptic\":true,\"wake\":true}",
+    "oscillator_calls_after_tile_tap": 3
+  },
+  "settings_persistence": {
+    "stored": "{\"confirmDoubt\":true,\"confirmPass\":true,\"sound\":true,\"vol\":0.7,\"calm\":false,\"autoVoice\":true,\"haptic\":true,\"wake\":true}",
+    "screen": "home"
+  },
+  "keyboard": {
+    "name_field_value": "VoiceGuest2Key",
+    "screenshot": "extra_phone_03_keyboard.png"
+  },
+  "clipboard_permission": {
+    "id": 1,
+    "result": {}
+  },
+  "clipboard": {
+    "readback": "NotAllowedError: Failed to execute 'readText' on 'Clipboard': Read permission denied.",
+    "toast": ""
+  },
+  "share_target": {
+    "chooser_visible": true,
+    "ui_has_whatsapp": true,
+    "app_not_crashed": true
+  },
+  "back_button": {
+    "before": "lobby",
+    "after": "home",
+    "overlay": {
+      "on": false,
+      "text": ""
+    }
+  },
+  "background_resume": {
+    "screen_after_resume": "home",
+    "pid": "28651"
+  },
+  "small_screen": {
+    "720x1280": {
+      "w": 360,
+      "h": 592,
+      "sw": 360,
+      "sh": 592,
+      "overflowX": false,
+      "overflowY": false,
+      "screen": "game"
+    },
+    "540x960": {
+      "w": 270,
+      "h": 432,
+      "sw": 270,
+      "sh": 432,
+      "overflowX": false,
+      "overflowY": false,
+      "screen": "game"
+    },
+    "restored": "Physical size: 720x1280"
+  }
+}

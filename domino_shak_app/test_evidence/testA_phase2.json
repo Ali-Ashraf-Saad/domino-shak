@@ -1,0 +1,1010 @@
+{
+  "migrated_before_return": {
+    "emulator": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "دور PhoneHost — فاصل، هيتلعب أوتوماتيك",
+      "mine": {
+        "line": "E\n👑\nمعاك ١١ قطعة",
+        "name": "معاك ١١ قطعة"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "PhoneHost",
+          "count": "١٢ قطعة",
+          "status": "فاصل",
+          "turn": true,
+          "off": true,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "6",
+        "20",
+        "16",
+        "11",
+        "5",
+        "4",
+        "14",
+        "13",
+        "8",
+        "1",
+        "0"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": "بتاخد ملكية الطاولة…"
+      },
+      "storage": {
+        "name": "EmulGuest",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "crown": true
+  },
+  "after_host_return": {
+    "phone": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "دورك — انزل على ستات أو شك أو تخطّى",
+      "mine": {
+        "line": "P\nمعاك ١٢ قطعة",
+        "name": "معاك ١٢ قطعة"
+      },
+      "players": [
+        {
+          "seat": "1",
+          "name": "EmulGuest",
+          "count": "١١ قطعة",
+          "status": "",
+          "turn": false,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "21",
+        "12",
+        "25",
+        "22",
+        "19",
+        "15",
+        "10",
+        "18",
+        "9",
+        "3",
+        "2",
+        "7"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "PhoneHost",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "emulator": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "دور PhoneHost",
+      "mine": {
+        "line": "E\n👑\nمعاك ١١ قطعة",
+        "name": "معاك ١١ قطعة"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "PhoneHost",
+          "count": "١٢ قطعة",
+          "status": "دوره",
+          "turn": true,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "6",
+        "20",
+        "16",
+        "11",
+        "5",
+        "4",
+        "14",
+        "13",
+        "8",
+        "1",
+        "0"
+      ],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "EmulGuest نزّل قطعة وادّعى ستات"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": "بتاخد ملكية الطاولة…"
+      },
+      "storage": {
+        "name": "EmulGuest",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "phone_crown": false,
+    "emulator_crown": true
+  },
+  "completion_plays": [
+    {
+      "tile": {
+        "id": "21",
+        "label": "قطعة 3 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "6",
+        "label": "قطعة 0 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "12",
+        "label": "قطعة 1 و 6",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "20",
+        "label": "قطعة 3 و 5",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "25",
+        "label": "قطعة 5 و 5",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "16",
+        "label": "قطعة 2 و 5",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "22",
+        "label": "قطعة 4 و 4",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "11",
+        "label": "قطعة 1 و 5",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "19",
+        "label": "قطعة 3 و 4",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "5",
+        "label": "قطعة 0 و 5",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "15",
+        "label": "قطعة 2 و 4",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "4",
+        "label": "قطعة 0 و 4",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "10",
+        "label": "قطعة 1 و 4",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "14",
+        "label": "قطعة 2 و 3",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "18",
+        "label": "قطعة 3 و 3",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "13",
+        "label": "قطعة 2 و 2",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "9",
+        "label": "قطعة 1 و 3",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "8",
+        "label": "قطعة 1 و 2",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "3",
+        "label": "قطعة 0 و 3",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "1",
+        "label": "قطعة 0 و 1",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "2",
+        "label": "قطعة 0 و 2",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    },
+    {
+      "tile": {
+        "id": "0",
+        "label": "قطعة 0 و 0",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "emulator"
+    },
+    {
+      "tile": {
+        "id": "7",
+        "label": "قطعة 1 و 1",
+        "label2": "",
+        "sel": false
+      },
+      "claim": 6,
+      "lie": false,
+      "by": "phone"
+    }
+  ],
+  "game_over": {
+    "phone": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "اللعبة خلصت",
+      "mine": {
+        "line": "P\nقطعك خلصت\nالمركز التاني",
+        "name": "قطعك خلصت"
+      },
+      "players": [
+        {
+          "seat": "1",
+          "name": "EmulGuest",
+          "count": "—",
+          "status": "المركز الأول",
+          "turn": false,
+          "off": false,
+          "finished": true
+        }
+      ],
+      "hand_ids": [],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "PhoneHost خلّص — المركز التاني"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": true,
+        "text": "اللعبة خلصت\n🥇\nالأول\nE\n👑\nEmulGuest\n🥈\nالتاني\nP\nPhoneHost (إنت)\nلعبة تانية؟\nP\nPhoneHost (إنت)\n… مستني\nE\n👑\nEmulGuest\nصاحب الطاولة\nأنا مستعد\nالكدب والشك\n\tكذب وعدّى\tقال صدق\tاتقفش\tقفش كدّاب\tمرات الشك\n\nP\nPhoneHost (إنت)\n\t١٠\t٤\t٠\t٠\t٠\n\nE\nEmulGuest\n\t١١\t٣\t٠\t٠\t٠\n«كذب وعدّى»: كدب ومحدش قفشه · «قفش كدّاب»: شكّ صح\nالجلسة\nEmulGuest كسب\nمرة واحدة\nدردشة\nخروج"
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "PhoneHost",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "emulator": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "اللعبة خلصت",
+      "mine": {
+        "line": "E\n👑\nقطعك خلصت\nالمركز الأول",
+        "name": "قطعك خلصت"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "PhoneHost",
+          "count": "—",
+          "status": "المركز التاني",
+          "turn": false,
+          "off": false,
+          "finished": true
+        }
+      ],
+      "hand_ids": [],
+      "board": [
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "EmulGuest",
+          "tiles": 1,
+          "last": false
+        },
+        {
+          "name": "PhoneHost",
+          "tiles": 1,
+          "last": true
+        }
+      ],
+      "history": [
+        "PhoneHost خلّص — المركز التاني"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": true,
+        "text": "اللعبة خلصت\n🥇\nالأول\nE\n👑\nEmulGuest (إنت)\n🥈\nالتاني\nP\nPhoneHost\nلعبة تانية؟\nP\nPhoneHost\n… مستني\nE\n👑\nEmulGuest (إنت)\nصاحب الطاولة\nمستنيين اللاعبين (٠/١)\nالكدب والشك\n\tكذب وعدّى\tقال صدق\tاتقفش\tقفش كدّاب\tمرات الشك\n\nP\nPhoneHost\n\t١٠\t٤\t٠\t٠\t٠\n\nE\nEmulGuest (إنت)\n\t١١\t٣\t٠\t٠\t٠\n«كذب وعدّى»: كدب ومحدش قفشه · «قفش كدّاب»: شكّ صح\nالجلسة\nEmulGuest كسب\nمرة واحدة\nدردشة\nخروج"
+      },
+      "net": {
+        "hidden": true,
+        "text": "بتاخد ملكية الطاولة…"
+      },
+      "storage": {
+        "name": "EmulGuest",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    }
+  },
+  "rematch": {
+    "phone": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "دورك — اختار رقم وانزل",
+      "mine": {
+        "line": "P\nمعاك ١٤ قطعة",
+        "name": "معاك ١٤ قطعة"
+      },
+      "players": [
+        {
+          "seat": "1",
+          "name": "EmulGuest",
+          "count": "١٤ قطعة",
+          "status": "",
+          "turn": false,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "27",
+        "26",
+        "24",
+        "21",
+        "17",
+        "12",
+        "6",
+        "20",
+        "16",
+        "11",
+        "5",
+        "10",
+        "7",
+        "0"
+      ],
+      "board": [],
+      "history": [
+        "PhoneHost يبدأ — معاه الدبل ستة"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": ""
+      },
+      "storage": {
+        "name": "PhoneHost",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    },
+    "emulator": {
+      "screen": "game",
+      "room": "PHONE1",
+      "lob_count": "",
+      "status": "دور PhoneHost",
+      "mine": {
+        "line": "E\n👑\nمعاك ١٤ قطعة",
+        "name": "معاك ١٤ قطعة"
+      },
+      "players": [
+        {
+          "seat": "0",
+          "name": "PhoneHost",
+          "count": "١٤ قطعة",
+          "status": "دوره",
+          "turn": true,
+          "off": false,
+          "finished": false
+        }
+      ],
+      "hand_ids": [
+        "25",
+        "23",
+        "22",
+        "19",
+        "15",
+        "4",
+        "18",
+        "14",
+        "9",
+        "3",
+        "13",
+        "8",
+        "2",
+        "1"
+      ],
+      "board": [],
+      "history": [
+        "PhoneHost يبدأ — معاه الدبل ستة"
+      ],
+      "chat": [],
+      "badge": {
+        "hidden": true,
+        "text": ""
+      },
+      "overlay": {
+        "on": false,
+        "text": ""
+      },
+      "net": {
+        "hidden": true,
+        "text": "بتاخد ملكية الطاولة…"
+      },
+      "storage": {
+        "name": "EmulGuest",
+        "toks": [
+          "dmnshk-tok-PHONE1"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "solo_game_start": {
+    "screen": "game",
+    "hand": 7,
+    "players": [
+      "🤖 سمير",
+      "🤖 هدى",
+      "🤖 عمر"
+    ]
+  },
+  "back_from_game": {
+    "after_screen": "game",
+    "overlay": {
+      "on": false,
+      "text": ""
+    }
+  },
+  "background_resume_game": {
+    "after_screen": "game",
+    "hand_before": 7,
+    "hand_after": 7,
+    "players_after": [
+      "🤖 سمير",
+      "🤖 هدى",
+      "🤖 عمر"
+    ]
+  }
+}
