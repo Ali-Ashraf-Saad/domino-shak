@@ -31,7 +31,9 @@ The feature under test is the 30-second voice message in the bundled web game (`
 - `startRec()` immediately shows `بيجهّز الميكروفون…` for visual feedback and guards against a second tap while the mic is busy.
 - If `navigator.mediaDevices` or `MediaRecorder` is missing, the game shows a browser-unsupported message and does not open the microphone.
 - Permission state is checked before requesting; distinct Arabic error messages exist for `NotAllowedError`/`PermissionDeniedError`, `NotFoundError`/`DevicesNotFoundError`, `NotReadableError`/`AbortError`/`TrackStartError`, and `OverconstrainedError`.
-- Mime preference order: `audio/webm;codecs=opus`, then `audio/webm`, then `audio/mp4`; target bit rate about 24 kbit/s when accepted.
+- Mime preference order: `audio/webm;codecs=opus`, then `audio/webm`, then `audio/mp4`; target bit rate 64 kbit/s for Opus/WebM and 96 kbit/s for MP4/AAC (AAC needs more bits for the same speech clarity; 96 kbit/s for 30 s stays under the 450 KB cap).
+- The recorder uses one continuous `MediaRecorder.start()` call rather than 250 ms timeslices, so the final blob is produced by the encoder in one piece. This avoids concatenating fragments, which clipped the first/last moments on Android WebView's MP4 encoder.
+- The `[DSVOICE]` log now includes the selected mime/bitrate and the final blob size (`mediarecorder_init:*`, `blob:*`, `voice_ready`) so device-specific quality reports can be diagnosed without recording audio content.
 - A live level meter (`#recLevel`, driven by an `AnalyserNode`) shows input activity while recording.
 - Timer stops recording at 30 seconds; a message shorter than about 0.7 seconds is rejected; a blob larger than 450,000 bytes is rejected.
 - `FileReader` has an error handler; `onstop` releases the mic and a 1-second fallback release runs if `onstop` never fires.

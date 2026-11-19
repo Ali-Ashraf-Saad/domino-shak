@@ -44,6 +44,7 @@ Tagged release of the modernized Domino Shak experience.
 - Plain-text mode labels and bot names (no globe, robot, or signal emoji).
 - Wood-striped background painted on a fixed viewport layer, so it has no lower seam or solid band at any zoom level.
 - After a challenge, the table clears and the challenge winner takes the next turn: a correct challenge passes the turn to the challenger, while a false challenge returns it to the challenged player.
+- Voice capture uses one continuous recording at a higher bitrate so Android WebView messages no longer have clipped starts/ends or muffled speech.
 
 ### Verification
 - APK SHA-256: \`$APK_SHA\`

@@ -2342,8 +2342,11 @@ async function startRec(){
     if(micBtn)micBtn.classList.remove('busy');
     toast(micError(e));return}
   const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
+  // AAC/Android WebView needs more bits than Opus for the same speech clarity.
+  // 96 kbps for 30 s is 360 KB, still under the 450 KB message cap.
+  const bits=mt&&mt.indexOf('mp4')!==-1?96000:64000;
   let mr;
-  try{mr=mt?new MediaRecorder(stream,{mimeType:mt,audioBitsPerSecond:24000}):new MediaRecorder(stream);vpMark('mediarecorder_init')}
+  try{mr=new MediaRecorder(stream,mt?{mimeType:mt,audioBitsPerSecond:bits}:{audioBitsPerSecond:bits});vpMark('mediarecorder_init:'+(mt||'default')+':'+bits)}
   catch(e){releaseMic({stream});vpReport('mediarecorder_failed');recStarting=false;
     $('#chatInRow').hidden=false;$('#recRow').hidden=true;
     if(micBtn)micBtn.classList.remove('busy');
@@ -2361,7 +2364,9 @@ async function startRec(){
       if(r.audioCtx.state==='suspended')r.audioCtx.resume().catch(()=>{});}
   }catch(e){r.audioCtx=null;r.analyser=null}
   rec=r;recStarting=false;
-  try{mr.start(250);vpReport('mediarecorder_started')}
+  // One continuous recording: no 250 ms fragments to concatenate, which is what
+  // clips the first/last moments on Android WebView's MP4 encoder.
+  try{mr.onstart=()=>vpMark('mediarecorder_onstart');mr.start();vpReport('mediarecorder_started')}
   catch(e){rec=null;releaseMic(r);$('#chatInRow').hidden=false;$('#recRow').hidden=true;
     if(micBtn)micBtn.classList.remove('busy');toast(t('مش قادر أبدأ التسجيل','Could not start recording'));return}
   if(micBtn)micBtn.classList.remove('busy');
@@ -2402,9 +2407,10 @@ function stopRec(send){
     if(!send)return;
     if(dur<0.7){toast(t('التسجيل قصير أوي','The recording is too short'));return}
     const blob=new Blob(r.chunks,{type:r.mr.mimeType||'audio/webm'});
-    if(blob.size>450000){toast(t('التسجيل كبير أوي','The recording is too large'));return}
+    vpMark('blob:'+blob.size+':'+(r.mr.mimeType||'default'));
+    if(blob.size>450000){vpReport('too_large');toast(t('التسجيل كبير أوي','The recording is too large'));return}
     const fr=new FileReader();
-    fr.onload=()=>sendChat({voice:fr.result,dur:Math.round(dur)});
+    fr.onload=()=>{vpReport('voice_ready');sendChat({voice:fr.result,dur:Math.round(dur)})};
     fr.onerror=()=>toast(t('مش قادر أجهّز الرسالة الصوتية','Could not prepare the voice message'));
     fr.readAsDataURL(blob);
   };

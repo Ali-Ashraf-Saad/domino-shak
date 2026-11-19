@@ -1573,8 +1573,10 @@ async function startRec(){
   try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}
   catch(e){toast('لازم تسمح بالميكروفون عشان تسجّل');return}
   const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
+  // AAC/Android WebView needs more bits than Opus for the same speech clarity.
+  const bits=mt&&mt.indexOf('mp4')!==-1?96000:64000;
   let mr;
-  try{mr=mt?new MediaRecorder(stream,{mimeType:mt,audioBitsPerSecond:24000}):new MediaRecorder(stream)}
+  try{mr=new MediaRecorder(stream,mt?{mimeType:mt,audioBitsPerSecond:bits}:{audioBitsPerSecond:bits})}
   catch(e){stream.getTracks().forEach(t=>t.stop());toast('مش قادر أسجّل');return}
   const chunks=[],t0=Date.now();
   mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
