@@ -369,82 +369,298 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 .ugc-reasons{display:grid;gap:5px;text-align:right;font-size:13px;margin:10px 0}
 .ugc-link{color:var(--brass);text-decoration:none;font-size:13px}
 .cm .ugc-tools{justify-content:flex-end}
+
+/* =====================================================================
+   UI refresh v2 — balance, hierarchy, spacing, responsive desktop & motion
+   ===================================================================== */
+:root{
+  --gold-2:#E9C46A; --gold-deep:#7c5d12;
+  --line:rgba(233,196,106,.30);
+  --panel-bg:linear-gradient(180deg,rgba(48,31,16,.92),rgba(24,14,6,.94));
+  --shadow-lg:0 20px 52px rgba(0,0,0,.5);
+  --shadow-sm:0 3px 10px rgba(0,0,0,.35);
+  --radius-lg:20px; --radius:14px;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(90% 60% at 50% -10%,rgba(255,201,120,.14),transparent 62%),
+    radial-gradient(70% 50% at 100% 100%,rgba(217,169,60,.08),transparent 60%),
+    repeating-linear-gradient(90deg,#3b2514 0 4px,#33200f 4px 11px);
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.35) 100%);
+}
+h1,h2,.display{letter-spacing:.2px}
+html[dir="ltr"] h1,html[dir="ltr"] h2,html[dir="ltr"] .display,
+html[dir="ltr"] .sign h1,html[dir="ltr"] .card h2,html[dir="ltr"] .card h3.sec,
+html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
+  font-family:'Tajawal',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+}
+:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(233,196,106,.6);border-radius:12px}
+
+/* panels & cards */
+.panel{
+  position:relative;
+  background:var(--panel-bg);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(255,236,190,.07);
+  padding:clamp(16px,3vw,24px);
+}
+.card{
+  background:linear-gradient(180deg,#432d18,#28180b);
+  border:1px solid rgba(233,196,106,.55);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(255,236,190,.08);
+  gap:16px;padding:clamp(18px,4vw,26px);
+}
+.askbox{border-radius:var(--radius-lg);border:1px solid rgba(233,196,106,.55);box-shadow:var(--shadow-lg)}
+.card h2{font-size:clamp(22px,5vw,28px)}
+
+/* home layout */
+#home{padding:clamp(16px,4vw,40px);justify-content:flex-start}
+#homeWrap{width:100%;max-width:1080px;display:flex;flex-direction:column;align-items:center;gap:clamp(16px,4vw,38px);margin-block:auto}
+.sign h1{font-size:clamp(46px,13vw,80px);letter-spacing:.5px}
+.sign p{font-size:clamp(14px,3.4vw,17px);opacity:.9;line-height:1.6}
+#fan{margin-top:2px}
+.panel .field{margin-top:2px}
+.home-sec-label{display:block;font-size:13.5px;font-weight:700;letter-spacing:.2px;opacity:.9;margin-bottom:7px}
+.muted-hint{font-size:12.5px;opacity:.65;font-weight:500}
+
+/* language pill */
+.langbtn{
+  position:absolute;inset-inline-end:14px;top:12px;z-index:2;
+  min-width:46px;height:34px;padding:0 10px;border-radius:999px;
+  border:1px solid rgba(233,196,106,.5);background:rgba(0,0,0,.32);
+  color:var(--gold-2);font:800 13px 'Tajawal',sans-serif;letter-spacing:.5px;
+  transition:background-color .18s,border-color .18s,transform .12s;
+}
+.langbtn:hover{background:rgba(233,196,106,.18);border-color:var(--brass)}
+.langbtn:active{transform:scale(.96)}
+
+/* segmented mode picker */
+.modepick{
+  display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;
+  margin:6px 0 2px;padding:5px;border-radius:16px;
+  background:rgba(0,0,0,.34);border:1px solid rgba(233,196,106,.16);
+}
+.modepick button{
+  min-height:50px;border:0;border-radius:11px;background:transparent;
+  color:var(--txt);font:800 clamp(11px,3.5vw,13.5px) 'Tajawal',sans-serif;opacity:.82;
+  display:flex;align-items:center;justify-content:center;gap:5px;padding:4px 2px;white-space:nowrap;
+  transition:background-color .18s,opacity .18s,box-shadow .18s,color .18s;
+}
+.modepick button:hover{opacity:1;background:rgba(233,196,106,.10)}
+.modepick button.on{
+  background:linear-gradient(180deg,var(--gold-2),var(--brass));
+  color:#241a08;opacity:1;box-shadow:0 2px 0 var(--gold-deep);
+}
+.modepick button[hidden]{display:none!important}
+#modeLbl{font-size:12.5px;opacity:.7;margin:4px 0 2px}
+
+/* buttons */
+.btn{border-radius:var(--radius);font-weight:800;letter-spacing:.15px;transition:transform .12s,box-shadow .18s,filter .18s,background-color .18s,border-color .18s}
+.btn.primary{background:linear-gradient(180deg,var(--gold-2),var(--brass));color:#241a08;box-shadow:0 4px 0 var(--gold-deep),0 8px 18px rgba(0,0,0,.28)}
+.btn.primary:hover:not(:disabled){filter:brightness(1.07);transform:translateY(-1px)}
+.btn.primary:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--gold-deep)}
+.btn.ghost{background:rgba(255,255,255,.03);border:2px solid rgba(233,196,106,.42)}
+.btn.ghost:hover:not(:disabled){background:rgba(233,196,106,.14);border-color:var(--brass)}
+.btn.danger{background:linear-gradient(180deg,#d7503f,var(--red));box-shadow:0 4px 0 #7d2219}
+.btn.danger:hover:not(:disabled){filter:brightness(1.06)}
+.btn:disabled{opacity:.55;filter:saturate(.5)}
+.btn:focus-visible{box-shadow:0 0 0 3px rgba(233,196,106,.6)}
+
+/* inputs & segmented */
+.field{height:51px;border-radius:13px;border:2px solid rgba(217,169,60,.32);transition:border-color .18s,box-shadow .18s}
+.field:focus{border-color:var(--brass);box-shadow:0 0 0 3px rgba(233,196,106,.22)}
+.seg button{border-radius:12px;transition:background-color .18s,color .18s,transform .12s}
+.seg button:hover:not(.on){background:rgba(233,196,106,.10)}
+.seg button.on{box-shadow:0 2px 0 var(--gold-deep)}
+
+/* footer links */
+.footlinks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;padding-top:2px}
+.linklink{font-size:14px;opacity:.82;padding:6px 2px;text-underline-offset:3px;transition:opacity .18s,color .18s}
+.linklink:hover{opacity:1;color:var(--gold-2)}
+
+/* lobby */
+#lobby{padding:clamp(18px,4vw,36px)}
+#lobby .panel{width:min(480px,100%);gap:16px}
+.code{letter-spacing:.22em;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+#seats li{height:52px;border-radius:13px}
+#seats li.filled{box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+#seats li.empty{background:rgba(0,0,0,.15)}
+
+/* game top bar & table */
+.bar{gap:10px;padding:10px 14px;font-size:14px}
+.bar .grp{gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.bar button{border-radius:999px;padding:6px 14px;font-weight:700;transition:background-color .18s,border-color .18s}
+.bar button:hover{background:rgba(233,196,106,.14);border-color:var(--brass)}
+#roomTag{font-weight:800;letter-spacing:.3px;opacity:.95}
+#opps{gap:10px}
+.seat{border-radius:15px;background:linear-gradient(180deg,rgba(0,0,0,.34),rgba(0,0,0,.22));box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:border-color .25s,background-color .25s}
+.seat.turn{box-shadow:0 0 0 1px rgba(233,196,106,.4),0 0 18px rgba(217,169,60,.25)}
+#table{border-color:#5d3a22;box-shadow:inset 0 0 56px rgba(0,0,0,.5),inset 0 2px 0 rgba(255,255,255,.06),0 10px 26px rgba(0,0,0,.42)}
+#status{letter-spacing:.2px}
+
+/* chat */
+#chat{border-color:var(--brass);box-shadow:0 -12px 40px rgba(0,0,0,.5)}
+.chat-h{font-size:15px}
+.msg,.cm .bb{border-radius:15px}
+.chat-in .btn{flex:none}
+.chat-in .field{flex:1;min-width:0}
+#chatSend{flex:0 0 auto;padding:0 18px}
+.strip button{transition:background-color .18s,border-color .18s,transform .12s}
+.strip button:hover{background:rgba(233,196,106,.14);border-color:var(--brass)}
+.strip button:active{transform:scale(.96)}
+
+/* UGC alignment fix for LTR */
+.ugc-note,.ugc-terms,.ugc-reasons{text-align:start}
+
+/* dialogs motion */
+.ov{animation:fade .18s ease-out;padding:clamp(12px,3vw,22px)}
+.card{animation:cardIn .22s cubic-bezier(.2,.8,.3,1)}
+@keyframes cardIn{from{transform:translateY(16px) scale(.985);opacity:0}}
+#toast{border-radius:13px;box-shadow:var(--shadow-lg);font-size:15px}
+
+/* desktop / tablet */
+@media (min-width:900px){
+  #home{align-items:center}
+  #homeWrap{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,460px);
+    align-items:center;gap:clamp(36px,6vw,72px);
+    margin-inline:auto;
+  }
+  .sign{text-align:start}
+  .sign h1{font-size:clamp(72px,7.4vw,108px);line-height:1}
+  .sign p{max-width:38ch}
+  #fan{justify-content:flex-start;height:132px}
+  .panel{backdrop-filter:blur(4px);justify-self:center}
+  #lobby .panel{width:min(560px,100%)}
+  .card{width:min(560px,100%)}
+  #table{width:min(1040px,96vw);margin:0 auto;border-width:11px}
+  #me{width:min(1040px,100%);margin:0 auto}
+  #opps{gap:16px;padding:6px 18px 10px}
+  .seat{min-width:120px;max-width:168px}
+  #hand{--tw:52px;--th:98px;gap:9px}
+  #chat{width:min(560px,100%)}
+  .bar{padding:12px 22px;font-size:15px}
+}
+@media (min-width:1200px){
+  #homeWrap{grid-template-columns:minmax(0,1fr) 480px;gap:96px}
+}
+@media (max-width:430px){
+  .modepick button{gap:3px;padding:4px 0;font-size:12.5px}
+}
+@media (max-width:480px){
+  #homeWrap{gap:12px}
+  .sign h1{font-size:clamp(40px,12vw,54px)}
+  .sign p{font-size:14px;line-height:1.5}
+  #fan{height:96px;margin-top:0}
+  #fan .tile{transform:scale(.86)}
+}
+/* keep small screens comfortable */
+@media (max-width:380px){
+  .modepick button{font-size:12px;min-height:46px;gap:4px}
+  .panel{padding:14px}
+  .btn{font-size:16.5px}
+}
+@media (max-width:340px){
+  .modepick button{font-size:11px;gap:2px;padding:4px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .ov,.card,.btn,.modepick button,.seat,.field,.strip button{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
 
 <!-- ============ HOME ============ -->
 <main id="home" class="screen on">
-  <div class="sign">
-    <h1>دومينو شك</h1>
-    <p>دومينو أونلاين لـ ٢ إلى ٥ لاعبين — انزل واكدب، أو شك.</p>
-    <div id="fan"></div>
-  </div>
-
-  <div class="panel">
-    <div id="invited" class="invite" hidden></div>
-    <div>
-      <label for="nameIn">اسمك</label>
-      <input id="nameIn" class="field" maxlength="14" autocomplete="nickname" placeholder="مثلاً: علي">
+  <div id="homeWrap">
+    <div class="sign">
+      <h1 data-en="Domino Shak">دومينو شك</h1>
+      <p data-en="Online dominoes for 2–5 players — play straight, bluff, or call it.">دومينو أونلاين لـ ٢ إلى ٥ لاعبين — انزل واكدب، أو شك.</p>
+      <div id="fan"></div>
     </div>
 
-    <div id="modePick" class="modepick" role="group" aria-label="طريقة اللعب">
-      <button type="button" data-mode="online" class="on">🌐 أونلاين</button>
-      <button type="button" data-mode="lan">📶 شبكة محلية</button>
-      <button type="button" data-mode="solo">🤖 بوتات</button>
-    </div>
-    <div id="modeLbl">الوضع الحالي: أونلاين (PeerJS)</div>
-
-    <div id="createBox" class="panel" style="padding:0;border:0;background:none;gap:12px;backdrop-filter:none">
+    <div class="panel">
+      <button id="langBtn" class="langbtn" type="button" aria-label="تبديل اللغة / Switch language">EN</button>
+      <div id="invited" class="invite" hidden></div>
       <div>
-        <label>عدد اللاعبين</label>
-        <div class="seg" id="sizeSeg">
-          <button type="button" data-n="2">٢</button>
-          <button type="button" data-n="3">٣</button>
-          <button type="button" data-n="4" class="on">٤</button>
-          <button type="button" data-n="5">٥</button>
+        <label for="nameIn" data-en="Your name">اسمك</label>
+        <input id="nameIn" class="field" maxlength="14" autocomplete="nickname" placeholder="مثلاً: علي" data-en-ph="e.g. Ali">
+      </div>
+
+      <div id="modePick" class="modepick" role="group" aria-label="طريقة اللعب" data-en-aria="Game mode">
+        <button type="button" data-mode="online" class="on">🌐 <span data-en="Online">أونلاين</span></button>
+        <button type="button" data-mode="lan">📶 <span data-en="Local network">شبكة محلية</span></button>
+        <button type="button" data-mode="solo">🤖 <span data-en="Bots">بوتات</span></button>
+      </div>
+      <div id="modeLbl" data-en="Mode: Online (PeerJS)">الوضع الحالي: أونلاين (PeerJS)</div>
+
+      <div id="createBox" class="panel" style="padding:0;border:0;background:none;gap:12px;backdrop-filter:none">
+        <div>
+          <label class="home-sec-label" data-en="Players">عدد اللاعبين</label>
+          <div class="seg" id="sizeSeg">
+            <button type="button" data-n="2" data-en="2">٢</button>
+            <button type="button" data-n="3" data-en="3">٣</button>
+            <button type="button" data-n="4" class="on" data-en="4">٤</button>
+            <button type="button" data-n="5" data-en="5">٥</button>
+          </div>
         </div>
+        <div>
+          <label for="roomIn"><span data-en="Room code">كود الطاولة</span> <small class="muted-hint" data-en="(optional — leave empty for random)">(اختياري — سيبه فاضي وهيتختار عشوائي)</small></label>
+          <input id="roomIn" class="field" maxlength="8" placeholder="عشوائي" data-en-ph="Random" autocapitalize="characters" autocomplete="off" style="direction:ltr;text-align:center;letter-spacing:.15em">
+        </div>
+        <button id="createBtn" class="btn primary" type="button" data-en="Create new table">اعمل طاولة جديدة</button>
       </div>
-      <div>
-        <label for="roomIn">كود الطاولة <small style="opacity:.7">(اختياري — سيبه فاضي وهيتختار عشوائي)</small></label>
-        <input id="roomIn" class="field" maxlength="8" placeholder="عشوائي" autocapitalize="characters" autocomplete="off" style="direction:ltr;text-align:center;letter-spacing:.15em">
+
+      <div id="soloBox" hidden>
+        <button id="botBtn" class="btn primary" type="button">🤖 <span data-en="Play against bots">العب ضد البوتات</span></button>
       </div>
-      <button id="createBtn" class="btn primary" type="button">اعمل طاولة جديدة</button>
-    </div>
 
-    <div class="divider">أو</div>
+      <div class="divider" data-en="or">أو</div>
 
-    <div id="joinBox" style="display:flex;flex-direction:column;gap:10px">
-      <input id="lanIpIn" class="field" hidden maxlength="40" placeholder="IP المضيف — مثال 192.168.43.1" autocapitalize="off" autocomplete="off" dir="ltr" style="direction:ltr;text-align:center">
-      <input id="codeIn" class="field" maxlength="8" placeholder="كود الطاولة" autocapitalize="characters" style="direction:ltr;text-align:center;letter-spacing:.2em">
-      <button id="joinBtn" class="btn ghost" type="button">ادخل الطاولة</button>
-      <button id="invBack" class="btn ghost" type="button" hidden>رجوع للصفحة الرئيسية</button>
+      <div id="joinBox" style="display:flex;flex-direction:column;gap:10px">
+        <input id="lanIpIn" class="field" hidden maxlength="40" placeholder="IP المضيف — مثال 192.168.43.1" data-en-ph="Host IP — e.g. 192.168.43.1" autocapitalize="off" autocomplete="off" dir="ltr" style="direction:ltr;text-align:center">
+        <input id="codeIn" class="field" maxlength="8" placeholder="كود الطاولة" data-en-ph="Room code" autocapitalize="characters" style="direction:ltr;text-align:center;letter-spacing:.2em">
+        <button id="joinBtn" class="btn ghost" type="button" data-en="Join table">ادخل الطاولة</button>
+        <button id="invBack" class="btn ghost" type="button" hidden data-en="Back to home">رجوع للصفحة الرئيسية</button>
+      </div>
+      <div class="footlinks">
+        <button id="rulesHome" class="linklink" type="button" data-en="How to play">إزاي بنلعب؟</button>
+        <button id="termsHome" class="linklink" type="button" data-en="Community rules">شروط المجتمع</button>
+        <button id="privacyHome" class="linklink" type="button" data-en="Privacy">الخصوصية</button>
+        <button id="setHome" class="linklink" type="button" data-en="Settings">الإعدادات</button>
+      </div>
     </div>
-    <button id="botBtn" class="btn ghost" type="button">🤖 العب ضد البوتات</button>
-    <div class="row" style="justify-content:center;gap:14px;flex-wrap:wrap"><button id="rulesHome" class="linklink" type="button">إزاي بنلعب؟</button><button id="termsHome" class="linklink" type="button">شروط المجتمع</button><button id="privacyHome" class="linklink" type="button">الخصوصية</button><button id="setHome" class="linklink" type="button">الإعدادات</button></div>
   </div>
 </main>
 
 <!-- ============ LOBBY ============ -->
 <main id="lobby" class="screen">
   <div class="panel">
-    <h2 style="text-align:center">مستنيين اللاعبين</h2>
+    <h2 style="text-align:center" data-en="Waiting for players">مستنيين اللاعبين</h2>
     <div class="code" id="lobCode">-----</div>
     <ul id="seats"></ul>
     <div id="lobCount" style="text-align:center;font-weight:800"></div>
     <div id="lobHint" style="text-align:center;font-size:14px;opacity:.85"></div>
     <div class="row">
-      <button id="copyBtn" class="btn primary" type="button" style="flex:1">انسخ اللينك</button>
-      <a id="waBtn" class="btn ghost" target="_blank" rel="noopener" style="flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none">واتساب</a>
+      <button id="copyBtn" class="btn primary" type="button" style="flex:1" data-en="Copy link">انسخ اللينك</button>
+      <a id="waBtn" class="btn ghost" target="_blank" rel="noopener" style="flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none" data-en="WhatsApp">واتساب</a>
     </div>
-    <button id="lobBack" class="btn ghost" type="button">رجوع للصفحة الرئيسية</button>
+    <button id="lobBack" class="btn ghost" type="button" data-en="Back to home">رجوع للصفحة الرئيسية</button>
   </div>
 </main>
 
 <!-- ============ GAME ============ -->
 <main id="game" class="screen">
-  <div class="bar"><span id="roomTag"></span><div class="grp"><button id="chatBtn" type="button">دردشة<i id="chatBadge" hidden></i></button><button id="setBtn" type="button">إعدادات</button><button id="rulesBtn" type="button">القواعد</button></div></div>
-  <section id="opps" aria-label="اللاعبين"></section>
+  <div class="bar"><span id="roomTag"></span><div class="grp"><button id="chatBtn" type="button"><span data-en="Chat">دردشة</span><i id="chatBadge" hidden></i></button><button id="setBtn" type="button" data-en="Settings">إعدادات</button><button id="rulesBtn" type="button" data-en="Rules">القواعد</button></div></div>
+  <section id="opps" aria-label="اللاعبين" data-en-aria="Players"></section>
   <section id="table" aria-live="polite">
     <div id="oldrows"></div>
     <div id="claim"></div>
@@ -464,15 +680,15 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 
 <div id="chatBack" hidden></div>
 <div id="chat" hidden>
-  <div class="chat-h"><span>الدردشة</span><span id="typing" hidden aria-live="polite"></span><button id="chatX" type="button">إغلاق</button></div>
+  <div class="chat-h"><span data-en="Chat">الدردشة</span><span id="typing" hidden aria-live="polite"></span><button id="chatX" type="button" data-en="Close">إغلاق</button></div>
   <div id="chatMsgs"></div>
   <div class="strip" id="quickBar"></div>
   <div class="strip emos" id="emoBar"></div>
-  <div class="chat-in" id="chatInRow"><button id="micBtn" class="btn ghost mic" type="button" aria-label="رسالة صوتية">🎤</button><input id="chatIn" class="field" maxlength="80" placeholder="اكتب رسالة أو إيموجي…"><button id="chatSend" class="btn primary" type="button">ابعت</button></div>
-  <div class="chat-in rec" id="recRow" hidden><span id="recInfo">● بيسجّل 0:00</span><span id="recLevel" class="reclevel" aria-hidden="true"><b></b></span><button id="recCancel" class="btn ghost" type="button">إلغاء</button><button id="recSend" class="btn primary" type="button">ابعت</button></div>
+  <div class="chat-in" id="chatInRow"><button id="micBtn" class="btn ghost mic" type="button" aria-label="رسالة صوتية" data-en-aria="Voice message">🎤</button><input id="chatIn" class="field" maxlength="80" placeholder="اكتب رسالة أو إيموجي…" data-en-ph="Type a message or emoji…"><button id="chatSend" class="btn primary" type="button" data-en="Send">ابعت</button></div>
+  <div class="chat-in rec" id="recRow" hidden><span id="recInfo">● بيسجّل 0:00</span><span id="recLevel" class="reclevel" aria-hidden="true"><b></b></span><button id="recCancel" class="btn ghost" type="button" data-en="Cancel">إلغاء</button><button id="recSend" class="btn primary" type="button" data-en="Send">ابعت</button></div>
 </div>
 
-<div id="ask" hidden><div class="askbox"><p id="askQ"></p><div class="row"><button id="askNo" class="btn ghost" type="button">لأ</button><button id="askYes" class="btn danger" type="button">أيوه</button></div></div></div>
+<div id="ask" hidden><div class="askbox"><p id="askQ"></p><div class="row"><button id="askNo" class="btn ghost" type="button" data-en="No">لأ</button><button id="askYes" class="btn danger" type="button" data-en="Yes">أيوه</button></div></div></div>
 
 <div id="net" hidden><i class="spin"></i><span id="netTxt"></span></div>
 <div id="cprev" hidden></div>
@@ -491,7 +707,7 @@ const $=s=>document.querySelector(s);
 const NUMS=['صفرات','واحدات','اتنينات','تلاتات','أربعات','خمسات','ستات'];
 const ORD=['','الأول','التاني','التالت','الرابع','الخامس'];
 const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
-const pcs=n=>n===0?'مفيش قطع':n===1?'قطعة':n===2?'قطعتين':n<=10?AR(n)+' قطع':AR(n)+' قطعة';
+const pcs=n=>LANG==='en'?(n===0?'no tiles':n===1?'1 tile':n===2?'2 tiles':n+' tiles'):(n===0?'مفيش قطع':n===1?'قطعة':n===2?'قطعتين':n<=10?AR(n)+' قطع':AR(n)+' قطعة');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cleanName=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,14);
 const ID_PREFIX='dmnshk-';
@@ -507,6 +723,53 @@ const seatColor=i=>SEATC[(((i|0)%5)+5)%5];
 const initial=n=>[...String(n||'?').trim()][0]||'?';
 const avHTML=(i,name,crown)=>`<span class="av" style="--c:${seatColor(i)}">${esc(initial(name))}${crown?'<i class="crown">👑</i>':''}</span>`;
 const hostId=(code,ep)=>ID_PREFIX+code+(ep?'-'+ep:'');
+
+/* =====================================================
+   اللغة — عربي (RTL) / English (LTR)
+   ===================================================== */
+const LANG_KEY='dmnshk-lang';
+let LANG=(function(){try{const v=localStorage.getItem(LANG_KEY);return v==='en'?'en':'ar'}catch(e){return 'ar'}})();
+const LANG_TITLE={ar:'دومينو شك',en:'Domino Shak'};
+function t(ar,en){return (LANG==='en'&&en!=null)?en:ar}
+function trNum(n){return LANG==='en'?String(n):AR(n)}
+const EN_NUMS=['zeroes','ones','twos','threes','fours','fives','sixes'];
+const EN_ORD=['','1st','2nd','3rd','4th','5th'];
+function numWord(n){return LANG==='en'?(EN_NUMS[n]||''):NUMS[n]}
+function ordWord(n){return LANG==='en'?(EN_ORD[n]||''):ORD[n]}
+function applyDir(){const h=document.documentElement;h.lang=LANG;h.dir=LANG==='en'?'ltr':'rtl';document.title=LANG_TITLE[LANG]}
+function applyI18n(root){
+  root=root||document;
+  if(!root||!root.querySelectorAll)return;
+  root.querySelectorAll('[data-en]').forEach(function(el){
+    if(el.getAttribute('data-ar')==null)el.setAttribute('data-ar',el.textContent);
+    el.textContent=LANG==='en'?el.getAttribute('data-en'):el.getAttribute('data-ar');
+  });
+  root.querySelectorAll('[data-en-ph]').forEach(function(el){
+    if(el.getAttribute('data-ar-ph')==null)el.setAttribute('data-ar-ph',el.getAttribute('placeholder')||'');
+    el.setAttribute('placeholder',LANG==='en'?el.getAttribute('data-en-ph'):el.getAttribute('data-ar-ph'));
+  });
+  root.querySelectorAll('[data-en-aria]').forEach(function(el){
+    if(el.getAttribute('data-ar-aria')==null)el.setAttribute('data-ar-aria',el.getAttribute('aria-label')||'');
+    el.setAttribute('aria-label',LANG==='en'?el.getAttribute('data-en-aria'):el.getAttribute('data-ar-aria'));
+  });
+}
+function updateLangBtn(){const b=$('#langBtn');if(b)b.textContent=LANG==='en'?'ع':'EN'}
+function rerenderLangSensitive(){
+  try{if(document.getElementById('lobby')&&document.getElementById('lobby').classList.contains('on'))renderLobby(lobby.names,size,roomCode,hostSeat)}catch(e){}
+  try{if(document.getElementById('game')&&document.getElementById('game').classList.contains('on')&&V)render()}catch(e){}
+  try{if(chatOpen)renderChat()}catch(e){}
+  try{renderQuickPhrases()}catch(e){}
+  try{const inv=$('#invited');if(inv&&!inv.hidden){const rc=($('#codeIn').value||'').toUpperCase();inv.textContent=t('اتدعيت لطاولة '+rc+' — اكتب اسمك وادخل.','You are invited to table '+rc+' — enter your name to join.')}}catch(e){}
+}
+let syncHomeMode=null;
+function setLang(l){
+  LANG=l==='en'?'en':'ar';
+  try{localStorage.setItem(LANG_KEY,LANG)}catch(e){}
+  applyDir();updateLangBtn();applyI18n(document);rerenderLangSensitive();
+  try{if(syncHomeMode)syncHomeMode()}catch(e){}
+  const ov=$('#overlay');
+  if(ov&&ov.classList.contains('on')&&ov.querySelector('[data-lang-settings]'))openSettings();
+}
 
 /* =====================================================
    وضع الشبكة المحلية — ناقل متوافق مع واجهة PeerJS
@@ -596,7 +859,22 @@ function useLanTransport(on){
 const buzz=p=>{try{if(S.haptic&&navigator.vibrate)navigator.vibrate(p)}catch(e){}};
 
 /* ---------- سلامة المحتوى (UGC) — نسخة الموبايل فقط ---------- */
-const UGC_TERMS=`<h2>شروط المجتمع</h2>
+const UGC_TERMS=()=>LANG==='en'?`<h2>Community rules</h2>
+<div class="ugc-terms">
+<p>Chat, voice messages and player names are content other players can see. By using these features you agree to these rules:</p>
+<ul class="rules">
+<li>No harassment, bullying or insults.</li>
+<li>No hate speech or discrimination based on race, religion, sex or nationality.</li>
+<li>No threats or incitement to violence.</li>
+<li>No sexual or obscene content.</li>
+<li>No sharing personal information (address, phone number, email, or photos of someone without their consent).</li>
+<li>No spam, repeated disruption or suspicious links.</li>
+<li>No impersonating another player or game staff.</li>
+<li>No illegal content.</li>
+<li>Voice messages must follow the same rules — abusive audio is not allowed.</li>
+</ul>
+<p>You can report any violation or block the sender from Settings or directly from their message. Content is seen peer-to-peer and reports are stored on your device until moderated (see the privacy policy).</p>
+</div>`:`<h2>شروط المجتمع</h2>
 <div class="ugc-terms">
 <p>الدردشة والرسائل الصوتية وأسماء اللاعبين محتوى بيشوفه لاعبين تانيين. باستخدامك لهذه الميزات بتوافق على القواعد دي:</p>
 <ul class="rules">
@@ -611,12 +889,11 @@ const UGC_TERMS=`<h2>شروط المجتمع</h2>
 <li>الرسائل الصوتية لازم كمان تحترم نفس القواعد — الصوت المسيء ممنوع.</li>
 </ul>
 <p>أي مخالفة ممكن تبلّغ عنها أو تحظر صاحبها من «الإعدادات» أو من رسالته مباشرة. المحتوى بيتشاف peer-to-peer والبلاغات بتتخزن على جهازك لحد ما تتوسط (انظر سياسة الخصوصية).</p>
-<p class="ugc-note">القواعد دي بالإنجليزية: لا مضايقة، لا كراهية، لا تهديد، لا محتوى جنسي، لا معلومات شخصية، لا سبام، لا انتحال، لا محتوى غير قانوني، ولا إساءة صوتية.</p>
 </div>`;
 const REPORT_REASONS=[
-  ['harass','مضايقة أو تنمّر'],['hate','كراهية أو تمييز'],['threat','تهديد أو عنف'],
-  ['sexual','محتوى جنسي'],['personal','معلومات شخصية'],['spam','سبام أو إزعاج'],
-  ['impersonate','انتحال شخصية'],['illegal','محتوى غير قانوني'],['voice','إساءة صوتية'],['other','سبب تاني']
+  ['harass','مضايقة أو تنمّر','Harassment or bullying'],['hate','كراهية أو تمييز','Hate or discrimination'],['threat','تهديد أو عنف','Threats or violence'],
+  ['sexual','محتوى جنسي','Sexual content'],['personal','معلومات شخصية','Personal information'],['spam','سبام أو إزعاج','Spam or disruption'],
+  ['impersonate','انتحال شخصية','Impersonation'],['illegal','محتوى غير قانوني','Illegal content'],['voice','إساءة صوتية','Abusive voice'],['other','سبب تاني','Other reason']
 ];
 const TERMS_KEY='dmnshk-terms-v1';
 const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
@@ -674,28 +951,28 @@ function blockPid(pid,name){
     Object.keys(bubbles).forEach(k=>{if((seatPids[k]||'')===pid)delete bubbles[k]});
     if(chatOpen)renderChat();if(V)render();
   }catch(e){}
-  toast('حظرت '+(name||'اللاعب')+' — رسائله هتتخفى');
+  toast(t('حظرت '+(name||'اللاعب')+' — رسائله هتتخفى','Blocked '+(name||'the player')+' — their messages are hidden'));
 }
-function unblockPid(pid){blocklist=blocklist.filter(p=>p!==pid);saveBlock();toast('اتشال الحظر')}
+function unblockPid(pid){blocklist=blocklist.filter(p=>p!==pid);saveBlock();toast(t('اتشال الحظر','Unblocked'))}
 function addReport(rep){
   reportsOutbox.push(Object.assign({id:'r-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6),ts:Date.now(),room:roomCode||'',reporter:myPid},rep));
   if(reportsOutbox.length>200)reportsOutbox.shift();
   saveReports();
-  toast('اتسجّل البلاغ على جهازك');
+  toast(t('اتسجّل البلاغ على جهازك','Report saved on your device'));
 }
 function openPrivacy(){location.href='PRIVACY_POLICY.html'}
 function requireTerms(fn){
   if(termsOk){fn();return}
-  openOv(UGC_TERMS+`<div class="ugc-reasons" style="display:block;margin-top:14px">
-    <label class="sw"><span>أوافق على شروط المجتمع</span><input type="checkbox" id="termsAgree"></label></div>
-    <div class="row" style="gap:8px"><button class="btn ghost" id="termsNo" type="button">موافقش</button><button class="btn primary" id="termsYes" type="button">أوافق وأكمل</button></div>`,true);
+  openOv(UGC_TERMS()+`<div class="ugc-reasons" style="display:block;margin-top:14px">
+    <label class="sw"><span>${t('أوافق على شروط المجتمع','I agree to the community rules')}</span><input type="checkbox" id="termsAgree"></label></div>
+    <div class="row" style="gap:8px"><button class="btn ghost" id="termsNo" type="button">${t('موافقش','Decline')}</button><button class="btn primary" id="termsYes" type="button">${t('أوافق وأكمل','Agree & continue')}</button></div>`,true);
   $('#termsNo').onclick=()=>{closeOv()};
   $('#termsYes').onclick=()=>{
-    if(!$('#termsAgree').checked){toast('لازم توافق على الشروط الأول');return}
+    if(!$('#termsAgree').checked){toast(t('لازم توافق على الشروط الأول','Please accept the rules first'));return}
     termsOk=true;lsSet(TERMS_KEY,true);closeOv();fn();
   };
 }
-function openTerms(){openOv(UGC_TERMS+'<button class="btn primary" id="ovClose" type="button">تمام</button>',true)}
+function openTerms(){openOv(UGC_TERMS()+`<button class="btn primary" id="ovClose" type="button">${t('تمام','Done')}</button>`,true)}
 
 /* ---------- الإعدادات ---------- */
 let S={confirmDoubt:true,confirmPass:true,sound:true,vol:.7,calm:false,autoVoice:true,haptic:true,wake:true};
@@ -760,7 +1037,10 @@ const SFX=(()=>{
 
 /* ---------- نافذة التأكيد ---------- */
 function ask(q,yes,fn){
-  $('#askQ').textContent=q;$('#askYes').textContent=yes;$('#ask').hidden=false;
+  $('#askQ').textContent=q;
+  $('#askYes').textContent=LANG==='en'?'Yes':yes;
+  $('#askNo').textContent=t('لأ','No');
+  $('#ask').hidden=false;
   $('#askYes').onclick=()=>{$('#ask').hidden=true;fn()};
   $('#askNo').onclick=()=>{$('#ask').hidden=true};
 }
@@ -768,23 +1048,24 @@ const stateKey=()=>V?V.gid+':'+(V.log.length?V.log[V.log.length-1].n:0)+':'+V.tu
 
 function openSettings(){
   const inRoom=!!peer||inSolo();
-  openOv(`<h2>الإعدادات</h2>
-    <label class="sw"><span>تأكيد قبل الشك</span><input type="checkbox" id="sCD"${S.confirmDoubt?' checked':''}></label>
-    <label class="sw"><span>تأكيد قبل التخطّي</span><input type="checkbox" id="sCP"${S.confirmPass?' checked':''}></label>
-    <label class="sw"><span>التشغيل التلقائي للرسائل الصوتية</span><input type="checkbox" id="sAV"${S.autoVoice?' checked':''}></label>
-    <label class="sw"><span>الأصوات</span><input type="checkbox" id="sSnd"${S.sound?' checked':''}></label>
-    <label class="sw"><span>مستوى الصوت</span><input type="range" id="sVol" min="0" max="100" value="${Math.round(S.vol*100)}"></label>
-    <label class="sw"><span>الاهتزاز</span><input type="checkbox" id="sHap"${S.haptic?' checked':''}></label>
-    <label class="sw"><span>إبقاء الشاشة شغالة أثناء اللعب</span><input type="checkbox" id="sWake"${S.wake?' checked':''}></label>
-    <label class="sw"><span>تقليل الحركة</span><input type="checkbox" id="sCalm"${S.calm?' checked':''}></label>
+  const lbl=a=>t(a[0],a[1]);
+  openOv(`<h2>${t('الإعدادات','Settings')}</h2>
+    <label class="sw"><span>${lbl(['تأكيد قبل الشك','Confirm before doubting'])}</span><input type="checkbox" id="sCD"${S.confirmDoubt?' checked':''}></label>
+    <label class="sw"><span>${lbl(['تأكيد قبل التخطّي','Confirm before passing'])}</span><input type="checkbox" id="sCP"${S.confirmPass?' checked':''}></label>
+    <label class="sw"><span>${lbl(['التشغيل التلقائي للرسائل الصوتية','Auto-play voice messages'])}</span><input type="checkbox" id="sAV"${S.autoVoice?' checked':''}></label>
+    <label class="sw"><span>${lbl(['الأصوات','Sound'])}</span><input type="checkbox" id="sSnd"${S.sound?' checked':''}></label>
+    <label class="sw"><span>${lbl(['مستوى الصوت','Volume'])}</span><input type="range" id="sVol" min="0" max="100" value="${Math.round(S.vol*100)}"></label>
+    <label class="sw"><span>${lbl(['الاهتزاز','Haptics'])}</span><input type="checkbox" id="sHap"${S.haptic?' checked':''}></label>
+    <label class="sw"><span>${lbl(['إبقاء الشاشة شغالة أثناء اللعب','Keep the screen awake while playing'])}</span><input type="checkbox" id="sWake"${S.wake?' checked':''}></label>
+    <label class="sw"><span>${lbl(['تقليل الحركة','Reduce motion'])}</span><input type="checkbox" id="sCalm"${S.calm?' checked':''}></label>
     <div class="ugc-row" style="justify-content:center;margin:8px 0">
-      <button class="ugc-act" id="sTerms" type="button">شروط المجتمع</button>
-      <button class="ugc-act" id="sBlocked" type="button">المحظورين (${blocklist.length})</button>
-      <button class="ugc-act" id="sReports" type="button">البلاغات (${reportsOutbox.length})</button>
-      <button class="ugc-act" id="sPrivacy" type="button">الخصوصية</button>
+      <button class="ugc-act" id="sTerms" type="button">${t('شروط المجتمع','Community rules')}</button>
+      <button class="ugc-act" id="sBlocked" type="button">${t('المحظورين','Blocked')} (${trNum(blocklist.length)})</button>
+      <button class="ugc-act" id="sReports" type="button">${t('البلاغات','Reports')} (${trNum(reportsOutbox.length)})</button>
+      <button class="ugc-act" id="sPrivacy" type="button">${t('الخصوصية','Privacy')}</button>
     </div>
-    ${inRoom?'<button class="btn danger" id="leaveBtn" type="button">اخرج من الطاولة</button>':''}
-    <button class="btn primary" id="ovClose" type="button">تمام</button>`,true);
+    ${inRoom?`<button class="btn danger" id="leaveBtn" type="button">${t('اخرج من الطاولة','Leave the table')}</button>`:''}
+    <button class="btn primary" id="ovClose" type="button">${t('تمام','Done')}</button>`,true);
   $('#sCD').onchange=e=>{S.confirmDoubt=e.target.checked;saveS()};
   $('#sCP').onchange=e=>{S.confirmPass=e.target.checked;saveS()};
   $('#sAV').onchange=e=>{S.autoVoice=e.target.checked;saveS();if(!S.autoVoice)voiceQ=[]};
@@ -798,12 +1079,11 @@ function openSettings(){
   $('#sPrivacy').onclick=openPrivacy;
   $('#sBlocked').onclick=openBlocked;
   $('#sReports').onclick=openReports;
-  if(inRoom)$('#leaveBtn').onclick=()=>ask('متأكد إنك عايز تخرج من الطاولة؟','أيوه، اخرج',leaveTable);
+  if(inRoom)$('#leaveBtn').onclick=()=>ask(t('متأكد إنك عايز تخرج من الطاولة؟','Leave the table?'),t('أيوه، اخرج','Yes, leave'),leaveTable);
 }
 function openBlocked(){
-  const names={};Object.keys(bubbles).forEach(k=>{});
-  const list=blocklist.length?blocklist.map(p=>`<div class="ugc-row" style="justify-content:space-between"><span class="ugc-note" dir="auto">${esc(p)}</span><button class="ugc-act" data-unblock="${esc(p)}" type="button">إلغاء الحظر</button></div>`).join(''):'<p class="ugc-note">مفيش لاعبين محظورين.</p>';
-  openOv(`<h2>اللاعبون المحظورون</h2><p class="ugc-note">رسائل وأصوات اللاعبين المحظورين هتتخفى من الدردشة.</p>${list}<button class="btn primary" id="ovClose" type="button">تمام</button>`,true);
+  const list=blocklist.length?blocklist.map(p=>`<div class="ugc-row" style="justify-content:space-between"><span class="ugc-note" dir="auto">${esc(p)}</span><button class="ugc-act" data-unblock="${esc(p)}" type="button">${t('إلغاء الحظر','Unblock')}</button></div>`).join(''):`<p class="ugc-note">${t('مفيش لاعبين محظورين.','No blocked players.')}</p>`;
+  openOv(`<h2>${t('اللاعبون المحظورون','Blocked players')}</h2><p class="ugc-note">${t('رسائل وأصوات اللاعبين المحظورين هتتخفى من الدردشة.','Messages and voice from blocked players are hidden in chat.')}</p>${list}<button class="btn primary" id="ovClose" type="button">${t('تمام','Done')}</button>`,true);
   $('#overlay').onclick=e=>{
     const b=e.target.closest('[data-unblock]');if(!b)return;
     unblockPid(b.dataset.unblock);openBlocked();
@@ -811,33 +1091,33 @@ function openBlocked(){
 }
 function reportDialog(pid,name,snippet){
   if(!pid||pid===myPid)return;
-  if(isBlocked(pid)){toast('اللاعب ده محظور بالفعل');return}
-  const opts=REPORT_REASONS.map(([v,l])=>`<label class="sw"><span>${l}</span><input type="radio" name="repReason" value="${v}"></label>`).join('');
-  openOv(`<h2>تبليغ عن لاعب</h2><p class="ugc-note">اللاعب: ${esc(name||'لاعب')}${snippet?'<br>'+esc(String(snippet).slice(0,80)):''}</p>
+  if(isBlocked(pid)){toast(t('اللاعب ده محظور بالفعل','This player is already blocked'));return}
+  const opts=REPORT_REASONS.map(([v,l,le])=>`<label class="sw"><span>${t(l,le)}</span><input type="radio" name="repReason" value="${v}"></label>`).join('');
+  openOv(`<h2>${t('تبليغ عن لاعب','Report a player')}</h2><p class="ugc-note">${t('اللاعب: ','Player: ')}${esc(name||t('لاعب','player'))}${snippet?'<br>'+esc(String(snippet).slice(0,80)):''}</p>
     <div class="ugc-reasons">${opts}</div>
-    <div class="row" style="gap:8px"><button class="btn ghost" id="ovClose" type="button">إلغاء</button><button class="btn danger" id="repSend" type="button">ابعت البلاغ</button></div>`,true);
+    <div class="row" style="gap:8px"><button class="btn ghost" id="ovClose" type="button">${t('إلغاء','Cancel')}</button><button class="btn danger" id="repSend" type="button">${t('ابعت البلاغ','Send report')}</button></div>`,true);
   $('#repSend').onclick=()=>{
     const r=document.querySelector('input[name="repReason"]:checked');
-    if(!r){toast('اختار سبب البلاغ الأول');return}
+    if(!r){toast(t('اختار سبب البلاغ الأول','Choose a reason first'));return}
     addReport({type:'player',pid:String(pid),name:name||'',reason:r.value,snippet:snippet?String(snippet).slice(0,80):''});
     closeOv();
   };
 }
 function openReports(){
-  const list=reportsOutbox.length?reportsOutbox.slice().reverse().map(r=>`<div class="ugc-row" style="justify-content:space-between"><span class="ugc-note" dir="auto">${esc(r.reason||'')} · ${esc(r.name||r.pid||'')} · ${new Date(r.ts).toLocaleString('ar-EG')}</span></div>`).join(''):'<p class="ugc-note">مفيش بلاغات مسجّلة.</p>';
+  const list=reportsOutbox.length?reportsOutbox.slice().reverse().map(r=>`<div class="ugc-row" style="justify-content:space-between"><span class="ugc-note" dir="auto">${esc(r.reason||'')} · ${esc(r.name||r.pid||'')} · ${new Date(r.ts).toLocaleString(LANG==='en'?'en-GB':'ar-EG')}</span></div>`).join(''):`<p class="ugc-note">${t('مفيش بلاغات مسجّلة.','No reports recorded.')}</p>`;
   const exported=reportsOutbox.length?JSON.stringify(reportsOutbox,null,2):'';
-  openOv(`<h2>بلاغاتك</h2><p class="ugc-note">البلاغات بتتخزن على جهازك فقط لحد ما يتم إرسالها. الإرسال النهائي محتاج خدمة بلاغات (شوف خطة الإشراف).</p>${list}
-    <div class="row" style="gap:8px;margin-top:8px"><button class="ugc-act" id="repCopy" type="button">انسخ/all</button><button class="ugc-act" id="repShare" type="button">مشاركة</button><button class="ugc-act danger" id="repClear" type="button">مسح</button></div>
-    <button class="btn primary" id="ovClose" type="button">تمام</button>`,true);
-  const copy=()=>{if(!exported){toast('مفيش حاجة تتنسخ');return}
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(exported).then(()=>toast('اتنسخ'),()=>fallbackCopy(exported));else fallbackCopy(exported)};
+  openOv(`<h2>${t('بلاغاتك','Your reports')}</h2><p class="ugc-note">${t('البلاغات بتتخزن على جهازك فقط لحد ما يتم إرسالها. الإرسال النهائي محتاج خدمة بلاغات (شوف خطة الإشراف).','Reports are stored only on your device until they are sent. Final delivery needs a reporting service (see the moderation plan).')}</p>${list}
+    <div class="row" style="gap:8px;margin-top:8px"><button class="ugc-act" id="repCopy" type="button">${t('انسخ','Copy')}</button><button class="ugc-act" id="repShare" type="button">${t('مشاركة','Share')}</button><button class="ugc-act danger" id="repClear" type="button">${t('مسح','Clear')}</button></div>
+    <button class="btn primary" id="ovClose" type="button">${t('تمام','Done')}</button>`,true);
+  const copy=()=>{if(!exported){toast(t('مفيش حاجة تتنسخ','Nothing to copy'));return}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(exported).then(()=>toast(t('اتنسخ','Copied')),()=>fallbackCopy(exported));else fallbackCopy(exported)};
   $('#repCopy').onclick=copy;
-  $('#repShare').onclick=()=>{if(!exported){toast('مفيش حاجة تتشارك');return}
-    if(navigator.share)navigator.share({title:'بلاغات دومينو شك',text:exported}).then(()=>{},()=>copy());else copy()};
-  $('#repClear').onclick=()=>ask('تمسح كل البلاغات من جهازك؟','أيوه',()=>{reportsOutbox=[];saveReports();openReports()});
+  $('#repShare').onclick=()=>{if(!exported){toast(t('مفيش حاجة تتشارك','Nothing to share'));return}
+    if(navigator.share)navigator.share({title:t('بلاغات دومينو شك','Domino Shak reports'),text:exported}).then(()=>{},()=>copy());else copy()};
+  $('#repClear').onclick=()=>ask(t('تمسح كل البلاغات من جهازك؟','Clear all reports from your device?'),t('أيوه','Yes'),()=>{reportsOutbox=[];saveReports();openReports()});
 }
 function fallbackCopy(text){
-  try{const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('اتنسخ')}catch(e){toast('مش قادر انسخ')}
+  try{const t2=document.createElement('textarea');t2.value=text;t2.style.position='fixed';t2.style.opacity='0';document.body.appendChild(t2);t2.select();document.execCommand('copy');t2.remove();toast(t('اتنسخ','Copied'))}catch(e){toast(t('مش قادر انسخ','Could not copy'))}
 }
 
 /* =====================================================
@@ -846,11 +1126,23 @@ function fallbackCopy(text){
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
 let toastT;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
-function openOv(html,dismiss){$('#overlay').innerHTML=`<div class="ov"${dismiss?' data-dismiss="1"':''}><div class="card">${html}</div></div>`;$('#overlay').classList.add('on')}
+function openOv(html,dismiss){$('#overlay').innerHTML=`<div class="ov"${dismiss?' data-dismiss="1"':''}><div class="card">${html}</div></div>`;$('#overlay').classList.add('on');applyI18n($('#overlay'))}
 function closeOv(){$('#overlay').classList.remove('on');$('#overlay').innerHTML='';revealOpen=false;overOpen=false;clearTimeout(revealTimer);rvTimers.forEach(clearTimeout);rvTimers=[];clearSweep()}
 const goHome=()=>{location.href=location.href.split(/[?#]/)[0]};
 
-const RULES=`<h2>إزاي بنلعب؟</h2>
+const RULES=()=>LANG==='en'?`<h2>How to play</h2>
+<ul class="rules">
+<li>The 28 dominoes are dealt evenly (9 each with 3 players, 5 each with 5 players; leftover tiles are set aside).</li>
+<li>The player whose turn it is, with an empty table, picks a number, plays one or more face-down tiles, and claims they are that number — e.g. “fives”.</li>
+<li>The next player either plays one or more tiles on the same number, or doubts the previous play.</li>
+<li>Any player can doubt the last play before the next player plays. The tiles are revealed: if any tile does not match the called number, the liar takes the whole table. If all match, the doubter takes the table.</li>
+<li>After a doubt the table is cleared, and the player whose turn it is starts with a new number. If the doubter is the one whose turn it is, they keep the turn.</li>
+<li>The first player to run out of tiles takes first place. Their place is confirmed when the next player plays without doubting.</li>
+<li>You can pass your turn. If every player passes in a row (including the last player who played, when the turn returns to them), the tiles on the table are moved aside into an old row, and the first player who passed picks a new number and plays into a new row. If someone doubts afterwards, the loser takes everything on the table, including the old rows.</li>
+<li>If you disconnect (network or accidental exit), rejoin with the same name and you will return to your seat with the same tiles; your turn is auto-played if you are slow. If the host leaves, ownership passes to another player.</li>
+<li>At the end every player taps “Ready” and the host starts the next game.</li>
+</ul>
+<button class="btn primary" id="ovClose" type="button">Done</button>`:`<h2>إزاي بنلعب؟</h2>
 <ul class="rules">
 <li>الدومينو ٢٨ قطعة بتتوزع بالتساوي على اللاعبين (لو ٣ لاعبين كل واحد ٩، ولو ٥ لاعبين كل واحد ٥، والقطع الزيادة بتتشال).</li>
 <li>اللي عليه الدور والأرض فاضية يختار رقم، وينزل قطعة أو أكتر مقلوبين، ويدّعي إن القطع دي «خمسات» مثلاً.</li>
@@ -876,24 +1168,24 @@ const RULES=`<h2>إزاي بنلعب؟</h2>
   const inviteParams=new URLSearchParams(location.search);
   const rawRoom=inviteParams.get('room')||'';
   const urlRoom=rawRoom.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
-  if(rawRoom && urlRoom.length<4){toast('كود الطاولة في اللينك غير صالح');}
+  if(rawRoom && urlRoom.length<4){toast(t('كود الطاولة في اللينك غير صالح','The room code in the link is not valid'));}
   if(urlRoom){
     $('#codeIn').value=urlRoom;
-    const inv=$('#invited');inv.hidden=false;inv.textContent='اتدعيت لطاولة '+urlRoom+' — اكتب اسمك وادخل.';
+    const inv=$('#invited');inv.hidden=false;inv.textContent=t('اتدعيت لطاولة '+urlRoom+' — اكتب اسمك وادخل.','You are invited to table '+urlRoom+' — enter your name to join.');
     $('#createBox').style.display='none';
     document.querySelector('.divider').style.display='none';
     $('#joinBtn').className='btn primary';
     $('#invBack').hidden=false;
-    $('#botBtn').hidden=true;
+    $('#soloBox').hidden=true;
     $('#invBack').onclick=goHome;
     // App Links pass auto=1. Never create a room here; only join the invited
     // table, and only when a previously saved name is available.
     if(inviteParams.get('auto')==='1'){
-      inv.textContent='اتدعيت لطاولة '+urlRoom+' — بنجرب ندخل تلقائيًا.';
+      inv.textContent=t('اتدعيت لطاولة '+urlRoom+' — بنجرب ندخل تلقائيًا.','You are invited to table '+urlRoom+' — trying to join automatically.');
       setTimeout(function(){
         if(aborted||leaving||location.search.indexOf('room='+urlRoom)===-1)return;
         if(!$('#nameIn').value.trim()){
-          inv.textContent='اتدعيت لطاولة '+urlRoom+' — اكتب اسمك وادخل.';
+          inv.textContent=t('اتدعيت لطاولة '+urlRoom+' — اكتب اسمك وادخل.','You are invited to table '+urlRoom+' — enter your name to join.');
           $('#nameIn').focus();
           return;
         }
@@ -913,47 +1205,60 @@ const RULES=`<h2>إزاي بنلعب؟</h2>
   $('#botBtn').onclick=openBotSetup;
   $('#joinBtn').onclick=()=>joinRoom($('#codeIn').value.toUpperCase().replace(/[^A-Z0-9]/g,''));
   function setNetMode(m){
+    if(m==='lan'&&!lanAvailable())m='online';
     netMode=m;
     document.querySelectorAll('#modePick button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
-    const lan=m==='lan';
+    const lan=m==='lan',solo=m==='solo',invited=!$('#invited').hidden;
     $('#lanIpIn').hidden=!lan;
-    $('#createBtn').textContent=lan?'اعمل طاولة محلية':'اعمل طاولة جديدة';
-    $('#joinBtn').textContent=lan?'ادخل الطاولة المحلية':'ادخل الطاولة';
+    const cb=$('#createBtn');if(cb)cb.textContent=lan?t('اعمل طاولة محلية','Create local table'):t('اعمل طاولة جديدة','Create new table');
+    const jb=$('#joinBtn');if(jb)jb.textContent=lan?t('ادخل الطاولة المحلية','Join local table'):t('ادخل الطاولة','Join table');
     const lbl=$('#modeLbl');
-    lbl.textContent=lan?'الوضع الحالي: شبكة محلية (بدون إنترنت — تطبيق أندرويد)'
-      :(m==='solo'?'الوضع الحالي: ضد البوتات':'الوضع الحالي: أونلاين (PeerJS)');
+    lbl.textContent=lan?t('الوضع الحالي: شبكة محلية (بدون إنترنت — تطبيق أندرويد)','Mode: Local network (no internet — Android app)')
+      :(solo?t('الوضع الحالي: ضد البوتات','Mode: Against bots'):t('الوضع الحالي: أونلاين (PeerJS)','Mode: Online (PeerJS)'));
+    const createBox=$('#createBox'),divider=document.querySelector('.divider'),joinBox=$('#joinBox'),soloBox=$('#soloBox'),mp=$('#modePick');
+    if(createBox)createBox.style.display=(solo||invited)?'none':'';
+    if(divider)divider.style.display=(solo||invited)?'none':'';
+    if(joinBox)joinBox.style.display=solo?'none':'flex';
+    if(soloBox)soloBox.hidden=!solo||invited;
+    if(mp)mp.style.display=invited?'none':'';
     const wa=$('#waBtn');if(wa)wa.style.display=lan?'none':'';
-    const copy=$('#copyBtn');if(copy)copy.textContent=lan?'انسخ الكود':'انسخ اللينك';
-    if(lan&&!lanAvailable())toast('وضع الشبكة المحلية يحتاج تطبيق أندرويد — استخدم أونلاين في المتصفح');
+    const copy=$('#copyBtn');if(copy)copy.textContent=lan?t('انسخ الكود','Copy code'):t('انسخ اللينك','Copy link');
   }
+  syncHomeMode=()=>setNetMode(netMode);
+  // Hide Local Network on hosts where the native LAN bridge is unavailable (the web build).
+  const lanBtn=document.querySelector('#modePick [data-mode="lan"]');
+  if(lanBtn&&!lanAvailable())lanBtn.hidden=true;
   document.querySelectorAll('#modePick button').forEach(b=>{b.onclick=()=>setNetMode(b.dataset.mode)});
   setNetMode('online');
-  $('#rulesHome').onclick=()=>{openOv(RULES,true)};
-  $('#rulesBtn').onclick=()=>{openOv(RULES,true)};
+  $('#rulesHome').onclick=()=>{openOv(RULES(),true)};
+  $('#rulesBtn').onclick=()=>{openOv(RULES(),true)};
   $('#termsHome').onclick=openTerms;
   $('#privacyHome').onclick=openPrivacy;
   $('#setHome').onclick=openSettings;
   $('#setBtn').onclick=openSettings;
   $('#lobBack').onclick=goHome;
+  const lb=$('#langBtn');if(lb)lb.onclick=()=>setLang(LANG==='en'?'ar':'en');
+  // initial language pass
+  applyDir();updateLangBtn();applyI18n(document);
 })();
 
 function readName(){
   const n=cleanName($('#nameIn').value);
-  if(!n){toast('اكتب اسمك الأول');$('#nameIn').focus();return null}
+  if(!n){toast(t('اكتب اسمك الأول','Enter your name first'));$('#nameIn').focus();return null}
   try{localStorage.setItem('dmnshk-name',n)}catch(e){}
   return n;
 }
-function needPeer(){if(typeof Peer==='undefined'){toast('مش قادر أحمّل مكتبة PeerJS — اتأكد من النت');return false}return true}
+function needPeer(){if(typeof Peer==='undefined'){toast(t('مش قادر أحمّل مكتبة PeerJS — اتأكد من النت','Could not load PeerJS — check your connection'));return false}return true}
 
 /* =====================================================
    الشبكة — Host
    ===================================================== */
 function createRoom(){
   if(netMode==='lan'){
-    if(!lanAvailable()){toast('اللعب في الشبكة المحلية متاح في تطبيق أندرويد فقط');return}
+    if(!lanAvailable()){toast(t('اللعب في الشبكة المحلية متاح في تطبيق أندرويد فقط','Local network play is available in the Android app only'));return}
     useLanTransport(true);lanTargetIp='127.0.0.1';
     window.dsLan.host(LAN_PORT).then(function(ok){
-      if(!ok){toast('مش قادر أفتح الطاولة المحلية');return}
+      if(!ok){toast(t('مش قادر أفتح الطاولة المحلية','Could not start the local table'));return}
       requireTerms(doCreateRoom);
     });
     return;
@@ -963,7 +1268,7 @@ function createRoom(){
 function doCreateRoom(){
   const n=readName();if(!n)return;
   const cc=$('#roomIn').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(cc&&cc.length<4){toast('الكود لازم يكون من ٤ لـ ٨ حروف أو أرقام إنجليزي');$('#roomIn').focus();return}
+  if(cc&&cc.length<4){toast(t('الكود لازم يكون من ٤ لـ ٨ حروف أو أرقام إنجليزي','The code must be 4–8 letters or digits'));$('#roomIn').focus();return}
   if(!needPeer())return;
   customCode=cc;
   myName=n;isHost=true;mySeat=0;hostSeat=0;epoch=0;
@@ -985,7 +1290,7 @@ function showLanHostInfo(code){
     lanHostIp=ip||'';
     const h=$('#lobHint');
     if(h&&netMode==='lan'){
-      h.textContent='طاولة محلية — على الجهاز التاني اختار «شبكة محلية» واكتب IP: '+(ip||'؟')+' والكود '+code;
+      h.textContent=t('طاولة محلية — على الجهاز التاني اختار «شبكة محلية» واكتب IP: '+(ip||'؟')+' والكود '+code,'Local table — on the other device choose “Local network”, enter IP: '+(ip||'?')+' and code '+code);
     }
   });
 }
@@ -1002,12 +1307,12 @@ function attachHostPeer(id,onOpen){
   peer.on('error',e=>{
     if(e.type==='unavailable-id'){
       try{peer.destroy()}catch(_){}
-      if(G){abortUI('مقدرناش نفتح الطاولة من جديد');return}
-      if(customCode){toast('الكود ده مستخدم دلوقتي — اختار كود تاني');goHomeSoft();return}
+      if(G){abortUI(t('مقدرناش نفتح الطاولة من جديد','We could not reopen the table'));return}
+      if(customCode){toast(t('الكود ده مستخدم دلوقتي — اختار كود تاني','That code is taken — choose another'));goHomeSoft();return}
       openHostPeer();return;
     }
     if(e.type==='peer-unavailable')return;
-    toast('مشكلة في الاتصال بالسيرفر الوسيط');
+    toast(t('مشكلة في الاتصال بالسيرفر الوسيط','Problem connecting to the signalling server'));
   });
 }
 /* نبض الاتصال: الـ Host بيفصل اللي ساكت، والعميل بيكتشف انقطاع الـ Host */
@@ -1035,12 +1340,12 @@ function hostData(conn,d){
 function uniqueName(n){
   let name=n,k=2;
   const taken=x=>lobby.names.some(q=>q.toLowerCase()===x.toLowerCase());
-  while(taken(name))name=n.slice(0,12)+' '+AR(k++);
+  while(taken(name))name=n.slice(0,12)+' '+trNum(k++);
   return name;
 }
 function handleJoin(conn,d){
   if(conn.seat!==undefined)return;
-  const name=cleanName(d.name)||'لاعب';
+  const name=cleanName(d.name)||t('لاعب','player');
   const pid=String(d.pid||'');
   let seat=d.tok?lobby.toks.indexOf(String(d.tok)):-1;
   if(seat<0)seat=lobby.names.findIndex((q,i)=>lobby.off[i]&&q.toLowerCase()===name.toLowerCase());
@@ -1052,7 +1357,7 @@ function handleJoin(conn,d){
     if(pid)lobby.pids[seat]=pid;
     conn.send({t:'welcome',seat,tok:lobby.toks[seat],epoch,host:hostSeat,pid:myPid,pids:lobby.pids});
     SFX.join();
-    if(G){sysMsg(lobby.names[seat]+(was?' رجع للطاولة':' دخل تاني'));broadcast()}else broadcastLobby();
+    if(G){sysMsg(lobby.names[seat]+(was?t(' رجع للطاولة',' came back to the table'):t(' دخل تاني',' rejoined')));broadcast()}else broadcastLobby();
     return;
   }
   if(G){conn.send({t:'full',why:'started'});setTimeout(()=>{try{conn.close()}catch(e){}},400);return}
@@ -1080,7 +1385,7 @@ function hostClosed(conn){
   }
   lobby.conns[seat]=null;lobby.off[seat]=true;
   SFX.leave();
-  sysMsg(lobby.names[seat]+' فصل من الطاولة');
+  sysMsg(lobby.names[seat]+t(' فصل من الطاولة',' disconnected from the table'));
   broadcast();
 }
 function broadcastLobby(){
@@ -1093,23 +1398,23 @@ function broadcastLobby(){
    ===================================================== */
 function joinRoom(code){
   if(netMode==='lan'){
-    if(!lanAvailable()){toast('اللعب في الشبكة المحلية متاح في تطبيق أندرويد فقط');return}
+    if(!lanAvailable()){toast(t('اللعب في الشبكة المحلية متاح في تطبيق أندرويد فقط','Local network play is available in the Android app only'));return}
     const ip=(($('#lanIpIn')||{}).value||'').trim();
-    if(!/^[\w.]{3,40}$/.test(ip)){toast('اكتب IP المضيف أول — مثال 192.168.43.1');$('#lanIpIn').focus();return}
+    if(!/^[\w.]{3,40}$/.test(ip)){toast(t('اكتب IP المضيف أول — مثال 192.168.43.1','Enter the host IP first — e.g. 192.168.43.1'));$('#lanIpIn').focus();return}
     lanTargetIp=ip;useLanTransport(true);
   }else useLanTransport(false);
   requireTerms(()=>doJoinRoom(code));
 }
 function doJoinRoom(code){
   const n=readName();if(!n)return;
-  if(code.length<4){toast('اكتب كود الطاولة');return}
+  if(code.length<4){toast(t('اكتب كود الطاولة','Enter the room code'));return}
   if(!needPeer())return;
   myName=n;isHost=false;roomCode=code;
   showConnecting(code);
   aborted=false;reconnecting=false;leaving=false;V=null;
   cli={welcomed:false,tok:loadTok(code),epoch:0,hostLeft:false,lostAt:0,tick:0,lastPong:Date.now(),rt:null,failTimer:null};
   ensurePeer(()=>probe(0));
-  cli.failTimer=setTimeout(()=>{if(!cli.welcomed){toast('الطاولة مردتش — اتأكد من الكود');goHomeSoft()}},20000);
+  cli.failTimer=setTimeout(()=>{if(!cli.welcomed){toast(t('الطاولة مردتش — اتأكد من الكود','The table did not respond — check the code'));goHomeSoft()}},20000);
 }
 const tokKey=c=>'dmnshk-tok-'+c;
 function loadTok(c){try{return localStorage.getItem(tokKey(c))||''}catch(e){return ''}}
@@ -1122,7 +1427,7 @@ function ensurePeer(cb){
   peer.on('disconnected',()=>{try{if(peer&&!peer.destroyed)peer.reconnect()}catch(e){}});
   peer.on('error',e=>{
     if(e.type==='peer-unavailable'){onProbeFail();return}
-    if(!cli.welcomed&&!reconnecting){toast('مشكلة في الاتصال');goHomeSoft()}
+    if(!cli.welcomed&&!reconnecting){toast(t('مشكلة في الاتصال','Connection problem'));goHomeSoft()}
   });
 }
 function probe(ep){
@@ -1138,7 +1443,7 @@ function onProbeFail(){
   if(aborted||isHost)return;
   if(cli.welcomed||reconnecting){scheduleTick(2500);return}
   if(probeEp<6){probe(probeEp+1);return}
-  clearTimeout(cli.failTimer);toast('الطاولة دي مش موجودة أو اتقفلت');goHomeSoft();
+  clearTimeout(cli.failTimer);toast(t('الطاولة دي مش موجودة أو اتقفلت','This table does not exist or was closed'));goHomeSoft();
 }
 function clientData(d){
   if(!d)return;
@@ -1160,7 +1465,7 @@ function onWelcome(d){
   hostPid=d.pid||'';seatPids=Array.isArray(d.pids)?d.pids.slice():[];
   mySeat=d.seat;hostSeat=d.host||0;epoch=cli.epoch;
   saveTok(roomCode,d.tok);
-  if(reconnecting){reconnecting=false;hideNet();toast('رجعت للطاولة')}
+  if(reconnecting){reconnecting=false;hideNet();toast(t('رجعت للطاولة','Back at the table'))}
   startHeartbeat();
 }
 function showNet(t){$('#net').hidden=false;$('#netTxt').textContent=t}
@@ -1169,7 +1474,7 @@ function scheduleTick(ms){clearTimeout(cli.rt);cli.rt=setTimeout(reconnectTick,m
 function onHostLost(c){
   if(c&&c!==hostConn)return;
   if(isHost||aborted||leaving||!cli.welcomed||reconnecting)return;
-  if(!V){abortUI('صاحب الطاولة قفل الطاولة');return}
+  if(!V){abortUI(t('صاحب الطاولة قفل الطاولة','The host closed the table'));return}
   reconnecting=true;cli.lostAt=Date.now();cli.tick=0;
   showNet('الاتصال اتقطع — بيحاول يرجع…');
   reconnectTick();
@@ -1177,7 +1482,7 @@ function onHostLost(c){
 function reconnectTick(){
   if(!reconnecting||aborted||leaving)return;
   const waited=(Date.now()-cli.lostAt)/1000;
-  if(waited>150){hideNet();abortUI('مقدرناش نرجع للطاولة');return}
+  if(waited>150){hideNet();abortUI(t('مقدرناش نرجع للطاولة','We could not get back to the table'));return}
   const grace=cli.hostLeft?0:9;
   if(V&&snapPayload&&V.succ===V.me&&waited>=grace){becomeHost();return}
   const eps=waited<grace?[cli.epoch]:[cli.epoch+1,cli.epoch];
@@ -1201,8 +1506,8 @@ function becomeHost(){
   showNet('بتاخد ملكية الطاولة…');
   attachHostPeer(hostId(roomCode,epoch),()=>{
     hideNet();
-    sysMsg(lobby.names[hostSeat]+' بقى صاحب الطاولة 👑');
-    toast('إنت دلوقتي صاحب الطاولة');
+    sysMsg(lobby.names[hostSeat]+t(' بقى صاحب الطاولة 👑',' is now the host 👑'));
+    toast(t('إنت دلوقتي صاحب الطاولة','You are the host now'));
     broadcast();
   });
 }
@@ -1215,13 +1520,13 @@ function leaveTable(){
 function showConnecting(code){
   renderLobby([],0,code);
   $('#lobCount').textContent='';
-  $('#lobHint').textContent='بيتوصّل بالطاولة…';
+  $('#lobHint').textContent=t('بيتوصّل بالطاولة…','Connecting to the table…');
 }
 function goHomeSoft(){clearInterval(hbTimer);clearTimeout(cli.rt);try{peer&&peer.destroy()}catch(e){}peer=null;try{if(window.__dsLanMode&&window.dsLan)window.dsLan.stopHost()}catch(e){}hideNet();show('home')}
 function abortUI(m){
   aborted=true;reconnecting=false;clearTimeout(cli.rt);
   hideNet();
-  openOv(`<h2>الطاولة اتقفلت</h2><p>${esc(m)}</p><button class="btn primary" id="homeBtn" type="button">رجوع للرئيسية</button>`);
+  openOv(`<h2>${t('الطاولة اتقفلت','The table was closed')}</h2><p>${esc(m)}</p><button class="btn primary" id="homeBtn" type="button">${t('رجوع للرئيسية','Back to home')}</button>`);
   $('#homeBtn').onclick=goHome;
 }
 
@@ -1240,23 +1545,23 @@ function renderLobby(names,sz,code,host){
   const h=host||0;
   $('#lobCode').textContent=code;
   $('#seats').innerHTML=Array.from({length:sz},(_,i)=>names[i]
-    ?`<li class="filled"><span>${avHTML(i,names[i],i===h)} ${esc(names[i])}</span>${i===h?'<small>صاحب الطاولة</small>':''}</li>`
-    :`<li class="empty">مستني لاعب…</li>`).join('');
-  $('#lobCount').textContent=AR(names.length)+' من '+AR(sz);
-  $('#lobHint').textContent=isHost?'ابعت اللينك لصحابك — اللعبة هتبدأ أول ما الطاولة تكمل.':'اللعبة هتبدأ أول ما الطاولة تكمل.';
+    ?`<li class="filled"><span>${avHTML(i,names[i],i===h)} ${esc(names[i])}</span>${i===h?`<small>${t('صاحب الطاولة','Host')}</small>`:''}</li>`
+    :`<li class="empty">${t('مستني لاعب…','Waiting for a player…')}</li>`).join('');
+  $('#lobCount').textContent=trNum(names.length)+t(' من ',' of ')+trNum(sz);
+  $('#lobHint').textContent=isHost?t('ابعت اللينك لصحابك — اللعبة هتبدأ أول ما الطاولة تكمل.','Send the link to your friends — the game starts as soon as the table is full.'):t('اللعبة هتبدأ أول ما الطاولة تكمل.','The game starts as soon as the table is full.');
   const link=inviteLink(code);
-  $('#waBtn').href='https://wa.me/?text='+encodeURIComponent('تعالى نلعب دومينو شك! الطاولة: '+link);
+  $('#waBtn').href='https://wa.me/?text='+encodeURIComponent(t('تعالى نلعب دومينو شك! الطاولة: ','Come play Domino Shak! Table: ')+link);
   $('#copyBtn').onclick=()=>{
-    const done=()=>toast('اللينك اتنسخ');
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(done,()=>prompt('انسخ اللينك:',link));
-    else prompt('انسخ اللينك:',link);
+    const done=()=>toast(t('اللينك اتنسخ','Link copied'));
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(link).then(done,()=>prompt(t('انسخ اللينك:','Copy the link:'),link));
+    else prompt(t('انسخ اللينك:','Copy the link:'),link);
   };
 }
 
 /* =====================================================
    منطق اللعبة (على الـ Host فقط)
    ===================================================== */
-function addLog(s){G.log.push({n:++G.logN,s});if(G.log.length>60)G.log.shift()}
+function addLog(s,en){G.log.push({n:++G.logN,s,e:en||s});if(G.log.length>60)G.log.shift()}
 
 function startGame(){
   const n=lobby.names.length;
@@ -1274,8 +1579,8 @@ function startGame(){
   G.bm=G.players.map(()=>({r:0,l:0}));
   const s=G.players.findIndex(p=>p.hand.some(t=>t.a===6&&t.b===6));
   G.turn=s>=0?s:Math.floor(Math.random()*n);
-  {const d=28-per*n;if(d>0)addLog((d===1?'قطعة واحدة اتشالت':pcs(d)+' اتشالوا')+' برا اللعبة عشان التوزيع يبقى متساوي')}
-  addLog(G.players[G.turn].name+' يبدأ'+(s>=0?' — معاه الدبل ستة':''));
+  {const d=28-per*n;if(d>0)addLog((d===1?'قطعة واحدة اتشالت':pcs(d)+' اتشالوا')+' برا اللعبة عشان التوزيع يبقى متساوي',(d===1?'1 tile was removed':d+' tiles were removed')+' from the game so the deal is even')}
+  addLog(G.players[G.turn].name+' يبدأ'+(s>=0?' — معاه الدبل ستة':''),G.players[G.turn].name+' starts'+(s>=0?' — holding the double six':''));
   selected.clear();pickNum=null;seenReveal=rvId;
   broadcast();
 }
@@ -1323,7 +1628,7 @@ function finish(i){
   const p=G.players[i];
   p.finished=true;p.pending=false;
   G.ranking.push(i);p.place=G.ranking.length;
-  addLog(p.name+' خلّص — المركز '+ORD[p.place]);
+  addLog(p.name+' خلّص — المركز '+ORD[p.place],p.name+' finished — rank '+EN_ORD[p.place]);
 }
 function confirmPending(){G.players.forEach((p,i)=>{if(p.pending)finish(i)})}
 function checkEnd(){
@@ -1364,7 +1669,7 @@ function doPlay(seat,ids,num){
   G.num=claim;
   G.last={p:seat,tiles,num:claim,count:tiles.length};
   if(!p.hand.length)p.pending=true;
-  addLog(p.name+' نزّل '+pcs(tiles.length)+' وادّعى '+NUMS[claim]);
+  addLog(p.name+' نزّل '+pcs(tiles.length)+' وادّعى '+NUMS[claim],p.name+' played '+tiles.length+(tiles.length===1?' tile':' tiles')+' and called '+EN_NUMS[claim]);
   if(!checkEnd())nextTurn(seat);
   broadcast();
 }
@@ -1383,7 +1688,8 @@ function doDoubt(seat){
   G.players[loser].hand.push(...oldTiles,...G.pile);
   G.pile=[];G.batches=[];G.rows=[];G.passes=[];
   G.reveal={id:++rvId,doubter:seat,target:L.p,tiles:L.tiles,num:L.num,truth,loser,took};
-  addLog(p.name+' شكّ في '+tp.name+' — '+(truth?'طلع صادق':'طلع كذّاب')+' و'+G.players[loser].name+' أخد '+pcs(took));
+  addLog(p.name+' شكّ في '+tp.name+' — '+(truth?'طلع صادق':'طلع كذّاب')+' و'+G.players[loser].name+' أخد '+pcs(took),
+    p.name+' doubted '+tp.name+' — '+(truth?'they were truthful':'they were lying')+' and '+G.players[loser].name+' took '+took+(took===1?' tile':' tiles'));
   if(truth){if(tp.pending)finish(L.p)}else tp.pending=false;
   G.num=null;G.last=null;
   const t=G.players[G.turn];
@@ -1396,13 +1702,13 @@ function doPass(seat){
   const p=G.players[seat];
   if(!p||seat!==G.turn||p.finished||!G.last||G.num===null)return;
   G.passes.push(seat);p.st.passes++;
-  addLog(p.name+' تخطّى');
+  addLog(p.name+' تخطّى',p.name+' passed');
   const others=G.players.map((q,i)=>i).filter(i=>!G.players[i].finished&&G.players[i].hand.length>0);
   if(others.every(i=>G.passes.includes(i))){
     const first=G.passes[0];
     confirmPending();
     G.rows.push({num:G.num,count:G.pile.length,tiles:G.pile.slice()});
-    addLog('الكل تخطّى — الورق اتنحّى جنب، و'+G.players[first].name+' يختار رقم جديد');
+    addLog('الكل تخطّى — الورق اتنحّى جنب، و'+G.players[first].name+' يختار رقم جديد','Everyone passed — the tiles were moved aside, and '+G.players[first].name+' picks a new number');
     G.pile=[];G.batches=[];G.num=null;G.last=null;G.passes=[];
     G.turn=first;
     if(!checkEnd()){const t=G.players[G.turn];if(t.finished||!t.hand.length)nextTurn(G.turn)}
@@ -1453,7 +1759,7 @@ function autoMove(seat){
   if(!G||G.phase!=='play'||G.turn!==seat||!lobby.off[seat])return;
   const p=G.players[seat];
   p.st.auto++;
-  addLog('دور '+p.name+' اتلعب أوتوماتيك (فاصل)');
+  addLog('دور '+p.name+' اتلعب أوتوماتيك (فاصل)',p.name+"'s turn was auto-played (offline)");
   if(G.last&&G.num!==null)doPass(seat);
   else{
     const t=p.hand.slice().sort((a,b)=>(b.a+b.b)-(a.a+a.b))[0];
@@ -1463,8 +1769,8 @@ function autoMove(seat){
 function rematch(){
   if(!isHost||!G||G.phase!=='over')return;
   const live=lobby.names.map((_,i)=>i).filter(i=>i===hostSeat||!lobby.off[i]);
-  if(live.length<2){toast('محتاج لاعبين اتنين على الأقل');return}
-  if(live.some(i=>i!==hostSeat&&!ready[i]&&!isBot(i))){toast('لسه في لاعبين مش مستعدين');return}
+  if(live.length<2){toast(t('محتاج لاعبين اتنين على الأقل','You need at least 2 players'));return}
+  if(live.some(i=>i!==hostSeat&&!ready[i]&&!isBot(i))){toast(t('لسه في لاعبين مش مستعدين','Some players are not ready yet'));return}
   if(live.length<lobby.names.length){
     const names=live.map(i=>lobby.names[i]),toks=live.map(i=>lobby.toks[i]),conns=live.map(i=>lobby.conns[i]),pids=live.map(i=>(lobby.pids||[])[i]||'');
     hostSeat=live.indexOf(hostSeat);
@@ -1487,7 +1793,7 @@ function render(){
   const playing=V.phase==='play';
   const myTurn=playing&&V.turn===me&&!mp.finished&&mp.count>0;
   const eff=V.num!==null?V.num:pickNum;
-  $('#roomTag').textContent=V.solo?'ضد البوتات · '+(LEVELS[V.level]||''):'طاولة '+roomCode;
+  $('#roomTag').textContent=V.solo?t('ضد البوتات · ','Bots · ')+(LANG==='en'?({easy:'Easy',medium:'Medium',hard:'Hard'}[V.level]||V.level||''):(LEVELS[V.level]||'')):t('طاولة ','Table ')+roomCode;
   $('#chatBtn').hidden=!!V.solo;
 
   // أصوات وحركات حسب التغيير من آخر حالة
@@ -1507,7 +1813,7 @@ function render(){
   for(let k=1;k<n;k++){
     const i=(me+k)%n,p=P[i];
     const turn=playing&&V.turn===i&&!p.finished&&p.count>0;
-    const st=p.finished?'المركز '+ORD[p.place]:p.pending?'ورقه خلص':turn?'دوره':(playing&&V.passes.includes(i))?'تخطّى':'';
+    const st=p.finished?t('المركز ','Rank ')+ordWord(p.place):p.pending?t('ورقه خلص','out of tiles'):turn?t('دوره','their turn'):(playing&&V.passes.includes(i))?t('تخطّى','passed'):'';
     const spk=playingId!==null&&((chatLog.find(x=>x.id===playingId)||{}).from===i);
     const spid=p.pid||'';
     const sTools=(!V.solo&&i!==me&&spid&&spid!==myPid)
@@ -1516,31 +1822,31 @@ function render(){
       ${bubHTML(i)}<div class="top">${avHTML(i,p.name,V.host===i)}<div class="nm">${esc(p.name)}</div></div>
       <div class="minis">${'<i class="tile back mini"></i>'.repeat(Math.min(p.count,14))}</div>
       <div class="cnt">${p.count?pcs(p.count):'—'}</div>
-      <div class="st">${p.off?'<span class="offb">فاصل</span>':st}</div>${sTools}</div>`;
+      <div class="st">${p.off?`<span class="offb">${t('فاصل','offline')}</span>`:st}</div>${sTools}</div>`;
   }
   $('#opps').innerHTML=o;
   $('#opps').className=n>=5?'many':'';
 
   // الترابيزة
-  $('#claim').innerHTML=V.num===null?'<span class="muted">الأرض فاضية</span>':`<small>المطلوب</small><b${numChanged?' class="pop"':''}>${NUMS[V.num]}</b>`;
+  $('#claim').innerHTML=V.num===null?`<span class="muted">${t('الأرض فاضية','Board is empty')}</span>`:`<small>${t('المطلوب','Called')}</small><b${numChanged?' class="pop"':''}>${numWord(V.num)}</b>`;
   const newRow=V.rows.length>lastRows;lastRows=V.rows.length;
   const oldShown=V.rows.slice(-3);
-  $('#oldrows').innerHTML=(V.rows.length>3?`<div class="oldmore">+ ${AR(V.rows.length-3)} صفوف أقدم</div>`:'')+
-    oldShown.map((r,k)=>`<div class="orow${newRow&&k===oldShown.length-1?' enter':''}"><span>${NUMS[r.num]}</span><div class="strip2">${'<i class="tile back xs"></i>'.repeat(Math.min(r.count,14))}</div></div>`).join('');
+  $('#oldrows').innerHTML=(V.rows.length>3?`<div class="oldmore">+ ${trNum(V.rows.length-3)} ${t('صفوف أقدم','older rows')}</div>`:'')+
+    oldShown.map((r,k)=>`<div class="orow${newRow&&k===oldShown.length-1?' enter':''}"><span>${numWord(r.num)}</span><div class="strip2">${'<i class="tile back xs"></i>'.repeat(Math.min(r.count,14))}</div></div>`).join('');
   $('#board').innerHTML=V.batches.length
     ?V.batches.map((b,k)=>{const lastB=k===V.batches.length-1;return `<div class="bw${lastB?' lastb':''}"><div class="batch${lastB&&batchGrew?' drop':''}">${Array.from({length:b.count},(_,j)=>`<i class="tile back sm" style="--k:${j}"></i>`).join('')}</div><span class="bn">${esc(P[b.p].name)}</span></div>`}).join('')
-    :'<span class="bempty">مفيش ورق على الأرض</span>';
+    :`<span class="bempty">${t('مفيش ورق على الأرض','No tiles on the table')}</span>`;
   let status;
-  if(!playing)status='اللعبة خلصت';
-  else if(myTurn)status=V.num===null?'دورك — اختار رقم وانزل':V.last&&V.last.p===me?'دورك — كمّل على '+NUMS[V.num]+' أو تخطّى':'دورك — انزل على '+NUMS[V.num]+' أو شك أو تخطّى';
-  else status='دور '+esc(P[V.turn].name)+(P[V.turn].off?' — فاصل، هيتلعب أوتوماتيك':'');
+  if(!playing)status=t('اللعبة خلصت','Game over');
+  else if(myTurn)status=V.num===null?t('دورك — اختار رقم وانزل','Your turn — choose a number and play'):V.last&&V.last.p===me?t('دورك — كمّل على ','Your turn — continue at ')+numWord(V.num)+t(' أو تخطّى',' or pass'):t('دورك — انزل على ','Your turn — play on ')+numWord(V.num)+t(' أو شك أو تخطّى',' or doubt or pass');
+  else status=t('دور ','Turn: ')+esc(P[V.turn].name)+(P[V.turn].off?t(' — فاصل، هيتلعب أوتوماتيك',' — offline, auto-play'):'');
   $('#status').innerHTML=status;
-  $('#last').textContent=V.last?P[V.last.p].name+' نزّل '+pcs(V.last.count):'';
+  $('#last').textContent=V.last?P[V.last.p].name+t(' نزّل ',' played ')+pcs(V.last.count):'';
   renderHist();
 
   // أنا
-  $('#myline').innerHTML=`<span class="mycount">${avHTML(me,mp.name,V.host===me)}<span>${mp.count?'معاك '+pcs(mp.count):'قطعك خلصت'}</span></span>`+
-    (mp.finished?`<span>المركز ${ORD[mp.place]}</span>`:mp.pending?'<span>ورقك خلص — استنى لو حد هيشك</span>':'');
+  $('#myline').innerHTML=`<span class="mycount">${avHTML(me,mp.name,V.host===me)}<span>${mp.count?t('معاك ','You have ')+pcs(mp.count):t('قطعك خلصت','You are out of tiles')}</span></span>`+
+    (mp.finished?`<span>${t('المركز ','Rank ')}${ordWord(mp.place)}</span>`:mp.pending?`<span>${t('ورقك خلص — استنى لو حد هيشك','Out of tiles — waiting in case someone doubts')}</span>`:'');
   $('#mybub').innerHTML=bubHTML(V.me,true);
   const handIds=new Set(V.hand.map(t=>t.id));
   [...selected].forEach(id=>{if(!handIds.has(id))selected.delete(id)});
@@ -1548,7 +1854,7 @@ function render(){
   if(V.num!==null)pickNum=null;
 
   $('#picker').innerHTML=(myTurn&&V.num===null)
-    ?`<span>اختار الرقم اللي هتدّعيه</span><div class="chips">${[0,1,2,3,4,5,6].map(i=>`<button type="button" class="chip${pickNum===i?' on':''}" data-num="${i}" aria-label="${NUMS[i]}">${AR(i)}</button>`).join('')}</div>`
+    ?`<span>${t('اختار الرقم اللي هتدّعيه','Choose the number to call')}</span><div class="chips">${[0,1,2,3,4,5,6].map(i=>`<button type="button" class="chip${pickNum===i?' on':''}" data-num="${i}" aria-label="${numWord(i)}">${trNum(i)}</button>`).join('')}</div>`
     :'';
 
   const hnd=$('#hand');
@@ -1556,7 +1862,7 @@ function render(){
   let fi=0;
   hnd.innerHTML=V.hand.map(t=>{
     const fresh=!prevHand.has(t.id);
-    return `<button type="button" class="tile${selected.has(t.id)?' sel':''}${fresh?' deal':''}"${fresh?` style="--i:${fi++}"`:''} data-tile="${t.id}" aria-pressed="${selected.has(t.id)}" aria-label="قطعة ${t.a} و ${t.b}">${tileInner(t,eff)}</button>`;
+    return `<button type="button" class="tile${selected.has(t.id)?' sel':''}${fresh?' deal':''}"${fresh?` style="--i:${fi++}"`:''} data-tile="${t.id}" aria-pressed="${selected.has(t.id)}" aria-label="${LANG==='en'?'tile':'قطعة'} ${t.a} ${LANG==='en'?'and':'و'} ${t.b}">${tileInner(t,eff)}</button>`;
   }).join('');
   prevHand=new Set(V.hand.map(t=>t.id));
 
@@ -1564,11 +1870,11 @@ function render(){
   let a='';
   if(myTurn){
     const k=selected.size;
-    const lbl=eff===null?'اختار الرقم الأول':k?`نزّل ${pcs(k)} — ${NUMS[eff]}`:'اختار القطع اللي هتنزلها';
+    const lbl=eff===null?t('اختار الرقم الأول','Choose the number first'):k?t('نزّل ','Play ')+pcs(k)+' — '+numWord(eff):t('اختار القطع','Select tiles');
     a+=`<button id="playBtn" type="button" class="btn primary"${k&&eff!==null?'':' disabled'}>${lbl}</button>`;
-    if(V.num!==null)a+=`<button id="passBtn" type="button" class="btn ghost">تخطّى</button>`;
+    if(V.num!==null)a+=`<button id="passBtn" type="button" class="btn ghost">${t('تخطّى','Pass')}</button>`;
   }
-  if(playing&&!mp.finished)a+=`<button id="doubtBtn" type="button" class="btn danger"${canDoubt?'':' disabled'}>${canDoubt?'شك في '+esc(P[V.last.p].name):'شك'}</button>`;
+  if(playing&&!mp.finished)a+=`<button id="doubtBtn" type="button" class="btn danger"${canDoubt?'':' disabled'}>${canDoubt?t('شك في ','Doubt ')+esc(P[V.last.p].name):t('شك','Doubt')}</button>`;
   $('#actions').innerHTML=a;
 
   // الأوفرلاي: كشف الشك / نهاية اللعبة
@@ -1585,11 +1891,11 @@ function openReveal(r){
     return`<div class="rv-tile ${ok?'ok':'bad'}" style="--i:${i}">${tileEl(t,r.num)}<div class="tile back"></div></div>`;
   }).join('');
   const d=(r.tiles.length*0.3+1.2).toFixed(2);
-  openOv(`<h2>${esc(P[r.doubter].name)} شكّ في ${esc(P[r.target].name)}</h2>
-    <p>ادّعى إن القطع دي ${NUMS[r.num]}</p>
+  openOv(`<h2>${LANG==='en'?esc(P[r.doubter].name)+' doubted '+esc(P[r.target].name):esc(P[r.doubter].name)+' شكّ في '+esc(P[r.target].name)}</h2>
+    <p>${t('ادّعى إن القطع دي ','Claimed these tiles are ')}${numWord(r.num)}</p>
     <div class="rv-tiles">${tiles}</div>
-    <div class="verdict ${r.truth?'t':'f'}" style="--d:${d}s"><b>${r.truth?'صادق!':'كذّاب!'}</b><span>${esc(P[r.loser].name)} ياخد ${pcs(r.took)} من الأرض</span></div>
-    <button class="btn primary" id="ovClose" type="button">كمّل</button>`);
+    <div class="verdict ${r.truth?'t':'f'}" style="--d:${d}s"><b>${r.truth?t('صادق!','Truthful!'):t('كذّاب!','Liar!')}</b><span>${LANG==='en'?esc(P[r.loser].name)+' takes '+pcs(r.took)+' from the table':esc(P[r.loser].name)+' ياخد '+pcs(r.took)+' من الأرض'}</span></div>
+    <button class="btn primary" id="ovClose" type="button">${t('كمّل','Continue')}</button>`);
   revealOpen=true;
   clearTimeout(revealTimer);
   revealTimer=setTimeout(afterReveal,10000);
@@ -1657,33 +1963,34 @@ function openOver(first){
   const card=document.querySelector('#overlay .card');
   const sc=(!first&&card)?card.scrollTop:0;
   const medal=['','🥇','🥈','🥉'];
-  const rank=V.ranking.map((i,k)=>`<li><b>${medal[k+1]||''}</b><span>${ORD[k+1]}</span>${avHTML(i,P[i].name,V.host===i)}<span style="background:none;color:inherit;padding:0">${esc(P[i].name)}${i===me?' (إنت)':''}</span></li>`).join('');
+  const youTag=LANG==='en'?' (you)':' (إنت)';
+  const rank=V.ranking.map((i,k)=>`<li><b>${medal[k+1]||''}</b><span>${ordWord(k+1)}</span>${avHTML(i,P[i].name,V.host===i)}<span style="background:none;color:inherit;padding:0">${esc(P[i].name)}${i===me?youTag:''}</span></li>`).join('');
   const rl=P.map((p,i)=>{
-    const st=i===V.host?'<em class="rs host">صاحب الطاولة</em>':p.off?'<em class="rs off">فاصل</em>':V.ready[i]?'<em class="rs ok">✓ مستعد</em>':'<em class="rs wait">… مستني</em>';
-    return `<li>${avHTML(i,p.name,i===V.host)}<span class="rn">${esc(p.name)}${i===me?' (إنت)':''}</span>${st}</li>`;
+    const st=i===V.host?`<em class="rs host">${t('صاحب الطاولة','Host')}</em>`:p.off?`<em class="rs off">${t('فاصل','offline')}</em>`:V.ready[i]?`<em class="rs ok">${t('✓ مستعد','✓ Ready')}</em>`:`<em class="rs wait">${t('… مستني','… waiting')}</em>`;
+    return `<li>${avHTML(i,p.name,i===V.host)}<span class="rn">${esc(p.name)}${i===me?youTag:''}</span>${st}</li>`;
   }).join('');
   const others=P.map((p,i)=>i).filter(i=>i!==V.host&&!P[i].off);
   const readyN=others.filter(i=>V.ready[i]).length;
   const canStart=others.length>=1&&readyN===others.length;
   const action=V.host===me
-    ?`<button class="btn primary" id="againBtn" type="button"${canStart?'':' disabled'}>${canStart?'ابدأ لعبة تانية':'مستنيين اللاعبين ('+AR(readyN)+'/'+AR(others.length)+')'}</button>`
-    :`<button class="btn ${V.ready[me]?'ghost':'primary'}" id="readyBtn" type="button">${V.ready[me]?'✓ أنا مستعد (اضغط للإلغاء)':'أنا مستعد'}</button>`;
-  const html=`<h2>اللعبة خلصت</h2>
+    ?`<button class="btn primary" id="againBtn" type="button"${canStart?'':' disabled'}>${canStart?t('ابدأ لعبة تانية','Start another game'):t('مستنيين اللاعبين (','Waiting for players (')+trNum(readyN)+'/'+trNum(others.length)+')'}</button>`
+    :`<button class="btn ${V.ready[me]?'ghost':'primary'}" id="readyBtn" type="button">${V.ready[me]?t('✓ أنا مستعد (اضغط للإلغاء)',"✓ I'm ready (tap to cancel)"):t('أنا مستعد',"I'm ready")}</button>`;
+  const html=`<h2>${t('اللعبة خلصت','Game over')}</h2>
     <ol class="rank">${rank}</ol>
-    <h3 class="sec">لعبة تانية؟</h3>
+    <h3 class="sec">${t('لعبة تانية؟','Another game?')}</h3>
     <ul class="rdy">${rl}</ul>
     ${action}
-    <h3 class="sec">الكدب والشك</h3>${statsHTML()}
-    <h3 class="sec">الجلسة</h3>${sessionHTML()}
-    <button class="btn ghost" id="overChat" type="button">دردشة</button>
-    <button class="btn ghost" id="homeBtn" type="button">خروج</button>`;
+    <h3 class="sec">${t('الكدب والشك','Bluffing & doubts')}</h3>${statsHTML()}
+    <h3 class="sec">${t('الجلسة','Session')}</h3>${sessionHTML()}
+    <button class="btn ghost" id="overChat" type="button">${t('دردشة','Chat')}</button>
+    <button class="btn ghost" id="homeBtn" type="button">${t('خروج','Leave')}</button>`;
   if(first||!card)openOv(html);else card.innerHTML=html;
   overOpen=true;
   const nc=document.querySelector('#overlay .card');
   if(nc&&!first)nc.scrollTop=sc;
   if($('#againBtn'))$('#againBtn').onclick=rematch;
   if($('#readyBtn'))$('#readyBtn').onclick=()=>act({t:'ready',v:!V.ready[me]});
-  $('#homeBtn').onclick=()=>ask('متأكد إنك عايز تخرج من الطاولة؟','أيوه، اخرج',leaveTable);
+  $('#homeBtn').onclick=()=>ask(t('متأكد إنك عايز تخرج من الطاولة؟','Leave the table?'),t('أيوه، اخرج','Yes, leave'),leaveTable);
   if(first){if(P[me].place===1){SFX.win();confetti()}else SFX.end()}
 }
 
@@ -1713,8 +2020,8 @@ document.addEventListener('click',e=>{
   }
   if(e.target.closest('#passBtn')){
     const key=stateKey();
-    const go=()=>{if(stateKey()!==key){toast('الوضع اتغيّر — جرّب تاني');return}act({t:'pass'});selected.clear();pickNum=null};
-    if(S.confirmPass)ask('متأكد إنك عايز تتخطّى دورك؟','أيوه، اتخطّى',go);else go();
+    const go=()=>{if(stateKey()!==key){toast(t('الوضع اتغيّر — جرّب تاني','The state changed — try again'));return}act({t:'pass'});selected.clear();pickNum=null};
+    if(S.confirmPass)ask(t('متأكد إنك عايز تتخطّى دورك؟','Pass your turn?'),t('أيوه، اتخطّى','Yes, pass'),go);else go();
     return;
   }
   if(e.target.closest('#histT')){histOpen=!histOpen;renderHist();return}
@@ -1722,8 +2029,8 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#doubtBtn')){
     if(!V.last)return;
     const key=stateKey(),nm=V.players[V.last.p].name;
-    const go=()=>{if(stateKey()!==key){toast('الأرض اتغيّرت — اضغط شك تاني لو لسه عايز');return}act({t:'doubt'})};
-    if(S.confirmDoubt)ask('متأكد إنك عايز تشك في '+nm+'؟','أيوه، شك',go);else go();
+    const go=()=>{if(stateKey()!==key){toast(t('الأرض اتغيّرت — اضغط شك تاني لو لسه عايز','The table changed — tap Doubt again if you still want to'));return}act({t:'doubt'})};
+    if(S.confirmDoubt)ask(t('متأكد إنك عايز تشك في '+nm+'؟','Doubt '+nm+'?'),t('أيوه، شك','Yes, doubt'),go);else go();
     return;
   }
 });
@@ -1732,10 +2039,10 @@ document.addEventListener('click',e=>{
    السجل والإحصائيات
    ===================================================== */
 function renderHist(){
-  const L=V.log.slice().reverse();               // الأحدث الأول
+  const L=V.log.slice().reverse();
   const shown=histOpen?L:L.slice(0,1);
-  const li=shown.map((e,k)=>`<li><em>#${AR(e.n)}</em><span>${esc(e.s)}</span>${k===0?'<b class="tg new">الأحدث</b>':''}${histOpen&&shown.length>1&&k===shown.length-1?'<b class="tg old">الأقدم</b>':''}</li>`).join('');
-  $('#hist').innerHTML=`<button type="button" class="ht" id="histT"><span>السجل</span><span>${histOpen?'▾':'▴'}</span></button><ul>${li}</ul>`;
+  const li=shown.map((e,k)=>`<li><em>#${trNum(e.n)}</em><span>${esc(LANG==='en'?(e.e||e.s):e.s)}</span>${k===0?`<b class="tg new">${t('الأحدث','Newest')}</b>`:''}${histOpen&&shown.length>1&&k===shown.length-1?`<b class="tg old">${t('الأقدم','Oldest')}</b>`:''}</li>`).join('');
+  $('#hist').innerHTML=`<button type="button" class="ht" id="histT"><span>${t('السجل','Log')}</span><span>${histOpen?'▾':'▴'}</span></button><ul>${li}</ul>`;
 }
 function statsHTML(){
   if(!V.stats)return '';
@@ -1747,13 +2054,16 @@ function statsHTML(){
     s=>s.hits+s.miss
   ];
   const max=cols.map(f=>Math.max(...V.stats.map(f)));
-  const head=['كذب وعدّى','قال صدق','اتقفش','قفش كدّاب','مرات الشك'];
+  const head=LANG==='en'
+    ?['Bluffed','Told truth','Caught','Caught liars','Doubts']
+    :['كذب وعدّى','قال صدق','اتقفش','قفش كدّاب','مرات الشك'];
+  const youTag=LANG==='en'?' (you)':' (إنت)';
   const rows=V.players.map((p,i)=>{
     const s=V.stats[i];
-    return `<tr><td><div class="nmr">${avHTML(i,p.name,false)}<span>${esc(p.name)}${i===V.me?' (إنت)':''}</span></div></td>${cols.map((f,k)=>{const v=f(s);return `<td${v>0&&v===max[k]?' class="hi"':''}>${AR(v)}</td>`}).join('')}</tr>`;
+    return `<tr><td><div class="nmr">${avHTML(i,p.name,false)}<span>${esc(p.name)}${i===V.me?youTag:''}</span></div></td>${cols.map((f,k)=>{const v=f(s);return `<td${v>0&&v===max[k]?' class="hi"':''}>${trNum(v)}</td>`}).join('')}</tr>`;
   }).join('');
   return `<table class="stt"><thead><tr><th></th>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
-    <div class="legend">«كذب وعدّى»: كدب ومحدش قفشه · «قفش كدّاب»: شكّ صح</div>`;
+    <div class="legend">${t('«كذب وعدّى»: كدب ومحدش قفشه · «قفش كدّاب»: شكّ صح','“Bluffed”: lied and got away with it · “Caught liars”: successful doubts')}</div>`;
 }
 function sessionHTML(){
   const g=V.session||[];
@@ -1761,20 +2071,25 @@ function sessionHTML(){
   const tally={};
   g.forEach(x=>{const w=x.order[0];tally[w]=(tally[w]||0)+1});
   const rows=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
-  const t=rows.map(([n,c])=>`<li><span>${esc(n)} كسب</span><b>${c===1?'مرة واحدة':c===2?'مرتين':AR(c)+' مرات'}</b></li>`).join('');
-  const l=g.length>1?`<div class="legend">${g.map(x=>'لعبة '+AR(x.n)+': '+esc(x.order[0])).join(' · ')}</div>`:'';
-  return `<ul class="tally">${t}</ul>${l}`;
+  const rowsHTML=rows.map(([n,c])=>`<li><span>${esc(n)} ${t('كسب','won')}</span><b>${c===1?t('مرة واحدة','once'):c===2?t('مرتين','twice'):trNum(c)+t(' مرات',' times')}</b></li>`).join('');
+  const l=g.length>1?`<div class="legend">${g.map(x=>t('لعبة ','Game ')+trNum(x.n)+': '+esc(x.order[0])).join(' · ')}</div>`:'';
+  return `<ul class="tally">${rowsHTML}</ul>${l}`;
 }
 
 /* =====================================================
    الدردشة
    ===================================================== */
 const PHRASES=['شكّ فيه!','أنا صادق والله','ده كذّاب','يلا بسرعة','لعبة حلوة','حظ سعيد','استحمل بقى','مش هشك فيك','جامد!','هههه'];
+const PHRASES_EN=['Doubt it!','I swear it\u2019s true','That\u2019s a liar','Hurry up','Nice game','Good luck','Hold on then','I won\u2019t doubt you','Solid!','Hahaha'];
+function renderQuickPhrases(){
+  const bar=$('#quickBar');if(!bar)return;
+  bar.innerHTML=(LANG==='en'?PHRASES_EN:PHRASES).map(p=>`<button type="button" data-say="${esc(p)}">${esc(p)}</button>`).join('');
+}
 const EMOJIS=['😂','😎','🤔','😱','😡','👏','🔥','👀','🤥','😏','🙏','❤️','👍','🤝','😭','🥱'];
 const isEmoji=t=>/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(t);
 function initChat(){
-  $('#quickBar').innerHTML=PHRASES.map(t=>`<button type="button" data-say="${esc(t)}">${esc(t)}</button>`).join('');
-  $('#emoBar').innerHTML=EMOJIS.map(t=>`<button type="button" data-say="${t}">${t}</button>`).join('');
+  renderQuickPhrases();
+  $('#emoBar').innerHTML=EMOJIS.map(e=>`<button type="button" data-say="${e}">${e}</button>`).join('');
   $('#chatBtn').onclick=()=>toggleChat();
   $('#chatX').onclick=()=>toggleChat(false);
   $('#chatBack').onclick=()=>toggleChat(false);
@@ -1815,15 +2130,15 @@ function toggleChat(force){
   if(chatOpen){unread=0;renderChat()}
   updBadge();
 }
-function updBadge(){const b=$('#chatBadge');b.hidden=!unread;b.textContent=AR(unread)}
+function updBadge(){const b=$('#chatBadge');b.hidden=!unread;b.textContent=trNum(unread)}
 /* مؤشر "بيكتب" — حقل اختياري في البروتوكول، قديم العملاء يتجاهلوه بأمان. */
 let typingHide=null,typingLastSent=0;
 function showTyping(from,on){
   const el=$('#typing');if(!el)return;
   clearTimeout(typingHide);
   if(!on){el.hidden=true;el.textContent='';return}
-  const nm=V&&V.players[from]?V.players[from].name:'لاعب';
-  el.textContent=(from===hostSeat?'المضيف: ':'')+nm+' بيكتب…';
+  const nm=V&&V.players[from]?V.players[from].name:t('لاعب','player');
+  el.textContent=(from===hostSeat?t('المضيف: ','Host: '):'')+nm+t(' بيكتب…',' is typing…');
   el.hidden=false;
   typingHide=setTimeout(()=>{el.hidden=true;el.textContent=''},2600);
 }
@@ -1839,32 +2154,32 @@ function notifyTyping(on){
   typingLastSent=now;
   try{hostConn.send({t:'typing',on:on})}catch(e){}
 }
-function fmtClock(ts){try{return ts?new Date(ts).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}):''}catch(e){return ''}}
+function fmtClock(ts){try{return ts?new Date(ts).toLocaleTimeString(LANG==='en'?'en-GB':'ar-EG',{hour:'2-digit',minute:'2-digit'}):''}catch(e){return ''}}
 function renderChat(keep){
   const box=$('#chatMsgs');const st=box.scrollTop;
   box.innerHTML=chatLog.map(m=>{
     if(m.sys)return `<div class="sysmsg">${esc(m.text)}</div>`;
     const pl=V&&V.players[m.from];
-    const nm=pl?pl.name:'لاعب';
+    const nm=pl?pl.name:t('لاعب','player');
     const mine=!!V&&m.from===V.me;
     const emo=typeof m.text==='string'&&isEmoji(m.text);
     let body;
     if(typeof m.voice==='string'){
       const on=playingId===m.id;
-      body=`<button type="button" class="vplay${on?' on':''}" data-voice="${m.id}" aria-label="${on?'إيقاف':'تشغيل'}"><span class="vic">${on?'⏸':'▶'}</span><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="vt">${AR(m.dur)} ث</span><span class="prog" style="--p:${on&&curAudio?voiceProg(curAudio,m):0}"></span></button>`;
-    }else if(m.dur)body='🎤 رسالة صوتية (انتهت)';
+      body=`<button type="button" class="vplay${on?' on':''}" data-voice="${m.id}" aria-label="${on?t('إيقاف','Pause'):t('تشغيل','Play')}"><span class="vic">${on?'⏸':'▶'}</span><span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="vt">${trNum(m.dur)}${t(' ث','s')}</span><span class="prog" style="--p:${on&&curAudio?voiceProg(curAudio,m):0}"></span></button>`;
+    }else if(m.dur)body='🎤 '+t('رسالة صوتية (انتهت)','voice message (ended)');
     else body=`<span class="txt">${esc(m.text||'')}</span>`;
     const pid=m.pid||((seatPids||[])[m.from]||'');
-    const snippet=typeof m.text==='string'?m.text:'🎤 رسالة صوتية';
+    const snippet=typeof m.text==='string'?m.text:'🎤 '+t('رسالة صوتية','voice message');
     const tools=(!mine&&pid&&pid!==myPid)
-      ?`<div class="ugc-row ugc-tools"><button class="ugc-act" type="button" data-report="${esc(pid)}" data-rname="${esc(nm)}" data-rsnippet="${esc(snippet)}">🚩 بلاغ</button><button class="ugc-act danger" type="button" data-block="${esc(pid)}" data-bname="${esc(nm)}">🚫 حظر</button></div>`:'';
-    return `<div class="cm${mine?' me':''}${emo?' emo':''}${m.id===chatNewId?' new':''}" style="--c:${seatColor(m.from)}">${avHTML(m.from,nm,false)}<div class="bb"><div class="who"><span>${mine?'إنت':esc(nm)}</span><time>${fmtClock(m.ts)}</time></div>${body}${tools}</div></div>`;
-  }).join('')||'<div class="chatempty">ابدأ الكلام… ✋</div>';
+      ?`<div class="ugc-row ugc-tools"><button class="ugc-act" type="button" data-report="${esc(pid)}" data-rname="${esc(nm)}" data-rsnippet="${esc(snippet)}">🚩 ${t('بلاغ','Report')}</button><button class="ugc-act danger" type="button" data-block="${esc(pid)}" data-bname="${esc(nm)}">🚫 ${t('حظر','Block')}</button></div>`:'';
+    return `<div class="cm${mine?' me':''}${emo?' emo':''}${m.id===chatNewId?' new':''}" style="--c:${seatColor(m.from)}">${avHTML(m.from,nm,false)}<div class="bb"><div class="who"><span>${mine?t('إنت','You'):esc(nm)}</span><time>${fmtClock(m.ts)}</time></div>${body}${tools}</div></div>`;
+  }).join('')||`<div class="chatempty">${t('ابدأ الكلام… ✋','Start chatting… ✋')}</div>`;
   box.scrollTop=keep?st:box.scrollHeight;
 }
 function showPreview(m,label){
   const el=$('#cprev');
-  const nm=V&&V.players[m.from]?V.players[m.from].name:'لاعب';
+  const nm=V&&V.players[m.from]?V.players[m.from].name:t('لاعب','player');
   el.innerHTML=`${avHTML(m.from,nm,false)}<div><b>${esc(nm)}</b><div>${esc(label)}</div></div>`;
   el.hidden=false;clearTimeout(prevT);prevT=setTimeout(()=>{el.hidden=true},3200);
 }
@@ -1902,11 +2217,11 @@ function onChat(m){
   chatNewId=m.id;
   const mine=!!V&&m.from===V.me;
   const isV=typeof m.voice==='string';
-  bubbles[m.from]={text:isV?'🎤 رسالة صوتية':m.text,id:m.id};
+  bubbles[m.from]={text:isV?'🎤 '+t('رسالة صوتية','voice message'):m.text,id:m.id};
   setTimeout(()=>{if(bubbles[m.from]&&bubbles[m.from].id===m.id){delete bubbles[m.from];if(V)render()}},4200);
   if(V&&!mine){
     SFX.pop();
-    if(!chatOpen){unread++;updBadge();showPreview(m,isV?'🎤 رسالة صوتية':m.text)}
+    if(!chatOpen){unread++;updBadge();showPreview(m,isV?'🎤 '+t('رسالة صوتية','voice message'):m.text)}
   }
   if(chatOpen)renderChat();
   if(!isV&&isEmoji(m.text))floatEmoji(m.text,m.from);
@@ -1945,11 +2260,11 @@ function releaseMic(r){
 }
 function micError(e){
   const n=e&&e.name||'';
-  if(n==='NotAllowedError'||n==='PermissionDeniedError')return 'لازم تسمح بالميكروفون عشان تسجّل';
-  if(n==='NotFoundError'||n==='DevicesNotFoundError')return 'مفيش ميكروفون متاح على الجهاز ده';
-  if(n==='NotReadableError'||n==='AbortError'||n==='TrackStartError')return 'الميكروفون مشغول دلوقتي — قفّل أي تطبيق تاني بيستخدمه وجرب';
-  if(n==='OverconstrainedError')return 'إعدادات الميكروفون مش متاحة على الجهاز ده';
-  return 'مش قادر أفتح الميكروفون — جرب تاني';
+  if(n==='NotAllowedError'||n==='PermissionDeniedError')return t('لازم تسمح بالميكروفون عشان تسجّل','Allow microphone access to record');
+  if(n==='NotFoundError'||n==='DevicesNotFoundError')return t('مفيش ميكروفون متاح على الجهاز ده','No microphone is available on this device');
+  if(n==='NotReadableError'||n==='AbortError'||n==='TrackStartError')return t('الميكروفون مشغول دلوقتي — قفّل أي تطبيق تاني بيستخدمه وجرب','The microphone is busy — close any other app using it and try again');
+  if(n==='OverconstrainedError')return t('إعدادات الميكروفون مش متاحة على الجهاز ده','These microphone settings are not supported on this device');
+  return t('مش قادر أفتح الميكروفون — جرب تاني','Could not open the microphone — try again');
 }
 async function startRec(){
   if(rec||recStarting)return;
@@ -1959,14 +2274,14 @@ async function startRec(){
   // ردّ فعل بصري فوري قبل أي انتظار.
   $('#chatInRow').hidden=true;$('#recRow').hidden=false;
   const info=$('#recInfo');info.className='preparing';
-  info.textContent='● بيجهّز الميكروفون…';
+  info.textContent=t('● بيجهّز الميكروفون…','● Preparing microphone…');
   const micBtn=$('#micBtn');if(micBtn)micBtn.classList.add('busy');
   if(!navigator.mediaDevices||!window.MediaRecorder){
     vpReport('unsupported');
     recStarting=false;
     $('#chatInRow').hidden=false;$('#recRow').hidden=true;
     if(micBtn)micBtn.classList.remove('busy');
-    toast('المتصفح ده مش بيدعم تسجيل الصوت');return;
+    toast(t('المتصفح ده مش بيدعم تسجيل الصوت','This browser does not support voice recording'));return;
   }
   try{
     const ps=navigator.permissions&&navigator.permissions.query
@@ -1985,11 +2300,11 @@ async function startRec(){
   catch(e){releaseMic({stream});vpReport('mediarecorder_failed');recStarting=false;
     $('#chatInRow').hidden=false;$('#recRow').hidden=true;
     if(micBtn)micBtn.classList.remove('busy');
-    toast('مش قادر أسجّل');return}
+    toast(t('مش قادر أسجّل','Could not record'));return}
   const chunks=[],t0=Date.now();
   let firstData=false;
   mr.ondataavailable=e=>{if(e.data&&e.data.size){chunks.push(e.data);if(!firstData){firstData=true;vpMark('first_audio_data')}}};
-  mr.onerror=()=>{toast('حصلت مشكلة في التسجيل');if(rec===r)stopRec(false)};
+  mr.onerror=()=>{toast(t('حصلت مشكلة في التسجيل','There was a recording problem'));if(rec===r)stopRec(false)};
   const r={mr,stream,chunks,t0,timer:null,audioCtx:null,analyser:null,raf:0};
   // مؤشر مستوى الصوت (اختياري ومتاح في معظم المتصفحات).
   try{
@@ -2001,9 +2316,9 @@ async function startRec(){
   rec=r;recStarting=false;
   try{mr.start(250);vpReport('mediarecorder_started')}
   catch(e){rec=null;releaseMic(r);$('#chatInRow').hidden=false;$('#recRow').hidden=true;
-    if(micBtn)micBtn.classList.remove('busy');toast('مش قادر أبدأ التسجيل');return}
+    if(micBtn)micBtn.classList.remove('busy');toast(t('مش قادر أبدأ التسجيل','Could not start recording'));return}
   if(micBtn)micBtn.classList.remove('busy');
-  info.className='';info.textContent='● بيسجّل 0:00';
+  info.className='';info.textContent=t('● بيسجّل 0:00','● Recording 0:00');
   const lvl=$('#recLevel');if(lvl)lvl.classList.add('live');
   if(r.analyser){
     const buf=new Uint8Array(r.analyser.fftSize);
@@ -2021,7 +2336,7 @@ async function startRec(){
   }
   r.timer=setInterval(()=>{
     const sec=Math.floor((Date.now()-t0)/1000);
-    info.textContent='● بيسجّل '+fmtT(sec);
+    info.textContent=t('● بيسجّل ','● Recording ')+fmtT(sec);
     if(sec>=30)stopRec(true);
   },250);
 }
@@ -2038,12 +2353,12 @@ function stopRec(send){
   r.mr.onstop=()=>{
     finish();
     if(!send)return;
-    if(dur<0.7){toast('التسجيل قصير أوي');return}
+    if(dur<0.7){toast(t('التسجيل قصير أوي','The recording is too short'));return}
     const blob=new Blob(r.chunks,{type:r.mr.mimeType||'audio/webm'});
-    if(blob.size>450000){toast('التسجيل كبير أوي');return}
+    if(blob.size>450000){toast(t('التسجيل كبير أوي','The recording is too large'));return}
     const fr=new FileReader();
     fr.onload=()=>sendChat({voice:fr.result,dur:Math.round(dur)});
-    fr.onerror=()=>toast('مش قادر أجهّز الرسالة الصوتية');
+    fr.onerror=()=>toast(t('مش قادر أجهّز الرسالة الصوتية','Could not prepare the voice message'));
     fr.readAsDataURL(blob);
   };
   try{r.mr.stop()}catch(e){finish()}
@@ -2076,7 +2391,7 @@ function nextVoice(){
 function playVoice(id,auto){
   if(!auto&&playingId===id){stopVoice(true);return}
   const m=chatLog.find(x=>x.id===id);
-  if(!m||typeof m.voice!=='string'){if(auto)nextVoice();else toast('الرسالة الصوتية دي انتهت');return}
+  if(!m||typeof m.voice!=='string'){if(auto)nextVoice();else toast(t('الرسالة الصوتية دي انتهت','That voice message has ended'));return}
   if(!auto)voiceQ=[];
   stopVoice(false);
   const a=new Audio(m.voice);curAudio=a;
@@ -2088,8 +2403,8 @@ function playVoice(id,auto){
   a.addEventListener('ended',()=>{if(curAudio===a){curAudio=null;setPlaying(null);nextVoice()}});
   a.play().then(()=>{if(curAudio===a)setPlaying(id)}).catch(()=>{
     if(curAudio===a){curAudio=null;setPlaying(null)}
-    if(!auto)toast('مش قادر أشغّل الصوت');
-    else if(!autoWarned){autoWarned=true;toast('المتصفح منع التشغيل التلقائي — اضغط ▶ في الدردشة')}
+    if(!auto)toast(t('مش قادر أشغّل الصوت','Could not play the audio'));
+    else if(!autoWarned){autoWarned=true;toast(t('المتصفح منع التشغيل التلقائي — اضغط ▶ في الدردشة','The browser blocked autoplay — tap ▶ in chat'))}
   });
 }
 
@@ -2106,12 +2421,21 @@ function confetti(){
    وضع اللعب ضد البوتات
    ===================================================== */
 const LEVELS={easy:'سهل',medium:'متوسط',hard:'صعب'};
+const LEVELS_EN={easy:'Easy',medium:'Medium',hard:'Hard'};
+const lvlName=l=>(LANG==='en'?LEVELS_EN:LEVELS)[l]||l;
 const LEVEL_DESC={
   easy:'بيلعب شبه عشوائي، وبيكدب كتير، ونادراً بيشك.',
   medium:'بيلعب بحذر، وبيشك لما الحسبة متظبطش.',
   hard:'بيحسب القطع اللي معاه، وبيراقب كدب كل لاعب، وبيشك بذكاء.'
 };
+const LEVEL_DESC_EN={
+  easy:'Plays almost randomly, bluffs a lot, and rarely doubts.',
+  medium:'Plays cautiously and doubts when the numbers do not add up.',
+  hard:'Counts tiles, tracks every player\u2019s bluffing, and doubts smartly.'
+};
+const lvlDesc=l=>(LANG==='en'?LEVEL_DESC_EN:LEVEL_DESC)[l]||'';
 const BOT_NAMES=['سمير','ليلى','كريم','هدى','عمر','نادين','يوسف','مها'];
+const BOT_NAMES_EN=['Samir','Layla','Karim','Huda','Omar','Nadine','Youssef','Maha'];
 const isBot=i=>!!(lobby.bots&&lobby.bots[i]);
 const inSolo=()=>!!(lobby.bots&&lobby.bots.some(Boolean));
 const hasNum=(t,n)=>t.a===n||t.b===n;
@@ -2119,26 +2443,26 @@ const lvlOf=i=>(lobby.botLv&&lobby.botLv[i])||botLevel;
 
 function openBotSetup(){
   const n=readName();if(!n)return;
-  openOv(`<h2>العب ضد البوتات</h2>
-    <div><label>عدد اللاعبين (معاك)</label>
-      <div class="seg" id="botN"><button type="button" data-n="2">٢</button><button type="button" data-n="3">٣</button><button type="button" data-n="4" class="on">٤</button><button type="button" data-n="5">٥</button></div></div>
-    <div><label>مستوى البوتات</label>
-      <div class="seg" id="botL"><button type="button" data-l="easy">سهل</button><button type="button" data-l="medium" class="on">متوسط</button><button type="button" data-l="hard">صعب</button></div></div>
-    <p class="legend" id="botDesc">${LEVEL_DESC.medium}</p>
-    <button class="btn primary" id="botGo" type="button">ابدأ اللعب</button>
-    <button class="btn ghost" id="ovClose" type="button">رجوع</button>`,true);
+  openOv(`<h2>${t('العب ضد البوتات','Play against bots')}</h2>
+    <div><label>${t('عدد اللاعبين (معاك)','Players (including you)')}</label>
+      <div class="seg" id="botN"><button type="button" data-n="2">${trNum(2)}</button><button type="button" data-n="3">${trNum(3)}</button><button type="button" data-n="4" class="on">${trNum(4)}</button><button type="button" data-n="5">${trNum(5)}</button></div></div>
+    <div><label>${t('مستوى البوتات','Bot difficulty')}</label>
+      <div class="seg" id="botL"><button type="button" data-l="easy"${botLevel==='easy'?' class="on"':''}>${lvlName('easy')}</button><button type="button" data-l="medium"${botLevel==='medium'?' class="on"':''}>${lvlName('medium')}</button><button type="button" data-l="hard"${botLevel==='hard'?' class="on"':''}>${lvlName('hard')}</button></div></div>
+    <p class="legend" id="botDesc">${lvlDesc(botLevel)}</p>
+    <button class="btn primary" id="botGo" type="button">${t('ابدأ اللعب','Start playing')}</button>
+    <button class="btn ghost" id="ovClose" type="button">${t('رجوع','Back')}</button>`,true);
   const pickSeg=(id,attr,after)=>$(id).addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
     document.querySelectorAll(id+' button').forEach(x=>x.classList.toggle('on',x===b));
     if(after)after(b.dataset[attr]);
   });
   pickSeg('#botN','n');
-  pickSeg('#botL','l',l=>{$('#botDesc').textContent=LEVEL_DESC[l]});
+  pickSeg('#botL','l',l=>{$('#botDesc').textContent=lvlDesc(l)});
   $('#botGo').onclick=()=>startSolo(+document.querySelector('#botN .on').dataset.n,document.querySelector('#botL .on').dataset.l,n);
 }
 function startSolo(n,level,name){
   closeOv();
-  const pool=shuffle(BOT_NAMES.slice()).slice(0,n-1).map(x=>'🤖 '+x);
+  const pool=shuffle((LANG==='en'?BOT_NAMES_EN:BOT_NAMES).slice()).slice(0,n-1).map(x=>'🤖 '+x);
   const names=[name,...pool];
   myName=name;isHost=true;mySeat=0;hostSeat=0;epoch=0;roomCode='BOT';size=n;botLevel=level;
   aborted=false;leaving=false;peer=null;V=null;lastSnap=null;prevHand=new Set();
