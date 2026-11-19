@@ -406,7 +406,14 @@ body{
 }
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background:radial-gradient(120% 90% at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%);
+  /* كل الخلفية على طبقة ثابتة بحجم الشاشة: ما بتنقطعش عند التكبير ولا عند طول الصفحة */
+  background:
+    radial-gradient(120% 90% at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%),
+    radial-gradient(90% 60% at 50% -10%,rgba(255,201,120,.14),rgba(255,201,120,0) 62%),
+    radial-gradient(70% 50% at 100% 100%,rgba(217,169,60,.08),rgba(217,169,60,0) 60%),
+    repeating-linear-gradient(90deg,#3b2514 0 4px,#33200f 4px 11px);
+  background-size:100% 100%,100% 100%,100% 100%,11px 11px;
+  background-repeat:no-repeat,no-repeat,no-repeat,repeat;
 }
 h1,h2,.display{letter-spacing:.2px}
 html[dir="ltr"] h1,html[dir="ltr"] h2,html[dir="ltr"] .display,
