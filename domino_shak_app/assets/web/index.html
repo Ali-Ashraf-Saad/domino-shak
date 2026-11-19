@@ -324,6 +324,9 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 .legend{font-size:12px;opacity:.65;line-height:1.5}
 
 .card label{font-size:14px;opacity:.9;display:block;margin-bottom:6px;text-align:start}
+.card label.sw{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.sw > span{flex:1 1 auto;min-width:0}
+.sw > input,.sw > button{flex:0 0 auto}
 .card .seg button{height:46px}
 /* ---------- overlays ---------- */
 #overlay{display:none}
@@ -441,7 +444,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
 }
 .langbtn:hover{background:rgba(233,196,106,.18);border-color:var(--brass)}
 .langbtn:active{transform:scale(.96)}
-.langbtn.inline{position:static;min-width:92px;height:38px;padding:0 12px}
+.langbtn.inline{position:static;width:46px;min-width:46px;height:26px;padding:0;border-radius:13px;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
 
 /* segmented mode picker */
 .modepick{
@@ -773,7 +776,7 @@ function applyI18n(root){
     el.setAttribute('aria-label',LANG==='en'?el.getAttribute('data-en-aria'):el.getAttribute('data-ar-aria'));
   });
 }
-function updateLangBtn(){const b=$('#langBtn');if(b){b.textContent=LANG==='en'?'العربية':'English';b.setAttribute('aria-label',LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية')}}
+function updateLangBtn(){const b=$('#langBtn');if(b){b.textContent=LANG==='en'?'ع':'EN';b.setAttribute('aria-label',LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية')}}
 function rerenderLangSensitive(){
   try{if(document.getElementById('lobby')&&document.getElementById('lobby').classList.contains('on'))renderLobby(lobby.names,size,roomCode,hostSeat)}catch(e){}
   try{if(document.getElementById('game')&&document.getElementById('game').classList.contains('on')&&V)render()}catch(e){}
@@ -1070,7 +1073,7 @@ function openSettings(){
   const inRoom=!!peer||inSolo();
   const lbl=a=>t(a[0],a[1]);
   openOv(`<h2>${t('الإعدادات','Settings')}</h2>
-    <label class="sw" data-lang-settings><span data-en="Language">اللغة</span><button id="langBtn" class="langbtn inline" type="button" aria-label="${LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية'}">${LANG==='en'?'العربية':'English'}</button></label>
+    <label class="sw" data-lang-settings><span data-en="Language">اللغة</span><button id="langBtn" class="langbtn inline" type="button" aria-label="${LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية'}">${LANG==='en'?'ع':'EN'}</button></label>
     <label class="sw"><span>${lbl(['تأكيد قبل الشك','Confirm before doubting'])}</span><input type="checkbox" id="sCD"${S.confirmDoubt?' checked':''}></label>
     <label class="sw"><span>${lbl(['تأكيد قبل التخطّي','Confirm before passing'])}</span><input type="checkbox" id="sCP"${S.confirmPass?' checked':''}></label>
     <label class="sw"><span>${lbl(['التشغيل التلقائي للرسائل الصوتية','Auto-play voice messages'])}</span><input type="checkbox" id="sAV"${S.autoVoice?' checked':''}></label>
