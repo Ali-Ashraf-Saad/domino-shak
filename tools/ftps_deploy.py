@@ -6,25 +6,30 @@ Security properties (do not weaken):
     There is no code path that sends USER/PASS over a plaintext connection.
   * The TLS certificate AND hostname are verified against the system CA store.
     If verification fails the script aborts; it never disables verification.
-  * Credentials are read with getpass (hidden terminal) and held only in local
-    variables for the lifetime of this process. They are never written to a
-    file, never placed in argv or the environment, and never printed.
-  * Must be run from an interactive TTY; a non-TTY stdin is rejected so the
+  * Interactive mode reads credentials with getpass (hidden terminal) and holds
+    them only in local variables for the lifetime of this process.
+  * Explicit --deploy mode reads credentials from a 0600 file supplied by the
+    maintainer. Credentials are never placed in argv or the environment, never
+    printed, and never logged. Only the path to the file is passed.
+  * Interactive mode must be run from a TTY; a non-TTY stdin is rejected so the
     password prompt cannot be piped or captured.
-  * Write operations are explicit and confirmed; inspection/backup are read-only
-    with respect to the remote site.
+  * Write operations are explicit; inspection/backup are read-only with respect
+    to the remote site. --deploy performs backup, staging upload and promotion
+    in one authorized run.
 
 Nothing in this file contains credentials, secrets, or a fallback to FTP.
 """
 
 from __future__ import annotations
 
+import argparse
 import getpass
 import hashlib
 import io
 import os
 import posixpath
 import ssl
+import stat
 import sys
 from datetime import datetime
 from ftplib import FTP_TLS, error_perm, error_temp
@@ -45,6 +50,9 @@ MANAGED_FILES = {
     "SHA256SUMS.txt",
     "config.js",
     "deployment/upload_instructions.md",
+    "favicon-32.png",
+    "favicon.ico",
+    "apple-touch-icon.png",
     "index.html",
     "PRIVACY_POLICY.html",
 }
@@ -282,6 +290,62 @@ def detect_live_root(ftp: FTP_TLS) -> str | None:
 
 
 # --------------------------------------------------------------------------- #
+# Non-interactive deployment from a maintainer-supplied 0600 credential file.
+# --------------------------------------------------------------------------- #
+def read_credentials(path: Path) -> tuple[str, str]:
+    if not path.is_file():
+        fail(f"Credentials file not found: {path}")
+    mode = stat.S_IMODE(path.stat().st_mode)
+    if mode & 0o077:
+        fail("Credentials file must be owner-only (chmod 600).")
+
+    values: dict[str, str] = {}
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            fail("Malformed credentials file: expected key=value lines.")
+        key, value = line.split("=", 1)
+        values[key.strip()] = value.strip()
+
+    user = values.get("username", "")
+    password = values.get("password", "")
+    if not user or not password:
+        fail("Credentials file must define both username and password.")
+    return user, password
+
+
+def deploy_noninteractive(credentials_file: Path, live_root: str | None) -> None:
+    user, password = read_credentials(credentials_file)
+    ftp = connect(user, password)
+    del user, password
+
+    try:
+        root = live_root or detect_live_root(ftp) or DEFAULT_LIVE_ROOT
+        if not exists(ftp, root):
+            fail(f"Remote web root does not exist: {root}")
+        staging = posixpath.join(root, "_staging")
+
+        print(f"Live root: {root}")
+        print(f"Staging: {staging}")
+        backup = do_backup(ftp, root)
+        do_upload(ftp, staging)
+        do_promote(ftp, staging, root)
+
+        print(f"\nDeployment complete: https://liardominoes.gt.tc/")
+        print(f"Local backup: {backup}")
+    finally:
+        try:
+            ftp.quit()
+        except Exception:
+            try:
+                ftp.close()
+            except Exception:
+                pass
+
+
+# --------------------------------------------------------------------------- #
 # Interactive menu.
 # --------------------------------------------------------------------------- #
 def main() -> None:
@@ -384,5 +448,26 @@ def main() -> None:
                 pass
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Domino Shak explicit FTPS deployment helper")
+    parser.add_argument(
+        "--credentials-file",
+        help="Path to an owner-only (0600) file containing username= and password= lines",
+    )
+    parser.add_argument("--live-root", help="Override the auto-detected live web root")
+    parser.add_argument(
+        "--deploy",
+        action="store_true",
+        help="Back up, upload to staging, and promote to live without interactive prompts",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    if args.deploy:
+        if not args.credentials_file:
+            fail("--deploy requires --credentials-file")
+        deploy_noninteractive(Path(args.credentials_file), args.live_root)
+    else:
+        main()

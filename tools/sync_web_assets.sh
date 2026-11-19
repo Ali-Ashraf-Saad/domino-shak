@@ -24,6 +24,9 @@ cp "$SRC/index.html" "$DEST/index.html"
 cp "$SRC"/fonts/* "$DEST/fonts/"
 cp "$SRC/vendor/peerjs.min.js" "$DEST/vendor/peerjs.min.js"
 cp "$SRC/PRIVACY_POLICY.html" "$DEST/PRIVACY_POLICY.html"
+cp "$SRC/favicon.ico" "$DEST/favicon.ico"
+cp "$SRC/favicon-32.png" "$DEST/favicon-32.png"
+cp "$SRC/apple-touch-icon.png" "$DEST/apple-touch-icon.png"
 
 cat > "$DEST/config.js" <<'EOF'
 // Informational only. The game itself is self-contained in index.html.
