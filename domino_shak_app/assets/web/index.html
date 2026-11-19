@@ -1172,7 +1172,7 @@ const RULES=()=>LANG==='en'?`<h2>How to play</h2>
 <li>The player whose turn it is, with an empty table, picks a number, plays one or more face-down tiles, and claims they are that number — e.g. “fives”.</li>
 <li>The next player either plays one or more tiles on the same number, or doubts the previous play.</li>
 <li>Any player can doubt the last play before the next player plays. The tiles are revealed: if any tile does not match the called number, the liar takes the whole table. If all match, the doubter takes the table.</li>
-<li>After a doubt the table is cleared, and the player whose turn it is starts with a new number. If the doubter is the one whose turn it is, they keep the turn.</li>
+<li>After a challenge the table is cleared. If the challenge was correct, the challenger starts with a new number; if it was false, the challenged player starts instead as compensation.</li>
 <li>The first player to run out of tiles takes first place. Their place is confirmed when the next player plays without doubting.</li>
 <li>You can pass your turn. If every player passes in a row (including the last player who played, when the turn returns to them), the tiles on the table are moved aside into an old row, and the first player who passed picks a new number and plays into a new row. If someone doubts afterwards, the loser takes everything on the table, including the old rows.</li>
 <li>If you disconnect (network or accidental exit), rejoin with the same name and you will return to your seat with the same tiles; your turn is auto-played if you are slow. If the host leaves, ownership passes to another player.</li>
@@ -1184,7 +1184,7 @@ const RULES=()=>LANG==='en'?`<h2>How to play</h2>
 <li>اللي عليه الدور والأرض فاضية يختار رقم، وينزل قطعة أو أكتر مقلوبين، ويدّعي إن القطع دي «خمسات» مثلاً.</li>
 <li>اللي بعده يا ينزل قطعة أو أكتر على نفس الرقم، يا يشك في اللي نزل قبله.</li>
 <li>أي لاعب يقدر يشك في آخر نزلة قبل ما اللي بعده ينزل. القطع بتتكشف: لو فيها قطعة من غير الرقم المطلوب، الكذاب ياخد الأرض كلها. لو كلها صح، الشاكّ هو اللي ياخد الأرض.</li>
-<li>بعد الشك الأرض بتتنضف، واللي عليه الدور يبدأ برقم جديد. لو الشاكّ نفسه صاحب الدور، الدور يفضل معاه.</li>
+<li>بعد الشك الأرض بتتنضف. لو الشك كان صحيح، الشاكّ هو اللي يبدأ برقم جديد؛ ولو الشك كان غلط، اللي اتشك فيه هو اللي يبدأ كتعويض.</li>
 <li>أول واحد يخلّص قطعه ياخد المركز الأول. مركزه بيتأكد لما اللي بعده ينزل من غير ما يشك.</li>
 <li>تقدر تتخطّى دورك. لو كل اللاعبين اتخطّوا ورا بعض (حتى اللي نزل آخر نزلة لما الدور يرجعله)، الورق اللي على الأرض بيتنحّى جنب في صف قديم، وأول واحد اتخطّى يختار رقم جديد وينزل في صف جديد. لو حصل شك بعد كده، الخاسر ياخد كل اللي على الأرض بما فيه الصفوف القديمة.</li>
 <li>لو فصلت (نت أو خروج بالغلط) ادخل تاني بنفس الاسم وهترجع مكانك بنفس القطع، ودورك بيتلعب أوتوماتيك لو اتأخرت. ولو صاحب الطاولة خرج الملكية بتروح للاعب تاني.</li>
@@ -1729,9 +1729,12 @@ function doDoubt(seat){
     p.name+' doubted '+tp.name+' — '+(truth?'they were truthful':'they were lying')+' and '+G.players[loser].name+' took '+took+(took===1?' tile':' tiles'));
   if(truth){if(tp.pending)finish(L.p)}else tp.pending=false;
   G.num=null;G.last=null;
+  // الشك الصحيح يدي الدور للشاكّ، والشك الغلط يدي الدور للي اتشك فيه كتعويض
+  // Correct challenge -> challenger; false challenge -> challenged player.
+  G.turn=truth?L.p:seat;
   const t=G.players[G.turn];
   if(t.finished||t.hand.length===0)nextTurn(G.turn);
-  if(!checkEnd()){/* الدور بيفضل مع صاحبه */}
+  checkEnd();
   broadcast();
 }
 
