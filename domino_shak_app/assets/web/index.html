@@ -477,6 +477,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
 .btn.danger:hover:not(:disabled){filter:brightness(1.06)}
 .btn:disabled{opacity:.55;filter:saturate(.5)}
 .btn:focus-visible{box-shadow:0 0 0 3px rgba(233,196,106,.6)}
+.btn.share-btn{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none}
 
 /* inputs & segmented */
 .field{height:56px;padding:12px 16px;line-height:1.4;border-radius:13px;border:2px solid rgba(217,169,60,.32);transition:border-color .18s,box-shadow .18s}
@@ -674,7 +675,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
     <div id="lobHint" style="text-align:center;font-size:14px;opacity:.85"></div>
     <div class="row">
       <button id="copyBtn" class="btn primary" type="button" style="flex:1" data-en="Copy link">انسخ اللينك</button>
-      <a id="waBtn" class="btn ghost" target="_blank" rel="noopener" style="flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none" data-en="WhatsApp">واتساب</a>
+      <a id="waBtn" class="btn ghost share-btn" target="_blank" rel="noopener" style="flex:1" data-en="WhatsApp">واتساب</a>
     </div>
     <button id="lobBack" class="btn ghost" type="button" data-en="Back to home">رجوع للصفحة الرئيسية</button>
   </div>
