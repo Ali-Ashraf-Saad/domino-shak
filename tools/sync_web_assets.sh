@@ -68,7 +68,9 @@ fi
 
 (
   cd "$DEST"
-  find . -type f ! -path './.well-known/assetlinks.json' -print0 \
+  find . -type f \
+    ! -path './.well-known/*' \
+    ! -name 'SHA256SUMS.txt' -print0 \
     | sort -z \
     | xargs -0 sha256sum > SHA256SUMS.txt
 )
