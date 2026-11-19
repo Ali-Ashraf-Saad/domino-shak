@@ -16,6 +16,7 @@
   --tw:44px; --th:84px;
 }
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{
   font-family:'Tajawal',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
@@ -619,8 +620,27 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
         <button id="createBtn" class="btn primary" type="button" data-en="Create new table">اعمل طاولة جديدة</button>
       </div>
 
-      <div id="soloBox" hidden>
-        <button id="botBtn" class="btn primary" type="button">🤖 <span data-en="Play against bots">العب ضد البوتات</span></button>
+      <div id="soloBox" class="panel" style="padding:31px;border:0;background:none;gap:12px;backdrop-filter:none" hidden>
+        <div class="home-sec-label" data-ar="إعدادات البوتات" data-en="Bot settings">إعدادات البوتات</div>
+        <div>
+          <label class="home-sec-label" data-ar="عدد اللاعبين (معاك)" data-en="Players (including you)">عدد اللاعبين (معاك)</label>
+          <div class="seg" id="botN">
+            <button type="button" data-n="2" data-ar="٢" data-en="2">٢</button>
+            <button type="button" data-n="3" data-ar="٣" data-en="3">٣</button>
+            <button type="button" data-n="4" class="on" data-ar="٤" data-en="4">٤</button>
+            <button type="button" data-n="5" data-ar="٥" data-en="5">٥</button>
+          </div>
+        </div>
+        <div>
+          <label class="home-sec-label" data-ar="مستوى البوتات" data-en="Bot difficulty">مستوى البوتات</label>
+          <div class="seg" id="botL">
+            <button type="button" data-l="easy" data-ar="سهل" data-en="Easy">سهل</button>
+            <button type="button" data-l="medium" class="on" data-ar="متوسط" data-en="Medium">متوسط</button>
+            <button type="button" data-l="hard" data-ar="صعب" data-en="Hard">صعب</button>
+          </div>
+        </div>
+        <p class="legend" id="botDesc" data-ar="بيلعب بحذر، وبيشك لما الحسبة متظبطش." data-en="Plays cautiously and doubts when the numbers do not add up.">بيلعب بحذر، وبيشك لما الحسبة متظبطش.</p>
+        <button class="btn primary" id="botGo" type="button" data-ar="ابدأ اللعب" data-en="Start playing">ابدأ اللعب</button>
       </div>
 
       <div class="divider" data-en="or">أو</div>
@@ -1203,7 +1223,6 @@ const RULES=()=>LANG==='en'?`<h2>How to play</h2>
     if(v!==e.target.value)e.target.value=v;
   }));
   $('#createBtn').onclick=createRoom;
-  $('#botBtn').onclick=openBotSetup;
   $('#joinBtn').onclick=()=>joinRoom($('#codeIn').value.toUpperCase().replace(/[^A-Z0-9]/g,''));
   function setNetMode(m){
     if(m==='lan'&&!lanAvailable())m='online';
@@ -2444,25 +2463,33 @@ const inSolo=()=>!!(lobby.bots&&lobby.bots.some(Boolean));
 const hasNum=(t,n)=>t.a===n||t.b===n;
 const lvlOf=i=>(lobby.botLv&&lobby.botLv[i])||botLevel;
 
-function openBotSetup(){
-  const n=readName();if(!n)return;
-  openOv(`<h2>${t('العب ضد البوتات','Play against bots')}</h2>
-    <div><label>${t('عدد اللاعبين (معاك)','Players (including you)')}</label>
-      <div class="seg" id="botN"><button type="button" data-n="2">${trNum(2)}</button><button type="button" data-n="3">${trNum(3)}</button><button type="button" data-n="4" class="on">${trNum(4)}</button><button type="button" data-n="5">${trNum(5)}</button></div></div>
-    <div><label>${t('مستوى البوتات','Bot difficulty')}</label>
-      <div class="seg" id="botL"><button type="button" data-l="easy"${botLevel==='easy'?' class="on"':''}>${lvlName('easy')}</button><button type="button" data-l="medium"${botLevel==='medium'?' class="on"':''}>${lvlName('medium')}</button><button type="button" data-l="hard"${botLevel==='hard'?' class="on"':''}>${lvlName('hard')}</button></div></div>
-    <p class="legend" id="botDesc">${lvlDesc(botLevel)}</p>
-    <button class="btn primary" id="botGo" type="button">${t('ابدأ اللعب','Start playing')}</button>
-    <button class="btn ghost" id="ovClose" type="button">${t('رجوع','Back')}</button>`,true);
-  const pickSeg=(id,attr,after)=>$(id).addEventListener('click',e=>{
+function setBotDesc(level){
+  const el=$('#botDesc');if(!el)return;
+  el.dataset.ar=LEVEL_DESC[level]||'';
+  el.dataset.en=LEVEL_DESC_EN[level]||'';
+  el.textContent=LANG==='en'?el.dataset.en:el.dataset.ar;
+}
+function initBotSetup(){
+  const nSeg=$('#botN'),lSeg=$('#botL');
+  if(!nSeg||!lSeg)return;
+  const pick=(seg,attr,after)=>seg.addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
-    document.querySelectorAll(id+' button').forEach(x=>x.classList.toggle('on',x===b));
+    seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     if(after)after(b.dataset[attr]);
   });
-  pickSeg('#botN','n');
-  pickSeg('#botL','l',l=>{$('#botDesc').textContent=lvlDesc(l)});
-  $('#botGo').onclick=()=>startSolo(+document.querySelector('#botN .on').dataset.n,document.querySelector('#botL .on').dataset.l,n);
+  pick(nSeg,'n');
+  pick(lSeg,'l',setBotDesc);
+  lSeg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.l===botLevel));
+  setBotDesc(botLevel);
+  const go=$('#botGo');
+  if(go)go.onclick=()=>{
+    const n=+$('#botN .on').dataset.n;
+    const level=$('#botL .on').dataset.l;
+    const name=readName();if(!name)return;
+    startSolo(n,level,name);
+  };
 }
+initBotSetup();
 function startSolo(n,level,name){
   closeOv();
   const pool=shuffle((LANG==='en'?BOT_NAMES_EN:BOT_NAMES).slice()).slice(0,n-1).map(x=>'🤖 '+x);
