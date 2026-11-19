@@ -1648,7 +1648,7 @@ function hostChat(seat,p){
   let m;
   if(typeof p.voice==='string'){
     if(!p.voice.startsWith('data:audio/')||p.voice.length>700000)return;
-    m={id:0,from:seat,voice:p.voice,dur:Math.max(1,Math.min(30,Math.round(Number(p.dur)||1)))};
+    m={id:0,from:seat,voice:p.voice,dur:Math.max(0.5,Math.min(30,Math.round((Number(p.dur)||1)*10)/10))};
   }else{
     const text=String(p.text||'').replace(/[\u0000-\u001f]/g,' ').trim().slice(0,80);
     if(!text)return;
@@ -2335,18 +2335,34 @@ async function startRec(){
       ?await navigator.permissions.query({name:'microphone'}) : null;
     vpMark('permission_check'+(ps?':'+ps.state:':unsupported'));
   }catch(e){vpMark('permission_check:unsupported')}
+  // On mobile, Chrome/WebView apply echo cancellation, noise suppression and
+  // auto gain to the mic. Those take time to settle (silence at the start),
+  // roll off at the end, and muffle speech. Voice messages need the raw mic.
+  // Desktop stays on the exact request that already works well there.
+  const isMobile=!!(window.flutter_inappwebview&&window.flutter_inappwebview.callHandler)||
+    /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent||'');
+  const requests=isMobile
+    ?[{audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}},{audio:true}]
+    :[{audio:true}];
   let stream;
-  try{vpMark('getusermedia_request');stream=await navigator.mediaDevices.getUserMedia({audio:true});vpMark('getusermedia_resolved')}
-  catch(e){vpReport('getusermedia_failed');recStarting=false;
-    $('#chatInRow').hidden=false;$('#recRow').hidden=true;
-    if(micBtn)micBtn.classList.remove('busy');
-    toast(micError(e));return}
+  vpMark('getusermedia_request');
+  for(let i=0;i<requests.length;i++){
+    try{stream=await navigator.mediaDevices.getUserMedia(requests[i]);
+      vpMark('getusermedia_resolved'+(i?':fallback':''));break}
+    catch(e){
+      if(i===requests.length-1){vpReport('getusermedia_failed');recStarting=false;
+        $('#chatInRow').hidden=false;$('#recRow').hidden=true;
+        if(micBtn)micBtn.classList.remove('busy');
+        toast(micError(e));return}
+    }
+  }
+  // Keep the original WebM/Opus codec at 24 kbps. Raising the bitrate produced
+  // an audible edge artifact on web; 24 kbps is clean and well within the cap.
   const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
-  // AAC/Android WebView needs more bits than Opus for the same speech clarity.
-  // 96 kbps for 30 s is 360 KB, still under the 450 KB message cap.
-  const bits=mt&&mt.indexOf('mp4')!==-1?96000:64000;
+  const bits=24000;
   let mr;
-  try{mr=new MediaRecorder(stream,mt?{mimeType:mt,audioBitsPerSecond:bits}:{audioBitsPerSecond:bits});vpMark('mediarecorder_init:'+(mt||'default')+':'+bits)}
+  try{mr=mt?new MediaRecorder(stream,{mimeType:mt,audioBitsPerSecond:bits}):new MediaRecorder(stream);
+    vpMark('mediarecorder_init:'+(mt||'default')+':'+bits+':'+(isMobile?'mobile':'web'))}
   catch(e){releaseMic({stream});vpReport('mediarecorder_failed');recStarting=false;
     $('#chatInRow').hidden=false;$('#recRow').hidden=true;
     if(micBtn)micBtn.classList.remove('busy');
@@ -2410,7 +2426,7 @@ function stopRec(send){
     vpMark('blob:'+blob.size+':'+(r.mr.mimeType||'default'));
     if(blob.size>450000){vpReport('too_large');toast(t('التسجيل كبير أوي','The recording is too large'));return}
     const fr=new FileReader();
-    fr.onload=()=>{vpReport('voice_ready');sendChat({voice:fr.result,dur:Math.round(dur)})};
+    fr.onload=()=>{vpReport('voice_ready');sendChat({voice:fr.result,dur:Math.round(dur*10)/10})};
     fr.onerror=()=>toast(t('مش قادر أجهّز الرسالة الصوتية','Could not prepare the voice message'));
     fr.readAsDataURL(blob);
   };
@@ -2423,7 +2439,10 @@ document.addEventListener('visibilitychange',function(){
   if(document.hidden&&rec)stopRec(false);
 });
 let playingId=null;
-const voiceTotal=(a,m)=>isFinite(a.duration)&&a.duration>0?a.duration:(m.dur||1);
+// Mobile browsers can report a bogus duration for WebM blobs. The recorded
+// wall-clock length matches the single continuous blob closely, so use it as
+// the authoritative total and keep the element duration only as a fallback.
+const voiceTotal=(a,m)=>m&&m.dur>0?m.dur:(isFinite(a.duration)&&a.duration>0?a.duration:1);
 const voiceProg=(a,m)=>Math.min(1,a.currentTime/voiceTotal(a,m));
 function setPlaying(id){playingId=id;if(chatOpen)renderChat(true);if(V)render()}
 function stopVoice(manual){

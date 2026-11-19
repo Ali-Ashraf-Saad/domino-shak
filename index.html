@@ -989,7 +989,7 @@ function hostChat(seat,p){
   let m;
   if(typeof p.voice==='string'){
     if(!p.voice.startsWith('data:audio/')||p.voice.length>700000)return;
-    m={id:0,from:seat,voice:p.voice,dur:Math.max(1,Math.min(30,Math.round(Number(p.dur)||1)))};
+    m={id:0,from:seat,voice:p.voice,dur:Math.max(0.5,Math.min(30,Math.round((Number(p.dur)||1)*10)/10))};
   }else{
     const text=String(p.text||'').replace(/[\u0000-\u001f]/g,' ').trim().slice(0,80);
     if(!text)return;
@@ -1569,14 +1569,23 @@ async function startRec(){
   if(rec)return;
   stopVoice(true);
   if(!navigator.mediaDevices||!window.MediaRecorder){toast('المتصفح ده مش بيدعم تسجيل الصوت');return}
+  // Mobile browsers apply echo cancellation / noise suppression / auto gain
+  // which silence the start and end of a recording and muffle speech.
+  const isMobile=!!(window.flutter_inappwebview&&window.flutter_inappwebview.callHandler)||
+    /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent||'');
+  const requests=isMobile
+    ?[{audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}},{audio:true}]
+    :[{audio:true}];
   let stream;
-  try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}
-  catch(e){toast('لازم تسمح بالميكروفون عشان تسجّل');return}
+  for(let i=0;i<requests.length;i++){
+    try{stream=await navigator.mediaDevices.getUserMedia(requests[i]);break}
+    catch(e){if(i===requests.length-1){toast('لازم تسمح بالميكروفون عشان تسجّل');return}}
+  }
   const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
-  // AAC/Android WebView needs more bits than Opus for the same speech clarity.
-  const bits=mt&&mt.indexOf('mp4')!==-1?96000:64000;
+  // Keep the original 24 kbps: higher rates introduced an audible edge artifact.
+  const bits=24000;
   let mr;
-  try{mr=new MediaRecorder(stream,mt?{mimeType:mt,audioBitsPerSecond:bits}:{audioBitsPerSecond:bits})}
+  try{mr=mt?new MediaRecorder(stream,{mimeType:mt,audioBitsPerSecond:bits}):new MediaRecorder(stream)}
   catch(e){stream.getTracks().forEach(t=>t.stop());toast('مش قادر أسجّل');return}
   const chunks=[],t0=Date.now();
   mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
@@ -1602,14 +1611,14 @@ function stopRec(send){
     const blob=new Blob(r.chunks,{type:r.mr.mimeType||'audio/webm'});
     if(blob.size>450000){toast('التسجيل كبير أوي');return}
     const fr=new FileReader();
-    fr.onload=()=>sendChat({voice:fr.result,dur:Math.round(dur)});
+    fr.onload=()=>sendChat({voice:fr.result,dur:Math.round(dur*10)/10});
     fr.readAsDataURL(blob);
   };
   try{r.mr.stop()}catch(e){r.stream.getTracks().forEach(t=>t.stop())}
   $('#chatInRow').hidden=false;$('#recRow').hidden=true;
 }
 let playingId=null;
-const voiceTotal=(a,m)=>isFinite(a.duration)&&a.duration>0?a.duration:(m.dur||1);
+const voiceTotal=(a,m)=>m&&m.dur>0?m.dur:(isFinite(a.duration)&&a.duration>0?a.duration:1);
 const voiceProg=(a,m)=>Math.min(1,a.currentTime/voiceTotal(a,m));
 function setPlaying(id){playingId=id;if(chatOpen)renderChat(true);if(V)render()}
 function stopVoice(manual){
