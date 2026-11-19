@@ -604,9 +604,9 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
       </div>
 
       <div id="modePick" class="modepick" role="group" aria-label="طريقة اللعب" data-en-aria="Game mode">
-        <button type="button" data-mode="online" class="on">🌐 <span data-en="Online">أونلاين</span></button>
+        <button type="button" data-mode="online" class="on"><span data-en="Online">أونلاين</span></button>
         <button type="button" data-mode="lan">📶 <span data-en="Local network">شبكة محلية</span></button>
-        <button type="button" data-mode="solo">🤖 <span data-en="Bots">بوتات</span></button>
+        <button type="button" data-mode="solo"><span data-en="Bots">بوتات</span></button>
       </div>
       <div id="modeLbl" data-en="Mode: Online (PeerJS)">الوضع الحالي: أونلاين (PeerJS)</div>
 
@@ -2499,7 +2499,7 @@ function initBotSetup(){
 initBotSetup();
 function startSolo(n,level,name){
   closeOv();
-  const pool=shuffle((LANG==='en'?BOT_NAMES_EN:BOT_NAMES).slice()).slice(0,n-1).map(x=>'🤖 '+x);
+  const pool=shuffle((LANG==='en'?BOT_NAMES_EN:BOT_NAMES).slice()).slice(0,n-1).map(x=>x);
   const names=[name,...pool];
   myName=name;isHost=true;mySeat=0;hostSeat=0;epoch=0;roomCode='BOT';size=n;botLevel=level;
   aborted=false;leaving=false;peer=null;V=null;lastSnap=null;prevHand=new Set();

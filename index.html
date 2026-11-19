@@ -394,7 +394,7 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
       <button id="joinBtn" class="btn ghost" type="button">ادخل الطاولة</button>
       <button id="invBack" class="btn ghost" type="button" hidden>رجوع للصفحة الرئيسية</button>
     </div>
-    <button id="botBtn" class="btn ghost" type="button">🤖 العب ضد البوتات</button>
+    <button id="botBtn" class="btn ghost" type="button">العب ضد البوتات</button>
     <div class="row" style="justify-content:center;gap:22px"><button id="rulesHome" class="linklink" type="button">إزاي بنلعب؟</button><button id="setHome" class="linklink" type="button">الإعدادات</button></div>
   </div>
 </main>
@@ -1687,7 +1687,7 @@ function openBotSetup(){
 }
 function startSolo(n,level,name){
   closeOv();
-  const pool=shuffle(BOT_NAMES.slice()).slice(0,n-1).map(x=>'🤖 '+x);
+  const pool=shuffle(BOT_NAMES.slice()).slice(0,n-1).map(x=>x);
   const names=[name,...pool];
   myName=name;isHost=true;mySeat=0;hostSeat=0;epoch=0;roomCode='BOT';size=n;botLevel=level;
   aborted=false;leaving=false;peer=null;V=null;lastSnap=null;prevHand=new Set();
