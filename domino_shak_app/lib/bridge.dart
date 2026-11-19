@@ -9,6 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 /// Trusted origin served by InAppLocalhostServer.
 const String kGameOrigin = 'http://localhost:8080';
 
+/// Public fallback host. Never share the local WebView origin.
+const String kPublicGameOrigin = 'https://liardominoes.gt.tc';
+
+/// Stable invitation URL for a room code.
+String inviteUrlFor(String roomCode) => '$kPublicGameOrigin/?room=$roomCode';
+
 /// Global navigator key so native dialogs can be shown from WebView callbacks.
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -66,18 +72,20 @@ class NativeBridge {
 
   Future<bool> copyRoomCode(Object? code) async {
     if (!isValidRoomCode(code)) return false;
-    await Clipboard.setData(ClipboardData(text: code as String));
-    await showToast('تم نسخ كود الطاولة');
+    final roomCode = code as String;
+    await Clipboard.setData(ClipboardData(text: inviteUrlFor(roomCode)));
+    await showToast('تم نسخ لينك الطاولة');
     return true;
   }
 
   Future<bool> shareRoom(Object? code) async {
     if (!isValidRoomCode(code)) return false;
     final roomCode = code as String;
+    final link = inviteUrlFor(roomCode);
     final text = 'تعالى نلعب دومينو شك! 🁢\n'
-        'افتح تطبيق «دومينو شك»، اختار «ادخل الطاولة» واكتب كود الطاولة: '
-        '$roomCode\n\n'
-        'الكود بيشتغل من جوه التطبيق على أي موبايل.';
+        '$link\n\n'
+        'لو عندك التطبيق هيفتح الطاولة مباشرة. لو لأ، اللينك هيفتح نسخة '
+        'المتصفح. كود الطاولة: $roomCode';
     try {
       await SharePlus.instance.share(
         ShareParams(
@@ -232,19 +240,21 @@ const String _shimTemplate = r'''
 
   document.addEventListener('DOMContentLoaded', function () {
     var copy = document.querySelector('#copyBtn');
-    if (copy) copy.textContent = 'انسخ الكود';
+    if (copy) copy.textContent = 'انسخ اللينك';
     var share = document.querySelector('#waBtn');
     if (share) share.textContent = 'مشاركة';
 
-    // Android shares a room code, not a URL. Keep the lobby hint honest when
-    // the game re-renders it.
+    // Native sharing copies/opens the public invitation URL. Keep the lobby
+    // hint aligned when the game re-renders it.
     var hint = document.querySelector('#lobHint');
     if (hint) {
       var fixHint = function () {
+        // LAN rooms show local connection details instead of a public link.
+        if (window.__dsLanMode === true) return;
         var text = hint.textContent || '';
-        if (text.indexOf('اللينك') !== -1) {
+        if (text.indexOf('ابعت اللينك') === -1) {
           hint.textContent =
-              'ابعت كود الطاولة لصحابك — اللعبة هتبدأ أول ما الطاولة تكمل.';
+              'ابعت اللينك لصحابك — اللعبة هتبدأ أول ما الطاولة تكمل.';
         }
       };
       new MutationObserver(fixHint).observe(hint, {
@@ -360,6 +370,18 @@ const String _shimTemplate = r'''
     };
     setTimeout(step, 60);
     return true;
+  };
+
+  // Offline LAN transport. Available only inside the Android WebView; the
+  // hosted browser build leaves window.dsLan undefined and disables LAN mode.
+  window.dsLan = {
+    available: true,
+    host: function (port) { return bridge('lanHost', [port]); },
+    connect: function (ip, port, id) { return bridge('lanConnect', [ip, port, id]); },
+    send: function (to, dataJson) { return bridge('lanSend', [to, dataJson]); },
+    close: function () { return bridge('lanClose', []); },
+    stopHost: function () { return bridge('lanStopHost', []); },
+    ip: function () { return bridge('lanGetIp', []); }
   };
 })();
 ''';

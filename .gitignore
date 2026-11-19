@@ -75,6 +75,13 @@ desktop.ini
 *.orig
 *.rej
 
+# Local FTPS deployment backups (copies of the live site; machine-local only)
+deployment_backups/
+
+# Python bytecode caches (deployment tooling)
+__pycache__/
+*.pyc
+
 # Raw device/debug logs are not uploaded; summarized test reports are kept.
 domino_shak_app/test_evidence/*logcat.txt
 domino_shak_app/test_evidence/*cdp_events*.jsonl

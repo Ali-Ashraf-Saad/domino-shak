@@ -7,6 +7,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'bridge.dart';
+import 'deep_link.dart';
 import 'web_shell.dart';
 
 const Color _woodDark = Color(0xFF36210F);
@@ -46,11 +47,15 @@ Future<void> main() async {
     debugPrint('Local web server failed to start: $error');
   }
 
-  runApp(const DominoShakApp());
+  final initialRoom = await DeepLinkCoordinator.instance.start();
+
+  runApp(DominoShakApp(initialRoom: initialRoom));
 }
 
 class DominoShakApp extends StatefulWidget {
-  const DominoShakApp({super.key});
+  const DominoShakApp({super.key, this.initialRoom});
+
+  final String? initialRoom;
 
   @override
   State<DominoShakApp> createState() => _DominoShakAppState();
@@ -105,7 +110,7 @@ class _DominoShakAppState extends State<DominoShakApp> {
         scaffoldBackgroundColor: _woodDark,
       ),
       home: _serverError == null
-          ? const WebShell()
+          ? WebShell(initialRoom: widget.initialRoom)
           : _ServerErrorScreen(details: _serverError!),
     );
   }

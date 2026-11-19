@@ -1,4 +1,5 @@
 import 'package:domino_shak/bridge.dart';
+import 'package:domino_shak/deep_link.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -55,12 +56,35 @@ void main() {
       expect(shim, contains('window.__dominoBack'));
       expect(shim, contains('window.__dominoLeave'));
       expect(shim, contains("return 'lobby'"));
-      expect(shim, contains('ابعت كود الطاولة'));
+      expect(shim, contains('ابعت اللينك لصحابك'));
     });
 
     test('does not contain a localhost invite URL', () {
       expect(shim, isNot(contains('localhost:8080')));
       expect(shim, isNot(contains('?room=')));
+    });
+  });
+
+  group('invitation links', () {
+    test('use the public host and never localhost', () {
+      expect(inviteUrlFor('ABCD'), 'https://liardominoes.gt.tc/?room=ABCD');
+      expect(inviteUrlFor('BM9ZP'), isNot(contains('localhost')));
+    });
+
+    test('parse only valid HTTPS invitations for the configured host', () {
+      expect(
+        parseInviteRoomCode('https://liardominoes.gt.tc/?room=bm9zp'),
+        'BM9ZP',
+      );
+      expect(
+        parseInviteRoomCode('https://liardominoes.gt.tc/?room=ABCD&auto=1'),
+        'ABCD',
+      );
+      expect(parseInviteRoomCode('http://liardominoes.gt.tc/?room=ABCD'), isNull);
+      expect(parseInviteRoomCode('https://example.com/?room=ABCD'), isNull);
+      expect(parseInviteRoomCode('https://liardominoes.gt.tc/?room=ABC'), isNull);
+      expect(parseInviteRoomCode('https://liardominoes.gt.tc/'), isNull);
+      expect(parseInviteRoomCode(null), isNull);
     });
   });
 }

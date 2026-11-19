@@ -66,6 +66,10 @@ h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 .seg{display:flex;gap:8px}
 .seg button{flex:1;height:46px;border-radius:12px;border:2px solid rgba(217,169,60,.5);background:transparent;color:var(--txt);font:800 18px 'Tajawal',sans-serif}
 .seg button.on{background:var(--brass);color:var(--ink);border-color:var(--brass)}
+.modepick{display:flex;gap:8px;margin:14px 0}
+.modepick button{flex:1;min-height:46px;padding:6px 4px;border-radius:12px;border:2px solid rgba(217,169,60,.5);background:transparent;color:var(--txt);font:800 13px 'Tajawal',sans-serif}
+.modepick button.on{background:var(--brass);color:var(--ink);border-color:var(--brass)}
+#modeLbl{text-align:center;font-size:13px;font-weight:700;opacity:.85;margin-bottom:8px}
 .btn{height:52px;border-radius:14px;border:0;font:800 18px 'Tajawal',sans-serif;padding:0 18px}
 .btn.primary{background:var(--brass);color:var(--ink);box-shadow:0 3px 0 #8d6a17}
 .btn.primary:active{transform:translateY(2px);box-shadow:0 1px 0 #8d6a17}
@@ -171,8 +175,10 @@ h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 #chatBadge[hidden]{display:none}
 #chat{position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0 auto;width:min(520px,100%);height:min(64dvh,540px);background:linear-gradient(#3f2a17,#2d1c0e);border:3px solid var(--brass);border-bottom:0;border-radius:20px 20px 0 0;display:flex;flex-direction:column;padding:10px 12px calc(10px + env(safe-area-inset-bottom));gap:8px}
 #chat[hidden]{display:none}
-.chat-h{display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.chat-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;gap:8px}
 .chat-h button{background:none;border:1px solid rgba(246,239,220,.35);color:var(--txt);border-radius:10px;padding:4px 12px;font:500 14px 'Tajawal',sans-serif}
+#typing{flex:1;text-align:center;font-size:12px;font-weight:500;color:var(--brass);opacity:.9}
+#typing[hidden]{display:none}
 #chatMsgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:4px 2px}
 .msg{max-width:84%;padding:6px 10px;border-radius:12px;background:rgba(0,0,0,.32);align-self:flex-start;word-break:break-word}
 .msg.me{align-self:flex-end;background:rgba(217,169,60,.25)}
@@ -225,7 +231,12 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 .chat-in[hidden]{display:none}
 .chat-in.rec{align-items:center}
 #recInfo{color:#ff7b6b;font-weight:800;flex:1}
+#recInfo.preparing{color:var(--brass)}
+.reclevel{flex:0 0 46px;height:8px;border-radius:4px;background:rgba(246,239,220,.18);overflow:hidden}
+.reclevel b{display:block;height:100%;width:8%;background:var(--brass);border-radius:4px;transition:width .09s linear}
+.reclevel.live b{background:#ff7b6b}
 .chat-in .btn.mic{flex:0 0 52px;padding:0;font-size:22px}
+.chat-in .btn.mic.busy{opacity:.6}
 .vplay{display:flex;align-items:center;gap:8px;background:rgba(246,239,220,.14);border:0;color:var(--txt);border-radius:999px;padding:6px 14px;font:700 14px 'Tajawal',sans-serif}
 .sw{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;background:rgba(0,0,0,.28);border-radius:12px;font-weight:700;text-align:start}
 .sw input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;width:46px;height:26px;border-radius:13px;background:#5b4a38;position:relative;transition:background .2s;cursor:pointer}
@@ -377,6 +388,13 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
       <input id="nameIn" class="field" maxlength="14" autocomplete="nickname" placeholder="مثلاً: علي">
     </div>
 
+    <div id="modePick" class="modepick" role="group" aria-label="طريقة اللعب">
+      <button type="button" data-mode="online" class="on">🌐 أونلاين</button>
+      <button type="button" data-mode="lan">📶 شبكة محلية</button>
+      <button type="button" data-mode="solo">🤖 بوتات</button>
+    </div>
+    <div id="modeLbl">الوضع الحالي: أونلاين (PeerJS)</div>
+
     <div id="createBox" class="panel" style="padding:0;border:0;background:none;gap:12px;backdrop-filter:none">
       <div>
         <label>عدد اللاعبين</label>
@@ -397,6 +415,7 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
     <div class="divider">أو</div>
 
     <div id="joinBox" style="display:flex;flex-direction:column;gap:10px">
+      <input id="lanIpIn" class="field" hidden maxlength="40" placeholder="IP المضيف — مثال 192.168.43.1" autocapitalize="off" autocomplete="off" dir="ltr" style="direction:ltr;text-align:center">
       <input id="codeIn" class="field" maxlength="8" placeholder="كود الطاولة" autocapitalize="characters" style="direction:ltr;text-align:center;letter-spacing:.2em">
       <button id="joinBtn" class="btn ghost" type="button">ادخل الطاولة</button>
       <button id="invBack" class="btn ghost" type="button" hidden>رجوع للصفحة الرئيسية</button>
@@ -445,12 +464,12 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 
 <div id="chatBack" hidden></div>
 <div id="chat" hidden>
-  <div class="chat-h"><span>الدردشة</span><button id="chatX" type="button">إغلاق</button></div>
+  <div class="chat-h"><span>الدردشة</span><span id="typing" hidden aria-live="polite"></span><button id="chatX" type="button">إغلاق</button></div>
   <div id="chatMsgs"></div>
   <div class="strip" id="quickBar"></div>
   <div class="strip emos" id="emoBar"></div>
   <div class="chat-in" id="chatInRow"><button id="micBtn" class="btn ghost mic" type="button" aria-label="رسالة صوتية">🎤</button><input id="chatIn" class="field" maxlength="80" placeholder="اكتب رسالة أو إيموجي…"><button id="chatSend" class="btn primary" type="button">ابعت</button></div>
-  <div class="chat-in rec" id="recRow" hidden><span id="recInfo">● بيسجّل 0:00</span><button id="recCancel" class="btn ghost" type="button">إلغاء</button><button id="recSend" class="btn primary" type="button">ابعت</button></div>
+  <div class="chat-in rec" id="recRow" hidden><span id="recInfo">● بيسجّل 0:00</span><span id="recLevel" class="reclevel" aria-hidden="true"><b></b></span><button id="recCancel" class="btn ghost" type="button">إلغاء</button><button id="recSend" class="btn primary" type="button">ابعت</button></div>
 </div>
 
 <div id="ask" hidden><div class="askbox"><p id="askQ"></p><div class="row"><button id="askNo" class="btn ghost" type="button">لأ</button><button id="askYes" class="btn danger" type="button">أيوه</button></div></div></div>
@@ -488,6 +507,92 @@ const seatColor=i=>SEATC[(((i|0)%5)+5)%5];
 const initial=n=>[...String(n||'?').trim()][0]||'?';
 const avHTML=(i,name,crown)=>`<span class="av" style="--c:${seatColor(i)}">${esc(initial(name))}${crown?'<i class="crown">👑</i>':''}</span>`;
 const hostId=(code,ep)=>ID_PREFIX+code+(ep?'-'+ep:'');
+
+/* =====================================================
+   وضع الشبكة المحلية — ناقل متوافق مع واجهة PeerJS
+   يعمل فقط داخل تطبيق أندرويد عبر dsLan (Socket محلي).
+   لا يستخدم PeerJS Cloud ولا أي سيرفر عام.
+   ===================================================== */
+const OnlinePeer=window.Peer;
+const LAN_PORT=8974;
+let netMode='online',lanTargetIp='127.0.0.1',lanHostIp='';
+let lanConns={},lanCurrentPeer=null;
+
+function lanAvailable(){return !!(window.dsLan&&window.dsLan.available&&window.dsLan.connect)}
+
+function emitTo(obj,ev,arg){
+  (obj._h&&obj._h[ev]||[]).slice().forEach(function(fn){try{fn(arg)}catch(e){}});
+}
+function hook(ev,cb){(this._h[ev]=this._h[ev]||[]).push(cb);return this}
+function hookOnce(ev,cb){
+  const self=this;const wrap=function(a){try{cb(a)}finally{(self._h[ev]||[]).forEach(function(f,i,arr){if(f===wrap)arr.splice(i,1)})}};
+  return hook.call(this,ev,wrap);
+}
+
+function LanConn(peer,remoteId){
+  this.peer=peer;this.remoteId=remoteId;this.open=true;this._h={};this._seen=Date.now();
+}
+LanConn.prototype.on=hook;
+LanConn.prototype.once=hookOnce;
+LanConn.prototype.send=function(data){
+  if(!this.open||!window.dsLan)return;
+  try{window.dsLan.send(this.remoteId,JSON.stringify(data))}catch(e){emitTo(this,'error',e)}
+};
+LanConn.prototype.close=function(){
+  if(!this.open)return;
+  this.open=false;
+  delete lanConns[this.remoteId];
+  try{this.send({t:'bye'})}catch(e){}
+  emitTo(this,'close');
+};
+
+function LanPeer(a,b){
+  const self=this;
+  this.id=(typeof a==='string'&&a)?a:('c'+rand(6).toLowerCase());
+  this.open=false;this.disconnected=false;this.destroyed=false;this._h={};
+  if(!lanAvailable()){
+    setTimeout(function(){emitTo(self,'error',{type:'lan-unsupported'})},0);
+    return;
+  }
+  lanCurrentPeer=this;
+  window.dsLan.connect(lanTargetIp,LAN_PORT,this.id).then(function(ok){
+    if(!ok){emitTo(self,'error',{type:'lan-unavailable'});return}
+    self.open=true;emitTo(self,'open',self.id);
+  });
+}
+LanPeer.prototype.on=hook;
+LanPeer.prototype.once=hookOnce;
+LanPeer.prototype.connect=function(remoteId){
+  const c=new LanConn(this,remoteId);
+  lanConns[remoteId]=c;
+  setTimeout(function(){if(c.open)emitTo(c,'open')},0);
+  return c;
+};
+LanPeer.prototype.reconnect=function(){};
+LanPeer.prototype.destroy=function(){
+  this.destroyed=true;this.open=false;
+  try{window.dsLan&&window.dsLan.close()}catch(e){}
+  lanConns={};if(lanCurrentPeer===this)lanCurrentPeer=null;
+};
+window.addEventListener('dsLanMessage',function(ev){
+  const d=ev.detail||{};const from=d.from,data=d.data;
+  if(!data||typeof data!=='object')return;
+  let c=lanConns[from];
+  if(!c&&lanCurrentPeer){
+    c=new LanConn(lanCurrentPeer,from);lanConns[from]=c;
+    emitTo(lanCurrentPeer,'connection',c);
+  }
+  if(c){c._seen=Date.now();emitTo(c,'data',data)}
+});
+window.addEventListener('dsLanPeerLeft',function(ev){
+  const from=ev.detail&&ev.detail.from;
+  const c=lanConns[from];
+  if(c){c.open=false;emitTo(c,'close');delete lanConns[from]}
+});
+function useLanTransport(on){
+  window.Peer=on?LanPeer:OnlinePeer;
+  window.__dsLanMode=on;
+}
 const buzz=p=>{try{if(S.haptic&&navigator.vibrate)navigator.vibrate(p)}catch(e){}};
 
 /* ---------- سلامة المحتوى (UGC) — نسخة الموبايل فقط ---------- */
@@ -768,7 +873,10 @@ const RULES=`<h2>إزاي بنلعب؟</h2>
     `<div style="transform:rotate(-2deg) translateY(-6px)">${tileEl({a:5,b:3})}</div>`+
     `<div style="transform:rotate(10deg)"><div class="tile back" style="--tw:54px;--th:102px"></div></div>`;
   try{$('#nameIn').value=localStorage.getItem('dmnshk-name')||''}catch(e){}
-  const urlRoom=(new URLSearchParams(location.search).get('room')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
+  const inviteParams=new URLSearchParams(location.search);
+  const rawRoom=inviteParams.get('room')||'';
+  const urlRoom=rawRoom.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
+  if(rawRoom && urlRoom.length<4){toast('كود الطاولة في اللينك غير صالح');}
   if(urlRoom){
     $('#codeIn').value=urlRoom;
     const inv=$('#invited');inv.hidden=false;inv.textContent='اتدعيت لطاولة '+urlRoom+' — اكتب اسمك وادخل.';
@@ -778,6 +886,20 @@ const RULES=`<h2>إزاي بنلعب؟</h2>
     $('#invBack').hidden=false;
     $('#botBtn').hidden=true;
     $('#invBack').onclick=goHome;
+    // App Links pass auto=1. Never create a room here; only join the invited
+    // table, and only when a previously saved name is available.
+    if(inviteParams.get('auto')==='1'){
+      inv.textContent='اتدعيت لطاولة '+urlRoom+' — بنجرب ندخل تلقائيًا.';
+      setTimeout(function(){
+        if(aborted||leaving||location.search.indexOf('room='+urlRoom)===-1)return;
+        if(!$('#nameIn').value.trim()){
+          inv.textContent='اتدعيت لطاولة '+urlRoom+' — اكتب اسمك وادخل.';
+          $('#nameIn').focus();
+          return;
+        }
+        joinRoom(urlRoom);
+      },300);
+    }
   }
   $('#sizeSeg').addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
@@ -790,6 +912,22 @@ const RULES=`<h2>إزاي بنلعب؟</h2>
   $('#createBtn').onclick=createRoom;
   $('#botBtn').onclick=openBotSetup;
   $('#joinBtn').onclick=()=>joinRoom($('#codeIn').value.toUpperCase().replace(/[^A-Z0-9]/g,''));
+  function setNetMode(m){
+    netMode=m;
+    document.querySelectorAll('#modePick button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+    const lan=m==='lan';
+    $('#lanIpIn').hidden=!lan;
+    $('#createBtn').textContent=lan?'اعمل طاولة محلية':'اعمل طاولة جديدة';
+    $('#joinBtn').textContent=lan?'ادخل الطاولة المحلية':'ادخل الطاولة';
+    const lbl=$('#modeLbl');
+    lbl.textContent=lan?'الوضع الحالي: شبكة محلية (بدون إنترنت — تطبيق أندرويد)'
+      :(m==='solo'?'الوضع الحالي: ضد البوتات':'الوضع الحالي: أونلاين (PeerJS)');
+    const wa=$('#waBtn');if(wa)wa.style.display=lan?'none':'';
+    const copy=$('#copyBtn');if(copy)copy.textContent=lan?'انسخ الكود':'انسخ اللينك';
+    if(lan&&!lanAvailable())toast('وضع الشبكة المحلية يحتاج تطبيق أندرويد — استخدم أونلاين في المتصفح');
+  }
+  document.querySelectorAll('#modePick button').forEach(b=>{b.onclick=()=>setNetMode(b.dataset.mode)});
+  setNetMode('online');
   $('#rulesHome').onclick=()=>{openOv(RULES,true)};
   $('#rulesBtn').onclick=()=>{openOv(RULES,true)};
   $('#termsHome').onclick=openTerms;
@@ -810,7 +948,18 @@ function needPeer(){if(typeof Peer==='undefined'){toast('مش قادر أحمّ�
 /* =====================================================
    الشبكة — Host
    ===================================================== */
-function createRoom(){requireTerms(doCreateRoom)}
+function createRoom(){
+  if(netMode==='lan'){
+    if(!lanAvailable()){toast('اللعب في الشبكة المحلية متاح في تطبيق أندرويد فقط');return}
+    useLanTransport(true);lanTargetIp='127.0.0.1';
+    window.dsLan.host(LAN_PORT).then(function(ok){
+      if(!ok){toast('مش قادر أفتح الطاولة المحلية');return}
+      requireTerms(doCreateRoom);
+    });
+    return;
+  }else useLanTransport(false);
+  requireTerms(doCreateRoom);
+}
 function doCreateRoom(){
   const n=readName();if(!n)return;
   const cc=$('#roomIn').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -825,7 +974,20 @@ function doCreateRoom(){
 }
 function openHostPeer(){
   roomCode=customCode||rand(5);
-  attachHostPeer(hostId(roomCode,0),()=>renderLobby(lobby.names,size,roomCode,hostSeat));
+  attachHostPeer(hostId(roomCode,0),()=>{
+    renderLobby(lobby.names,size,roomCode,hostSeat);
+    if(netMode==='lan')showLanHostInfo(roomCode);
+  });
+}
+function showLanHostInfo(code){
+  if(!window.dsLan||!window.dsLan.ip)return;
+  window.dsLan.ip().then(function(ip){
+    lanHostIp=ip||'';
+    const h=$('#lobHint');
+    if(h&&netMode==='lan'){
+      h.textContent='طاولة محلية — على الجهاز التاني اختار «شبكة محلية» واكتب IP: '+(ip||'؟')+' والكود '+code;
+    }
+  });
 }
 function attachHostPeer(id,onOpen){
   peer=new Peer(id,PEER_OPTS);
@@ -867,6 +1029,7 @@ function hostData(conn,d){
   if(d.t==='ping'){try{conn.send({t:'pong'})}catch(e){}return}
   if(d.t==='join'){handleJoin(conn,d);return}
   if(d.t==='bye'){hostClosed(conn);return}
+  if(d.t==='typing'){hostTyping(conn,!!d.on);return}
   if(conn.seat!==undefined&&lobby.conns[conn.seat]===conn)hostAct(conn.seat,d);
 }
 function uniqueName(n){
@@ -928,7 +1091,15 @@ function broadcastLobby(){
 /* =====================================================
    الشبكة — Client
    ===================================================== */
-function joinRoom(code){requireTerms(()=>doJoinRoom(code))}
+function joinRoom(code){
+  if(netMode==='lan'){
+    if(!lanAvailable()){toast('اللعب في الشبكة المحلية متاح في تطبيق أندرويد فقط');return}
+    const ip=(($('#lanIpIn')||{}).value||'').trim();
+    if(!/^[\w.]{3,40}$/.test(ip)){toast('اكتب IP المضيف أول — مثال 192.168.43.1');$('#lanIpIn').focus();return}
+    lanTargetIp=ip;useLanTransport(true);
+  }else useLanTransport(false);
+  requireTerms(()=>doJoinRoom(code));
+}
 function doJoinRoom(code){
   const n=readName();if(!n)return;
   if(code.length<4){toast('اكتب كود الطاولة');return}
@@ -979,6 +1150,7 @@ function clientData(d){
   else if(d.t==='full'){clearTimeout(cli.failTimer);toast(d.why==='started'?'اللعبة بدأت — لو كنت لاعب فيها ادخل بنفس الاسم':'الطاولة دي كاملة');goHomeSoft()}
   else if(d.t==='abort')abortUI(d.m);
   else if(d.t==='chat')onChat(d.m);
+  else if(d.t==='typing')showTyping(d.from,d.on);
   else if(d.t==='snap')snapPayload=d.s;
   else if(d.t==='hostleft')cli.hostLeft=true;
 }
@@ -1045,7 +1217,7 @@ function showConnecting(code){
   $('#lobCount').textContent='';
   $('#lobHint').textContent='بيتوصّل بالطاولة…';
 }
-function goHomeSoft(){clearInterval(hbTimer);clearTimeout(cli.rt);try{peer&&peer.destroy()}catch(e){}peer=null;hideNet();show('home')}
+function goHomeSoft(){clearInterval(hbTimer);clearTimeout(cli.rt);try{peer&&peer.destroy()}catch(e){}peer=null;try{if(window.__dsLanMode&&window.dsLan)window.dsLan.stopHost()}catch(e){}hideNet();show('home')}
 function abortUI(m){
   aborted=true;reconnecting=false;clearTimeout(cli.rt);
   hideNet();
@@ -1139,6 +1311,12 @@ function hostChat(seat,p){
   m.id=++chatSeq;m.ts=now;m.pid=(lobby.pids||[])[seat]||'';
   lobby.conns.forEach(c=>{if(c&&c.open)c.send({t:'chat',m})});
   onChat(m);
+}
+function hostTyping(conn,on){
+  const seat=conn.seat;
+  lobby.conns.forEach(c=>{
+    if(c&&c.open&&c!==conn)c.send({t:'typing',from:seat,on:on});
+  });
 }
 
 function finish(i){
@@ -1602,6 +1780,8 @@ function initChat(){
   $('#chatBack').onclick=()=>toggleChat(false);
   $('#chatSend').onclick=sendTyped;
   $('#chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendTyped()}});
+  $('#chatIn').addEventListener('input',()=>notifyTyping(!!$('#chatIn').value.trim()));
+  $('#chatIn').addEventListener('blur',()=>notifyTyping(false));
   $('#chat').addEventListener('click',e=>{
     const rp=e.target.closest('[data-report]');if(rp){reportDialog(rp.dataset.report,rp.dataset.rname,rp.dataset.rsnippet);return}
     const bl=e.target.closest('[data-block]');if(bl){ask('تحظر '+bl.dataset.bname+'؟ رسائله هتتخفى', 'أيوه، حظر', ()=>blockPid(bl.dataset.block,bl.dataset.bname));return}
@@ -1618,7 +1798,7 @@ function initChat(){
     const bl=e.target.closest('[data-seat-block]');if(bl){ask('تحظر '+bl.dataset.bname+'؟ رسائله هتتخفى', 'أيوه، حظر', ()=>blockPid(bl.dataset.seatBlock,bl.dataset.bname));return}
   });
 }
-function sendTyped(){const i=$('#chatIn');const v=i.value.trim();if(!v)return;sendChat(v);i.value=''}
+function sendTyped(){const i=$('#chatIn');const v=i.value.trim();if(!v)return;sendChat(v);i.value='';notifyTyping(false)}
 function sendChat(p){requireTerms(()=>doSendChat(p))}
 function doSendChat(p){
   if(typeof p==='string')p={text:p};
@@ -1631,10 +1811,34 @@ function toggleChat(force){
   $('#chat').hidden=!chatOpen;
   $('#chatBack').hidden=!chatOpen;
   if(!chatOpen&&rec)stopRec(false);
+  if(!chatOpen){notifyTyping(false);const tp=$('#typing');if(tp){tp.hidden=true;tp.textContent=''}}
   if(chatOpen){unread=0;renderChat()}
   updBadge();
 }
 function updBadge(){const b=$('#chatBadge');b.hidden=!unread;b.textContent=AR(unread)}
+/* مؤشر "بيكتب" — حقل اختياري في البروتوكول، قديم العملاء يتجاهلوه بأمان. */
+let typingHide=null,typingLastSent=0;
+function showTyping(from,on){
+  const el=$('#typing');if(!el)return;
+  clearTimeout(typingHide);
+  if(!on){el.hidden=true;el.textContent='';return}
+  const nm=V&&V.players[from]?V.players[from].name:'لاعب';
+  el.textContent=(from===hostSeat?'المضيف: ':'')+nm+' بيكتب…';
+  el.hidden=false;
+  typingHide=setTimeout(()=>{el.hidden=true;el.textContent=''},2600);
+}
+function notifyTyping(on){
+  const now=Date.now();
+  if(isHost){
+    if(on)lobby.conns.forEach(c=>{if(c&&c.open&&c.seat!==hostSeat)c.send({t:'typing',from:hostSeat,on:true})});
+    else lobby.conns.forEach(c=>{if(c&&c.open&&c.seat!==hostSeat)c.send({t:'typing',from:hostSeat,on:false})});
+    return;
+  }
+  if(!hostConn||!hostConn.open)return;
+  if(on&&now-typingLastSent<1500)return;
+  typingLastSent=now;
+  try{hostConn.send({t:'typing',on:on})}catch(e){}
+}
 function fmtClock(ts){try{return ts?new Date(ts).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}):''}catch(e){return ''}}
 function renderChat(keep){
   const box=$('#chatMsgs');const st=box.scrollTop;
@@ -1715,29 +1919,109 @@ function bubHTML(i,inl){
 }
 
 /* ---------- الرسائل الصوتية ---------- */
-let rec=null,curAudio=null;
+/* الخصوصية: getUserMedia() لا يُستدعى إلا من داخل startRec() وبعد ضغط المستخدم.
+   لا يوجد أي "تسخين" للميكروفون عند فتح التطبيق أو الغرفة أو الدردشة. */
+let rec=null,curAudio=null,recStarting=false;
 const fmtT=n=>Math.floor(n/60)+':'+String(n%60).padStart(2,'0');
+
+/* قياس زمن كل مرحلة من مراحل التسجيل — بدون تخزين أي محتوى صوتي. */
+let vpT0=0;const vpLog=[];
+const vpMark=stage=>{
+  const ms=Math.round((performance.now()-vpT0)*10)/10;
+  vpLog.push({stage,ms});
+  try{window.__DSVoicePerf=vpLog.slice()}catch(e){}
+  return ms;
+};
+const vpBegin=()=>{vpLog.length=0;vpT0=performance.now();vpMark('button_pressed')};
+const vpReport=stage=>{
+  vpMark(stage);
+  try{console.debug('[DSVOICE]',JSON.stringify(vpLog))}catch(e){}
+};
+function releaseMic(r){
+  try{r.stream&&r.stream.getTracks().forEach(t=>t.stop())}catch(e){}
+  try{if(r.audioCtx&&r.audioCtx.state!=='closed')r.audioCtx.close()}catch(e){}
+  try{if(r.raf)cancelAnimationFrame(r.raf)}catch(e){}
+  try{const l=$('#recLevel');if(l){l.className='reclevel';l.firstElementChild.style.width='8%'}}catch(e){}
+}
+function micError(e){
+  const n=e&&e.name||'';
+  if(n==='NotAllowedError'||n==='PermissionDeniedError')return 'لازم تسمح بالميكروفون عشان تسجّل';
+  if(n==='NotFoundError'||n==='DevicesNotFoundError')return 'مفيش ميكروفون متاح على الجهاز ده';
+  if(n==='NotReadableError'||n==='AbortError'||n==='TrackStartError')return 'الميكروفون مشغول دلوقتي — قفّل أي تطبيق تاني بيستخدمه وجرب';
+  if(n==='OverconstrainedError')return 'إعدادات الميكروفون مش متاحة على الجهاز ده';
+  return 'مش قادر أفتح الميكروفون — جرب تاني';
+}
 async function startRec(){
-  if(rec)return;
+  if(rec||recStarting)return;
+  recStarting=true;
+  vpBegin();
   stopVoice(true);
-  if(!navigator.mediaDevices||!window.MediaRecorder){toast('المتصفح ده مش بيدعم تسجيل الصوت');return}
+  // ردّ فعل بصري فوري قبل أي انتظار.
+  $('#chatInRow').hidden=true;$('#recRow').hidden=false;
+  const info=$('#recInfo');info.className='preparing';
+  info.textContent='● بيجهّز الميكروفون…';
+  const micBtn=$('#micBtn');if(micBtn)micBtn.classList.add('busy');
+  if(!navigator.mediaDevices||!window.MediaRecorder){
+    vpReport('unsupported');
+    recStarting=false;
+    $('#chatInRow').hidden=false;$('#recRow').hidden=true;
+    if(micBtn)micBtn.classList.remove('busy');
+    toast('المتصفح ده مش بيدعم تسجيل الصوت');return;
+  }
+  try{
+    const ps=navigator.permissions&&navigator.permissions.query
+      ?await navigator.permissions.query({name:'microphone'}) : null;
+    vpMark('permission_check'+(ps?':'+ps.state:':unsupported'));
+  }catch(e){vpMark('permission_check:unsupported')}
   let stream;
-  try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}
-  catch(e){toast('لازم تسمح بالميكروفون عشان تسجّل');return}
+  try{vpMark('getusermedia_request');stream=await navigator.mediaDevices.getUserMedia({audio:true});vpMark('getusermedia_resolved')}
+  catch(e){vpReport('getusermedia_failed');recStarting=false;
+    $('#chatInRow').hidden=false;$('#recRow').hidden=true;
+    if(micBtn)micBtn.classList.remove('busy');
+    toast(micError(e));return}
   const mt=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
   let mr;
-  try{mr=mt?new MediaRecorder(stream,{mimeType:mt,audioBitsPerSecond:24000}):new MediaRecorder(stream)}
-  catch(e){stream.getTracks().forEach(t=>t.stop());toast('مش قادر أسجّل');return}
+  try{mr=mt?new MediaRecorder(stream,{mimeType:mt,audioBitsPerSecond:24000}):new MediaRecorder(stream);vpMark('mediarecorder_init')}
+  catch(e){releaseMic({stream});vpReport('mediarecorder_failed');recStarting=false;
+    $('#chatInRow').hidden=false;$('#recRow').hidden=true;
+    if(micBtn)micBtn.classList.remove('busy');
+    toast('مش قادر أسجّل');return}
   const chunks=[],t0=Date.now();
-  mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
-  const r={mr,stream,chunks,t0,timer:null};
-  rec=r;
-  mr.start();
-  $('#chatInRow').hidden=true;$('#recRow').hidden=false;
-  $('#recInfo').textContent='● بيسجّل 0:00';
+  let firstData=false;
+  mr.ondataavailable=e=>{if(e.data&&e.data.size){chunks.push(e.data);if(!firstData){firstData=true;vpMark('first_audio_data')}}};
+  mr.onerror=()=>{toast('حصلت مشكلة في التسجيل');if(rec===r)stopRec(false)};
+  const r={mr,stream,chunks,t0,timer:null,audioCtx:null,analyser:null,raf:0};
+  // مؤشر مستوى الصوت (اختياري ومتاح في معظم المتصفحات).
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(AC){r.audioCtx=new AC();const src=r.audioCtx.createMediaStreamSource(stream);
+      r.analyser=r.audioCtx.createAnalyser();r.analyser.fftSize=256;src.connect(r.analyser);
+      if(r.audioCtx.state==='suspended')r.audioCtx.resume().catch(()=>{});}
+  }catch(e){r.audioCtx=null;r.analyser=null}
+  rec=r;recStarting=false;
+  try{mr.start(250);vpReport('mediarecorder_started')}
+  catch(e){rec=null;releaseMic(r);$('#chatInRow').hidden=false;$('#recRow').hidden=true;
+    if(micBtn)micBtn.classList.remove('busy');toast('مش قادر أبدأ التسجيل');return}
+  if(micBtn)micBtn.classList.remove('busy');
+  info.className='';info.textContent='● بيسجّل 0:00';
+  const lvl=$('#recLevel');if(lvl)lvl.classList.add('live');
+  if(r.analyser){
+    const buf=new Uint8Array(r.analyser.fftSize);
+    const tick=()=>{
+      if(rec!==r)return;
+      r.analyser.getByteTimeDomainData(buf);
+      let sum=0;for(let i=0;i<buf.length;i++){const v=(buf[i]-128)/128;sum+=v*v}
+      const lvlEl=$('#recLevel');
+      if(lvlEl&&lvlEl.firstElementChild){
+        lvlEl.firstElementChild.style.width=Math.min(100,10+Math.sqrt(sum/buf.length)*260).toFixed(0)+'%';
+      }
+      r.raf=requestAnimationFrame(tick);
+    };
+    r.raf=requestAnimationFrame(tick);
+  }
   r.timer=setInterval(()=>{
     const sec=Math.floor((Date.now()-t0)/1000);
-    $('#recInfo').textContent='● بيسجّل '+fmtT(sec);
+    info.textContent='● بيسجّل '+fmtT(sec);
     if(sec>=30)stopRec(true);
   },250);
 }
@@ -1745,19 +2029,31 @@ function stopRec(send){
   if(!rec)return;
   const r=rec;rec=null;clearInterval(r.timer);
   const dur=(Date.now()-r.t0)/1000;
+  let released=false;
+  const finish=()=>{
+    if(released)return;released=true;
+    releaseMic(r);
+    $('#chatInRow').hidden=false;$('#recRow').hidden=true;
+  };
   r.mr.onstop=()=>{
-    r.stream.getTracks().forEach(t=>t.stop());
+    finish();
     if(!send)return;
     if(dur<0.7){toast('التسجيل قصير أوي');return}
     const blob=new Blob(r.chunks,{type:r.mr.mimeType||'audio/webm'});
     if(blob.size>450000){toast('التسجيل كبير أوي');return}
     const fr=new FileReader();
     fr.onload=()=>sendChat({voice:fr.result,dur:Math.round(dur)});
+    fr.onerror=()=>toast('مش قادر أجهّز الرسالة الصوتية');
     fr.readAsDataURL(blob);
   };
-  try{r.mr.stop()}catch(e){r.stream.getTracks().forEach(t=>t.stop())}
-  $('#chatInRow').hidden=false;$('#recRow').hidden=true;
+  try{r.mr.stop()}catch(e){finish()}
+  // If onstop is never fired, still release the microphone after one second.
+  setTimeout(finish,1000);
 }
+// Backgrounding the app ends the active recording session and frees the mic.
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden&&rec)stopRec(false);
+});
 let playingId=null;
 const voiceTotal=(a,m)=>isFinite(a.duration)&&a.duration>0?a.duration:(m.dur||1);
 const voiceProg=(a,m)=>Math.min(1,a.currentTime/voiceTotal(a,m));

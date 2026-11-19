@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,16 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'bridge.dart';
+import 'deep_link.dart';
+import 'lan_service.dart';
 
 const Color _woodDark = Color(0xFF36210F);
 const Color _brass = Color(0xFFD9A93C);
 
 class WebShell extends StatefulWidget {
-  const WebShell({super.key});
+  const WebShell({super.key, this.initialRoom});
+
+  final String? initialRoom;
 
   @override
   State<WebShell> createState() => _WebShellState();
@@ -21,8 +26,11 @@ class WebShell extends StatefulWidget {
 
 class _WebShellState extends State<WebShell> with WidgetsBindingObserver {
   final NativeBridge _bridge = NativeBridge();
+  final LanService _lan = LanService();
 
   InAppWebViewController? _controller;
+  StreamSubscription<String>? _linkSubscription;
+  String? _pendingRoom;
   bool _loading = true;
   bool _hasLoadError = false;
   bool _backBusy = false;
@@ -31,13 +39,37 @@ class _WebShellState extends State<WebShell> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _pendingRoom = widget.initialRoom;
+    _linkSubscription = DeepLinkCoordinator.instance.rooms.listen(_onInviteRoom);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _linkSubscription?.cancel();
+    unawaited(_lan.dispose());
     _controller = null;
     super.dispose();
+  }
+
+  void _onInviteRoom(String code) {
+    final controller = _controller;
+    if (controller == null) {
+      _pendingRoom = code;
+      return;
+    }
+    unawaited(_applyInvite(controller, code));
+  }
+
+  Future<void> _applyInvite(
+    InAppWebViewController controller,
+    String code,
+  ) async {
+    await controller.loadUrl(
+      urlRequest: URLRequest(
+        url: WebUri('$kGameOrigin/index.html?room=$code&auto=1'),
+      ),
+    );
   }
 
   @override
@@ -86,6 +118,100 @@ class _WebShellState extends State<WebShell> with WidgetsBindingObserver {
           _bridge.showToast(args[1] as String);
         }
         return true;
+      },
+    );
+
+    // ---- Offline LAN signalling (local sockets only) ----
+    _lan.onMessage = (from, data) {
+      final detail = jsonEncode({'from': from, 'data': data});
+      controller.evaluateJavascript(
+        source: "window.dispatchEvent(new CustomEvent('dsLanMessage',{detail:$detail}));",
+      );
+    };
+    _lan.onPeerLeft = (from) {
+      final detail = jsonEncode({'from': from});
+      controller.evaluateJavascript(
+        source: "window.dispatchEvent(new CustomEvent('dsLanPeerLeft',{detail:$detail}));",
+      );
+    };
+    _lan.onError = (message) {
+      debugPrint('LAN: $message');
+    };
+
+    bool validToken(List<dynamic> args) =>
+        args.isNotEmpty && _bridge.isTokenValid(args[0]);
+    final idPattern = RegExp(r'^[A-Za-z0-9_-]{1,40}$');
+    final hostPattern = RegExp(r'^[A-Za-z0-9.]{3,60}$');
+
+    controller.addJavaScriptHandler(
+      handlerName: 'lanHost',
+      callback: (args) async {
+        if (!validToken(args)) return 0;
+        final port = args.length > 1 && args[1] is int
+            ? args[1] as int
+            : LanService.defaultPort;
+        if (port < 1 || port > 65535) return 0;
+        try {
+          return await _lan.startHost(port);
+        } catch (_) {
+          return 0;
+        }
+      },
+    );
+
+    controller.addJavaScriptHandler(
+      handlerName: 'lanConnect',
+      callback: (args) async {
+        if (!validToken(args) || args.length < 4) return false;
+        final host = args[1];
+        final port = args[2];
+        final id = args[3];
+        if (host is! String || !hostPattern.hasMatch(host)) return false;
+        if (port is! int || port < 1 || port > 65535) return false;
+        if (id is! String || !idPattern.hasMatch(id)) return false;
+        return _lan.connect(host, port, id);
+      },
+    );
+
+    controller.addJavaScriptHandler(
+      handlerName: 'lanSend',
+      callback: (args) {
+        if (!validToken(args) || args.length < 3) return false;
+        final to = args[1];
+        final raw = args[2];
+        if (to is! String || !idPattern.hasMatch(to)) return false;
+        if (raw is! String) return false;
+        try {
+          final decoded = jsonDecode(raw);
+          if (decoded is! Map<String, dynamic>) return false;
+          return _lan.send(to, decoded);
+        } catch (_) {
+          return false;
+        }
+      },
+    );
+
+    controller.addJavaScriptHandler(
+      handlerName: 'lanClose',
+      callback: (args) {
+        if (!validToken(args)) return false;
+        return _lan.closeClient().then((_) => true);
+      },
+    );
+
+    controller.addJavaScriptHandler(
+      handlerName: 'lanStopHost',
+      callback: (args) {
+        if (!validToken(args)) return false;
+        return _lan.stopHost().then((_) => true);
+      },
+    );
+
+    controller.addJavaScriptHandler(
+      handlerName: 'lanGetIp',
+      callback: (args) async {
+        if (!validToken(args)) return '';
+        return await _lan.localIp() ?? '';
       },
     );
   }
@@ -361,7 +487,11 @@ class _WebShellState extends State<WebShell> with WidgetsBindingObserver {
             children: [
               InAppWebView(
                 initialUrlRequest: URLRequest(
-                  url: WebUri('$kGameOrigin/index.html'),
+                  url: WebUri(
+                    _pendingRoom == null
+                        ? '$kGameOrigin/index.html'
+                        : '$kGameOrigin/index.html?room=$_pendingRoom&auto=1',
+                  ),
                 ),
                 initialSettings: InAppWebViewSettings(
                   javaScriptEnabled: true,
