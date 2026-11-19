@@ -440,6 +440,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
 }
 .langbtn:hover{background:rgba(233,196,106,.18);border-color:var(--brass)}
 .langbtn:active{transform:scale(.96)}
+.langbtn.inline{position:static;min-width:92px;height:38px;padding:0 12px}
 
 /* segmented mode picker */
 .modepick{
@@ -588,7 +589,6 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
     </div>
 
     <div class="panel">
-      <button id="langBtn" class="langbtn" type="button" aria-label="تبديل اللغة / Switch language">EN</button>
       <div id="invited" class="invite" hidden></div>
       <div>
         <label for="nameIn" data-en="Your name">اسمك</label>
@@ -602,7 +602,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
       </div>
       <div id="modeLbl" data-en="Mode: Online (PeerJS)">الوضع الحالي: أونلاين (PeerJS)</div>
 
-      <div id="createBox" class="panel" style="padding:0;border:0;background:none;gap:12px;backdrop-filter:none">
+      <div id="createBox" class="panel" style="padding:31px;border:0;background:none;gap:12px;backdrop-filter:none">
         <div>
           <label class="home-sec-label" data-en="Players">عدد اللاعبين</label>
           <div class="seg" id="sizeSeg">
@@ -753,7 +753,7 @@ function applyI18n(root){
     el.setAttribute('aria-label',LANG==='en'?el.getAttribute('data-en-aria'):el.getAttribute('data-ar-aria'));
   });
 }
-function updateLangBtn(){const b=$('#langBtn');if(b)b.textContent=LANG==='en'?'ع':'EN'}
+function updateLangBtn(){const b=$('#langBtn');if(b){b.textContent=LANG==='en'?'العربية':'English';b.setAttribute('aria-label',LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية')}}
 function rerenderLangSensitive(){
   try{if(document.getElementById('lobby')&&document.getElementById('lobby').classList.contains('on'))renderLobby(lobby.names,size,roomCode,hostSeat)}catch(e){}
   try{if(document.getElementById('game')&&document.getElementById('game').classList.contains('on')&&V)render()}catch(e){}
@@ -1050,6 +1050,7 @@ function openSettings(){
   const inRoom=!!peer||inSolo();
   const lbl=a=>t(a[0],a[1]);
   openOv(`<h2>${t('الإعدادات','Settings')}</h2>
+    <label class="sw" data-lang-settings><span data-en="Language">اللغة</span><button id="langBtn" class="langbtn inline" type="button" aria-label="${LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية'}">${LANG==='en'?'العربية':'English'}</button></label>
     <label class="sw"><span>${lbl(['تأكيد قبل الشك','Confirm before doubting'])}</span><input type="checkbox" id="sCD"${S.confirmDoubt?' checked':''}></label>
     <label class="sw"><span>${lbl(['تأكيد قبل التخطّي','Confirm before passing'])}</span><input type="checkbox" id="sCP"${S.confirmPass?' checked':''}></label>
     <label class="sw"><span>${lbl(['التشغيل التلقائي للرسائل الصوتية','Auto-play voice messages'])}</span><input type="checkbox" id="sAV"${S.autoVoice?' checked':''}></label>
@@ -1237,7 +1238,9 @@ const RULES=()=>LANG==='en'?`<h2>How to play</h2>
   $('#setHome').onclick=openSettings;
   $('#setBtn').onclick=openSettings;
   $('#lobBack').onclick=goHome;
-  const lb=$('#langBtn');if(lb)lb.onclick=()=>setLang(LANG==='en'?'ar':'en');
+  document.addEventListener('click',function(e){
+    if(e.target&&e.target.closest&&e.target.closest('#langBtn'))setLang(LANG==='en'?'ar':'en');
+  });
   // initial language pass
   applyDir();updateLangBtn();applyI18n(document);
 })();
