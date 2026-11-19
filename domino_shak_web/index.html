@@ -388,17 +388,25 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
   --shadow-sm:0 3px 10px rgba(0,0,0,.35);
   --radius-lg:20px; --radius:14px;
 }
-html{-webkit-text-size-adjust:100%}
+html{
+  -webkit-text-size-adjust:100%;
+  min-height:100dvh;
+  background-color:#33200f;
+  background-image:
+    radial-gradient(90% 60% at 50% -10%,rgba(255,201,120,.14),rgba(255,201,120,0) 62%),
+    radial-gradient(70% 50% at 100% 100%,rgba(217,169,60,.08),rgba(217,169,60,0) 60%),
+    repeating-linear-gradient(90deg,#3b2514 0 4px,#33200f 4px 11px);
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
 body{
   line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  background:
-    radial-gradient(90% 60% at 50% -10%,rgba(255,201,120,.14),transparent 62%),
-    radial-gradient(70% 50% at 100% 100%,rgba(217,169,60,.08),transparent 60%),
-    repeating-linear-gradient(90deg,#3b2514 0 4px,#33200f 4px 11px);
+  min-height:100dvh;
+  background:transparent;
 }
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.35) 100%);
+  background:radial-gradient(120% 90% at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.35) 100%);
 }
 h1,h2,.display{letter-spacing:.2px}
 html[dir="ltr"] h1,html[dir="ltr"] h2,html[dir="ltr"] .display,
@@ -605,7 +613,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
 
       <div id="modePick" class="modepick" role="group" aria-label="طريقة اللعب" data-en-aria="Game mode">
         <button type="button" data-mode="online" class="on"><span data-en="Online">أونلاين</span></button>
-        <button type="button" data-mode="lan">📶 <span data-en="Local network">شبكة محلية</span></button>
+        <button type="button" data-mode="lan"><span data-en="Local network">شبكة محلية</span></button>
         <button type="button" data-mode="solo"><span data-en="Bots">بوتات</span></button>
       </div>
       <div id="modeLbl" data-en="Mode: Online (PeerJS)">الوضع الحالي: أونلاين (PeerJS)</div>
