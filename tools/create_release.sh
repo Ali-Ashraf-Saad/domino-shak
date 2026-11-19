@@ -43,6 +43,7 @@ Tagged release of the modernized Domino Shak experience.
 - Responsive layouts, comfortable inputs, and a centered lobby Share button.
 - Plain-text mode labels and bot names (no globe, robot, or signal emoji).
 - Wood-striped background fixed to paint the full viewport without a lower seam.
+- After a challenge, the table clears and the challenge winner takes the next turn: a correct challenge passes the turn to the challenger, while a false challenge returns it to the challenged player.
 
 ### Verification
 - APK SHA-256: \`$APK_SHA\`
