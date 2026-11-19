@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-# Publish the v1.0.0 GitHub release without `gh`.
+# Publish a versioned GitHub release without `gh`.
 # Uses git for the tag check and the GitHub REST API via curl for the release.
 set -euo pipefail
 
 REPO="Ali-Ashraf-Saad/domino-shak"
-TAG="v1.0.0"
-TITLE="Domino Shak v1.0.0"
+TAG="${RELEASE_TAG:-v1.0.1}"
+TITLE="Domino Shak $TAG"
 APK="domino_shak_app/build/app/outputs/flutter-apk/app-release.apk"
 SUMS="domino_shak_web/SHA256SUMS.txt"
+INDEX="domino_shak_app/assets/web/index.html"
 
 if [[ -n "${GH_TOKEN_FILE:-}" ]]; then
   TOKEN="$(cat "$GH_TOKEN_FILE")"
@@ -23,11 +24,15 @@ fi
 git rev-parse -q --verify "refs/tags/$TAG" >/dev/null || { echo "Missing local tag $TAG" >&2; exit 1; }
 [[ -f "$APK" ]] || { echo "Missing $APK" >&2; exit 1; }
 [[ -f "$SUMS" ]] || { echo "Missing $SUMS" >&2; exit 1; }
+[[ -f "$INDEX" ]] || { echo "Missing $INDEX" >&2; exit 1; }
 
-read -r -d '' NOTES <<'EOF' || true
-## Domino Shak v1.0.0
+APK_SHA="$(sha256sum "$APK" | awk '{print $1}')"
+INDEX_SHA="$(sha256sum "$INDEX" | awk '{print $1}')"
 
-First tagged release of the modernized Domino Shak experience.
+read -r -d '' NOTES <<EOF || true
+## Domino Shak $TAG
+
+Tagged release of the modernized Domino Shak experience.
 
 ### Highlights
 - Modernized UI/UX for Android WebView and the public website, keeping the brown/gold dark identity.
@@ -36,10 +41,12 @@ First tagged release of the modernized Domino Shak experience.
 - Bots, online multiplayer, and core gameplay/networking preserved.
 - Direct bot setup from the mode picker; no redundant extra step.
 - Responsive layouts, comfortable inputs, and a centered lobby Share button.
+- Plain-text mode labels and bot names (no globe, robot, or signal emoji).
+- Wood-striped background fixed to paint the full viewport without a lower seam.
 
 ### Verification
-- APK SHA-256: `02be461c0e77c804b1802b2903ee21980326ee9e9efb99efd6a5798d17fdb16f`
-- Web `index.html` SHA-256: `b100ed868fe9912790c2e038c53a64fdea31c9bcc6ef8c16f04611baee5acedd`
+- APK SHA-256: \`$APK_SHA\`
+- Web \`index.html\` SHA-256: \`$INDEX_SHA\`
 
 ### Notes
 Online play across different networks still requires a working TURN server or a network path that allows direct device-to-device UDP.
@@ -77,13 +84,18 @@ fi
 
 UPLOAD_URL="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["upload_url"])' <<<"$RESPONSE")"
 HTML_URL="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["html_url"])' <<<"$RESPONSE")"
-EXISTING_ASSETS="$(python3 -c 'import json,sys; print("\n".join(a["name"] for a in json.load(sys.stdin)["assets"]))' <<<"$RESPONSE")"
+ASSET_IDS="$(python3 -c 'import json,sys; d=json.load(sys.stdin); print("\n".join("{} {}".format(a["name"], a["id"]) for a in d.get("assets", [])))' <<<"$RESPONSE")"
 
 for asset in "$SUMS" "$APK"; do
   name="$(basename "$asset")"
-  if grep -Fxq "$name" <<<"$EXISTING_ASSETS"; then
-    echo "Already attached: $name"
-    continue
+  existing_id="$(awk -v n="$name" '$1==n{print $2}' <<<"$ASSET_IDS")"
+  if [[ -n "$existing_id" ]]; then
+    curl -fsS -X DELETE \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Accept: application/vnd.github+json" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      "https://api.github.com/repos/$REPO/releases/assets/$existing_id" >/dev/null
+    echo "Replaced $name"
   fi
   ctype="application/octet-stream"
   [[ "$name" == *.txt ]] && ctype="text/plain"
