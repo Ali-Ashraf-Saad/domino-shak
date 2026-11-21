@@ -78,3 +78,15 @@ performed. This checklist tracks what is ready and what still blocks release.
 
 Building a signed AAB locally is allowed by the recorded decision; **uploading
 it to Google Play is not**. Publishing requires a new explicit approval.
+
+## Final Play build (2026-11-21)
+
+- Version: `1.0.5` (`versionCode 5`, from `pubspec.yaml` `version: 1.0.5+5`).
+- Built with `flutter build appbundle --release` and `DOMINO_UPLOAD_KEY_PROPERTIES` outside the project.
+- `app-release.aab` SHA-256: `8ad5effa4b9e07a89487ed19531e14887cf99ca3a4709d28b91efc6235233df6`; `jarsigner -verify` = `jar verified`.
+- Package `com.dominoshak.domino_shak`; minSdk 24; targetSdk 36.
+- Bundled web build includes the v1.0.5 voice fix and the zoom-safe background.
+- `flutter analyze`: no issues. `flutter test`: 11/11 passed.
+- This supersedes the 2026-11-18 AAB. First upload target: **Internal testing**.
+- Still open before production: real UGC moderation/report intake, content-rating questionnaire, Data Safety verification.
+
