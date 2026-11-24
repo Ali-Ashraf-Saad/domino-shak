@@ -79,6 +79,13 @@ for the remaining blockers.
 - `../privacy_site/` — GitHub Pages-ready privacy policy and exact publish steps
 - `play_store_assets/` — draft icon, feature graphic, real screenshots, listings, checklist
 
+## License
+
+Released under the [MIT License](../LICENSE).
+
+Bundled third-party components keep their own licenses, including the Reem Kufi
+and Tajawal fonts (SIL Open Font License, see `assets/web/fonts/`) and PeerJS.
+
 ## Release status
 
 The mobile copy now includes a community-terms gate, anonymous player ID, local
