@@ -1,7 +1,8 @@
 # Play release checklist (draft — do not submit)
 
-Status: **pre-submission**. No Play Console upload, rollout, or publish has been
-performed. This checklist tracks what is ready and what still blocks release.
+Status: **web 1.0.10 deployed; Play upload pending owner sign-in**. No Play
+Console upload, rollout, or publish has been performed yet. This checklist
+tracks what is ready and what still blocks release.
 
 ## Ready
 
@@ -22,7 +23,7 @@ performed. This checklist tracks what is ready and what still blocks release.
 - [ ] Real UGC moderation/report intake: local outbox only; no reviewer receives reports. `UGC_MODERATION_PLAN.md` design approved but not deployed (deployment needs separate approval). Manual email reports are possible but are not an in-app moderation system.
 - [ ] Content-rating questionnaire answers (expect at least Teen/12+ because of chat and voice with strangers).
 - [ ] Data Safety answers re-verified against the exact final AAB (`DATA_SAFETY_SUBMISSION.md`).
-- [x] Final AAB rebuilt with the updated policy and confirmed developer details after publication; locally verified. Hash recorded below. **Not uploaded.**
+- [x] Final AAB rebuilt for `1.0.10` with the upload key and the updated web assets; locally verified. Hash recorded below. **Not uploaded yet.**
 
 ## Technical verification to repeat on the final build
 
@@ -39,7 +40,7 @@ performed. This checklist tracks what is ready and what still blocks release.
 - [x] Play App Signing chosen (`RELEASE_DECISIONS.md`).
 - [x] Local upload keystore generated with a random password in `0600` files outside the project (`~/.config/domino_shak/`), never printed, logged, or committed. Release builds now fail without the properties file instead of falling back to debug signing.
 - [x] Final signed AAB rebuilt with the upload key after URL confirmation: `app-release.aab`, SHA-256 `16d75cd96675b9a6844063b565a109bdd52178c5bd06a103d6eb3f463fc1dbaf`. Signer cert `CN=Domino Shak…`, SHA-256 `83:6A:88:B3:88:B3:13:DD:13:CC:2C:33:3C:52:CA:71:AB:A9:25:C6:73:45:4B:8E:E1:1C:D8:44:A8:93:4A:7C`; `jarsigner -verify` = `jar verified`. Manifest confirms `com.dominoshak.domino_shak`, `1.0.0`, minSdk 24/targetSdk 36, `allowBackup=false`; bundled policy hash matches source and game assets are unchanged.
-- [ ] App-signing key enrollment happens in Play Console after the owner's separate upload approval. **Do not upload now.**
+- [ ] App-signing key enrollment / first AAB upload still requires the owner to sign in to Play Console in the browser. Owner has approved the upload; no credentials are stored in this project.
 
 ## Artifacts
 
@@ -48,7 +49,7 @@ performed. This checklist tracks what is ready and what still blocks release.
 | `icon.png` | 512x512 Play icon (owner-updated appearance) | `8beec35d2d78564cfaff65c497bfbd981f58236c796fd0600eeecfc8df625abd` |
 | `feature_graphic.png` | 1024x500 feature graphic (owner-updated appearance) | `039b7eb0f9b09538a57de452ceee94a9efbfe97f95865af657b647ca5c78f3e8` |
 | `screenshots/*.png` | 7 real phone screenshots, 1080x1920 | See `SHA256SUMS.txt` |
-| `app-release.aab` | Final upload-key-signed AAB, version `1.0.6` (`versionCode 6`) | `a12411f4cee54f4b59f869b8060828d749a9c3ea2e09ea58719ea19fa66ce1c1` |
+| `app-release.aab` | Final upload-key-signed AAB, version `1.0.10` (`versionCode 10`) | `b1424ecc68ad4767b77aaededb8a04951c56265319d402f8a7ee2818585a4465` |
 | `listings/` | Arabic and English listing drafts | — |
 | `PRIVACY_POLICY.html` | Privacy policy copy (confirmed contact + target URL) | `8a652aab2dc9edc398b5aaaa103f79a41ce6022438ba6ef508411773f2d755fd` |
 
@@ -76,8 +77,9 @@ performed. This checklist tracks what is ready and what still blocks release.
 
 ## Reminder
 
-Building a signed AAB locally is allowed by the recorded decision; **uploading
-it to Google Play is not**. Publishing requires a new explicit approval.
+Building a signed AAB locally is allowed. The owner has now explicitly approved
+uploading and updating all remote targets; Play upload is the only step still
+waiting on an interactive owner sign-in.
 
 ## Final Play build (2026-11-25)
 
@@ -91,4 +93,23 @@ it to Google Play is not**. Publishing requires a new explicit approval.
 - `assetlinks.json` remains published for a possible future return to verified auto-open.
 - This supersedes the 2026-11-21 AAB. First upload target: **Internal testing**.
 - Still open before production: real UGC moderation/report intake, content-rating questionnaire, Data Safety verification.
+
+## Current build (2026-11-25) — 1.0.10
+
+- Version: `1.0.10` (`versionCode 10`, `pubspec.yaml version: 1.0.10+10`).
+- `flutter analyze`: no issues. `flutter test`: 11/11 passed.
+- Built with `flutter build appbundle --release` and `DOMINO_UPLOAD_KEY_PROPERTIES`
+  outside the project. Signer cert SHA-256 `83:6A:88:…:4A:7C` (upload key).
+- `app-release.aab` SHA-256: `b1424ecc68ad4767b77aaededb8a04951c56265319d402f8a7ee2818585a4465`.
+- Release APK SHA-256: `edca328fcbee67e512ae3f3d550eba441df1f351f3ad2cd971849322ac0e56f5`.
+- Bundled `assets/web/index.html` SHA-256: `d969a53753e7fd2153ed7e56f4421396a21a0b0e2773c16ac2a9017966895498`.
+- UI batch on top of 1.0.6: organised Settings sections; removed content-zoom
+  slider (only `−`/`+` remain) and fixed zoom repaint/layout; improved log
+  positions and hid log options when the log is off; removed chat swipe hint;
+  fixed dialog entry flash.
+- Website `domino_shak_web/` deployed to `https://liardominoes.gt.tc/` via
+  explicit FTPS; all 24 live files verified byte-for-byte against
+  `domino_shak_web/SHA256SUMS.txt` in the browser.
+- First Play target remains **Internal testing**. Requires owner sign-in; no
+  Play Console credentials are stored in this repository.
 

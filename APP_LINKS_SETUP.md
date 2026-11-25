@@ -30,7 +30,7 @@
 | `assetlinks.json` | **Generated and published 2026-11-25** — `200`, `application/json`, no redirect |
 | Invite link UX (since `1.0.6`) | Browser first, then in-page chooser: open the app or stay on the site |
 | `android:autoVerify` | **Removed** in `1.0.6` so Android shows the page instead of opening the app directly |
-| Play upload / publish | AAB `1.0.6` (code 6) built for internal testing; production not yet released |
+| Play upload / publish | AAB `1.0.10` (code 10) built for internal testing; production not yet released |
 
 Consequence: the association file is valid and served correctly to Google, but it is not used for automatic app opening. The app is launched by an explicit `intent://` link from the chooser, which does not require verification.
 
@@ -192,7 +192,7 @@ The live file's SHA-256 is `54e8a84317ab7fc989fb99a5d7b0dedf6cb5e2b51d4102299c6b
 | «كمّل في الموقع» | Headless Chrome via CDP | Overlay closes, name focused, choice stored, reload does not re-prompt | Tested successfully |
 | App-not-installed fallback (`appmissing=1`) | Headless Chrome via CDP | Toast shown, chooser suppressed, code pre-filled | Tested successfully |
 | English chooser text / LTR | Headless Chrome via CDP | “Open the app” / “Stay on the site”, `dir=ltr` | Tested successfully |
-| `1.0.6` AAB | Local build | `1.0.6`/6, minSdk 24, targetSdk 36, no `autoVerify`, `jar verified` | Tested successfully |
+| `1.0.10` AAB | Local build | `1.0.10`/10, minSdk 24, targetSdk 36, no `autoVerify`, upload-key signed | Tested successfully |
 | Play Console deep-link re-verification | Play Console | Not required for the browser-first flow; file still valid | Optional |
 | Verified App Links on a device | Android verifier | Not used by design since `1.0.6` | **Not claimed** |
 
@@ -206,7 +206,7 @@ See `PHASE5_FEATURE_REPORT.md` for the consolidated evidence and emulator-vs-phy
 2. ~~Regenerate with `PLAY_APP_SIGNING_SHA256` set so a real `assetlinks.json` exists.~~ **Done 2026-11-25.**
 3. ~~Publish the real asset file at the exact path.~~ **Done 2026-11-25** (see §3–§4).
 4. ~~Add the browser-first chooser and remove `autoVerify`.~~ **Done in `1.0.6` (2026-11-25).**
-5. Upload `1.0.6` (code 6) to internal testing. **Pending — owner action.**
+5. Upload `1.0.10` (code 10) to internal testing. **Pending — owner Play Console sign-in.**
 6. Verify on a physical device: open `https://liardominoes.gt.tc/?room=CODE` from WhatsApp, tap «افتح التطبيق», confirm the app opens the table; repeat with «كمّل في الموقع». **Not tested — no device connected.**
 7. Re-test cold start, warm start, background/resume, invalid code, unknown host, and web fallback. **Partially tested on emulator only.**
 8. If Play Console deep links still matter for store presentation, re-run verification; the file is already valid.

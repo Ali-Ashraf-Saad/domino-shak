@@ -16,7 +16,7 @@
   --wood:#6B4428; --wood-d:#36210f;
   --ivory:#F4ECD6; --ivory-d:#D9CBA6;
   --brass:#D9A93C; --ink:#1A1814; --red:#C23B2E; --txt:#F6EFDC;
-  --tw:44px; --th:84px;
+  --tw:44px; --th:84px; --ui-zoom:1;
 }
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
@@ -32,7 +32,7 @@ body{
 button{font-family:inherit;cursor:pointer}
 button:disabled{cursor:not-allowed}
 :focus-visible{outline:3px solid var(--brass);outline-offset:2px}
-.screen{display:none;min-height:100dvh;flex-direction:column}
+.screen{display:none;min-height:calc(100dvh / var(--ui-zoom));flex-direction:column}
 .screen.on{display:flex}
 h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 
@@ -97,7 +97,7 @@ h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 .code{font:700 40px 'Reem Kufi',sans-serif;letter-spacing:.18em;color:var(--brass);text-align:center;direction:ltr}
 
 /* ---------- game ---------- */
-#game{height:100dvh;min-height:0;overflow:hidden}
+#game{height:calc(100dvh / var(--ui-zoom));min-height:0;overflow:hidden}
 .bar{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;font-size:14px;opacity:.9}
 .bar button{background:none;border:1px solid rgba(246,239,220,.35);color:var(--txt);border-radius:10px;padding:4px 12px;font:500 14px 'Tajawal',sans-serif}
 #opps{display:flex;justify-content:center;gap:10px;padding:2px 10px 8px;flex-wrap:wrap}
@@ -162,9 +162,18 @@ h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 .bempty{opacity:.65;font-size:14px;align-self:center}
 
 /* ---------- history ---------- */
-#hist{position:absolute;right:6px;bottom:6px;width:min(66%,300px);background:rgba(15,10,5,.84);border:1px solid rgba(217,169,60,.45);border-radius:12px;text-align:start;font-size:12px;line-height:1.45;z-index:3}
+.logdock{display:none;flex:0 0 auto;width:min(860px,100%);margin:0 auto;padding:0 10px}
+.logdock.on{display:block}
+#hist{--log-opacity:.84;position:absolute;background:rgba(15,10,5,var(--log-opacity));border:1px solid rgba(217,169,60,.45);border-radius:12px;text-align:start;font-size:12px;line-height:1.45;z-index:3}
+#hist[hidden]{display:none}
+#hist.log-in-br{inset:auto 6px 6px auto;width:min(66%,300px)}
+#hist.log-in-bl{inset:auto auto 6px 6px;width:min(66%,300px)}
+#hist.log-in-tr{inset:6px 6px auto auto;width:min(66%,300px)}
+#hist.log-in-tl{inset:6px auto auto 6px;width:min(66%,300px)}
+#hist.log-dock{position:static;width:100%;max-width:none;border-radius:10px}
+#hist.log-dock ul{max-height:min(calc(20dvh / var(--ui-zoom)),calc(140px / var(--ui-zoom)))}
 #hist .ht{display:flex;width:100%;justify-content:space-between;background:none;border:0;color:var(--brass);font:800 12.5px 'Tajawal',sans-serif;padding:6px 10px}
-#hist ul{list-style:none;max-height:min(42dvh,260px);overflow:auto;padding:0 10px 6px;display:flex;flex-direction:column;gap:4px}
+#hist ul{list-style:none;max-height:min(calc(42dvh / var(--ui-zoom)),calc(260px / var(--ui-zoom)));overflow:auto;padding:0 10px 6px;display:flex;flex-direction:column;gap:4px}
 #hist li{display:flex;gap:6px;align-items:baseline}
 #hist li em{font-style:normal;opacity:.5;min-width:26px;font-size:11px}
 #hist li span{flex:1}
@@ -177,7 +186,7 @@ h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 #chatBtn{position:relative}
 #chatBadge{position:absolute;top:-7px;left:-7px;min-width:18px;height:18px;border-radius:9px;background:var(--red);color:#fff;font:800 11px/18px 'Tajawal',sans-serif;text-align:center;padding:0 4px;font-style:normal}
 #chatBadge[hidden]{display:none}
-#chat{position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0 auto;width:min(520px,100%);height:min(64dvh,540px);background:linear-gradient(#3f2a17,#2d1c0e);border:3px solid var(--brass);border-bottom:0;border-radius:20px 20px 0 0;display:flex;flex-direction:column;padding:10px 12px calc(10px + env(safe-area-inset-bottom));gap:8px}
+#chat{position:fixed;left:0;right:calc(100vw - 100vw / var(--ui-zoom));bottom:0;z-index:30;margin:0 auto;width:min(calc(520px / var(--ui-zoom)),100%);height:min(calc(64dvh / var(--ui-zoom)),calc(540px / var(--ui-zoom)));background:linear-gradient(#3f2a17,#2d1c0e);border:3px solid var(--brass);border-bottom:0;border-radius:20px 20px 0 0;display:flex;flex-direction:column;padding:10px 12px calc(10px + env(safe-area-inset-bottom));gap:8px}
 #chat[hidden]{display:none}
 .chat-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;gap:8px}
 .chat-h button{background:none;border:1px solid rgba(246,239,220,.35);color:var(--txt);border-radius:10px;padding:4px 12px;font:500 14px 'Tajawal',sans-serif}
@@ -226,9 +235,9 @@ h1,h2,.display{font-family:'Reem Kufi','Tajawal',sans-serif;font-weight:700}
 @keyframes popIn{from{transform:scale(.4);opacity:0}}
 #chat{animation:slideUp .25s ease-out}
 @keyframes slideUp{from{transform:translateY(40px);opacity:0}}
-#chatBack{position:fixed;inset:0;z-index:29;background:rgba(0,0,0,.35);animation:fade .2s}
+#chatBack{position:fixed;inset:0;right:auto;bottom:auto;width:calc(100vw / var(--ui-zoom));height:calc(100dvh / var(--ui-zoom));z-index:29;background:rgba(0,0,0,.35);animation:fade .2s}
 #chatBack[hidden]{display:none}
-.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:21}
+.confetti{position:fixed;inset:0;right:auto;bottom:auto;width:calc(100vw / var(--ui-zoom));height:calc(100dvh / var(--ui-zoom));pointer-events:none;overflow:hidden;z-index:21}
 .confetti i{position:absolute;top:-16px;width:9px;height:14px;border-radius:2px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 body.calm *,body.calm *::before,body.calm *::after{animation:none!important;transition:none!important}
@@ -248,7 +257,7 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 .sw input[type=checkbox]:checked{background:var(--brass)}
 .sw input[type=checkbox]:checked::after{left:23px}
 .sw input[type=range]{width:50%;accent-color:var(--brass)}
-#ask{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.6)}
+#ask{position:fixed;inset:0;right:auto;bottom:auto;width:calc(100vw / var(--ui-zoom));height:calc(100dvh / var(--ui-zoom));z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.6)}
 #ask[hidden]{display:none}
 .askbox{width:min(380px,100%);background:linear-gradient(#3f2a17,#2d1c0e);border:3px solid var(--brass);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px;text-align:center;font-weight:800;font-size:18px}
 .askbox .row .btn{flex:1}
@@ -277,14 +286,15 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 @keyframes speak{50%{box-shadow:0 0 0 6px rgba(217,169,60,.4)}}
 #myline{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
 .mycount{background:rgba(0,0,0,.35);border-radius:999px;padding:3px 14px 3px 10px;color:var(--txt);font-weight:800;font-size:14px;display:flex;gap:8px;align-items:center}
-#net{position:fixed;top:0;left:0;right:0;z-index:55;background:#7d2219;color:#fff;text-align:center;padding:8px 12px;font-weight:800;font-size:14px;display:flex;gap:10px;justify-content:center;align-items:center}
+#net{position:fixed;top:0;left:0;right:auto;width:calc(100vw / var(--ui-zoom));z-index:55;background:#7d2219;color:#fff;text-align:center;padding:8px 12px;font-weight:800;font-size:14px;display:flex;gap:10px;justify-content:center;align-items:center}
 #net[hidden]{display:none}
 #net .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #table.shake{animation:shake .5s}
 @keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
 .float-emo{position:fixed;z-index:35;pointer-events:none;font-size:34px;line-height:1}
-#cprev{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:45;width:min(420px,94vw);background:var(--ivory);color:var(--ink);border-radius:14px;padding:8px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 22px rgba(0,0,0,.5);animation:prevIn .25s ease-out;cursor:pointer;text-align:start;font-size:14px}
+#cprev{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:45;width:min(calc(420px / var(--ui-zoom)),calc(94vw / var(--ui-zoom)));background:var(--ivory);color:var(--ink);border-radius:14px;padding:8px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 22px rgba(0,0,0,.5);animation:prevIn .25s ease-out;cursor:pointer;text-align:start;font-size:14px;touch-action:pan-y;user-select:none;transition:transform .18s ease-out,opacity .18s ease-out}
+#cprev.drag{animation:none!important;transition:none;cursor:grabbing}
 #cprev[hidden]{display:none}
 @keyframes prevIn{from{transform:translate(-50%,-30px);opacity:0}}
 .cm{display:flex;gap:8px;align-items:flex-end;max-width:92%;align-self:flex-start}
@@ -309,6 +319,17 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 .award b{font-size:14px}
 .tally,.glist{list-style:none;padding:0;display:flex;flex-direction:column;gap:6px;text-align:start}
 .tally li{display:flex;justify-content:space-between;background:rgba(217,169,60,.14);border-radius:10px;padding:8px 12px;font-weight:800}
+.plc{width:100%;border-collapse:separate;border-spacing:0 5px;font-size:13px}
+.plc th{font-size:11px;opacity:.68;font-weight:500;padding:0 2px;line-height:1.2}
+.plc th:first-child,.plc td:first-child{text-align:start}
+.plc td{background:rgba(0,0,0,.28);padding:6px 3px;text-align:center;font-weight:800;border-radius:8px}
+.plc td:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:110px;padding-inline:8px}
+.plc .plmedal{font-size:15px;margin-inline-end:4px}
+.plc .plbadge{display:inline-block;min-width:26px;border-radius:999px;padding:2px 6px;background:rgba(246,239,220,.14)}
+.plc .p1{background:var(--brass);color:var(--ink)}
+.plc .p2{background:#c8d0d8;color:#151515}
+.plc .p3{background:#c9845a;color:#fff}
+.plc .p4,.plc .p5{background:rgba(246,239,220,.2)}
 .glist li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;background:rgba(0,0,0,.25);border-radius:10px;padding:6px 12px;font-size:14px}
 .glist em{font-style:normal;opacity:.7;font-size:12.5px}
 .glist small{flex-basis:100%;opacity:.7;font-size:12px}
@@ -329,12 +350,19 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 .card label{font-size:14px;opacity:.9;display:block;margin-bottom:6px;text-align:start}
 .card label.sw{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .sw > span{flex:1 1 auto;min-width:0}
-.sw > input,.sw > button{flex:0 0 auto}
+.sw > input,.sw > button,.sw > select,.sw > b{flex:0 0 auto}
+.card select{max-width:62%;background:rgba(0,0,0,.34);color:var(--txt);border:1px solid rgba(246,239,220,.35);border-radius:10px;padding:8px 9px;font:600 13px 'Tajawal',sans-serif}
+.card option{background:#2d1c0e;color:#fff}
+.sw .range-val{min-width:46px;text-align:center;color:var(--brass);font-weight:800}
+.set-sec{font:800 13px 'Tajawal',sans-serif;color:var(--brass);text-align:start;margin:4px 0 -2px;padding-bottom:5px;border-bottom:1px solid rgba(217,169,60,.28)}
+.set-group{display:flex;flex-direction:column;gap:7px}
+.zoomrow{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 1 64%;min-width:0}
+.zbtn{width:40px;height:40px;flex:none;border-radius:10px;border:1px solid rgba(217,169,60,.55);background:rgba(217,169,60,.12);color:var(--brass);font:800 22px/1 'Tajawal',sans-serif}
 .card .seg button{height:46px}
 /* ---------- overlays ---------- */
 #overlay{display:none}
 #overlay.on{display:block}
-.ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(12,8,4,.8)}
+.ov{position:fixed;inset:0;right:auto;bottom:auto;width:calc(100vw / var(--ui-zoom));height:calc(100dvh / var(--ui-zoom));z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(12,8,4,.8)}
 /* app-or-site chooser shown for invitation links on Android browsers */
 .chooser-code{font:800 32px 'Reem Kufi',sans-serif;letter-spacing:.14em;color:var(--brass);direction:ltr;unicode-bidi:isolate}
 .chooser-note{font-size:14px;line-height:1.75;opacity:.9}
@@ -359,7 +387,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 .rank{list-style:none!important;padding:0!important;counter-reset:r}
 .rank li{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.28);border-radius:12px;padding:10px 14px;font-weight:800;font-size:18px}
 .rank li span{background:var(--brass);color:var(--ink);border-radius:999px;padding:2px 12px;font-size:14px;white-space:nowrap}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:50;background:var(--ivory);color:var(--ink);font-weight:800;padding:10px 18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:calc(90px / var(--ui-zoom));transform:translateX(-50%);z-index:50;background:var(--ivory);color:var(--ink);font-weight:800;padding:10px 18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;max-width:calc(90vw / var(--ui-zoom));text-align:center}
 #toast.on{opacity:1}
 
 @media (min-width:720px){
@@ -396,7 +424,7 @@ a.btn{display:inline-flex;align-items:center;justify-content:center;text-decorat
 }
 html{
   -webkit-text-size-adjust:100%;
-  min-height:100dvh;
+  min-height:calc(100dvh / var(--ui-zoom));
   background-color:#33200f;
   background-image:
     radial-gradient(90% 60% at 50% -10%,rgba(255,201,120,.14),rgba(255,201,120,0) 62%),
@@ -407,7 +435,7 @@ html{
 }
 body{
   line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  min-height:100dvh;
+  min-height:calc(100dvh / var(--ui-zoom));
   background:transparent;
 }
 body::before{
@@ -549,10 +577,8 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
 /* UGC alignment fix for LTR */
 .ugc-note,.ugc-terms,.ugc-reasons{text-align:start}
 
-/* dialogs motion */
-.ov{animation:fade .18s ease-out;padding:clamp(12px,3vw,22px)}
-.card{animation:cardIn .22s cubic-bezier(.2,.8,.3,1)}
-@keyframes cardIn{from{transform:translateY(16px) scale(.985);opacity:0}}
+/* dialogs: no entry animation — it caused a visible flash on open */
+.ov{padding:clamp(12px,3vw,22px)}
 #toast{border-radius:13px;box-shadow:var(--shadow-lg);font-size:15px}
 
 /* desktop / tablet */
@@ -708,6 +734,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
 <!-- ============ GAME ============ -->
 <main id="game" class="screen">
   <div class="bar"><span id="roomTag"></span><div class="grp"><button id="chatBtn" type="button"><span data-en="Chat">دردشة</span><i id="chatBadge" hidden></i></button><button id="setBtn" type="button" data-en="Settings">إعدادات</button><button id="rulesBtn" type="button" data-en="Rules">القواعد</button></div></div>
+  <section id="logDockTop" class="logdock"></section>
   <section id="opps" aria-label="اللاعبين" data-en-aria="Players"></section>
   <section id="table" aria-live="polite">
     <div id="oldrows"></div>
@@ -717,6 +744,7 @@ html[dir="ltr"] .code,html[dir="ltr"] #claim b,html[dir="ltr"] .verdict b{
     <div id="last"></div>
     <div id="hist"></div>
   </section>
+  <section id="logDockBottom" class="logdock"></section>
   <section id="me">
     <div id="mybub"></div>
     <div id="myline"></div>
@@ -973,7 +1001,7 @@ let customCode='',lastSnap=null,prevHand=new Set(),rvTimers=[],gidC=0;
 let botLevel='medium',botT=null,botKeyChecked=-1;
 let epoch=0,hostSeat=0,ready=[],SESSION={games:[]},autoT=null,hbTimer=null,snapPayload=null;
 let cli={welcomed:false,tok:'',epoch:0,hostLeft:false,lostAt:0,tick:0,lastPong:0,rt:null,failTimer:null};
-let reconnecting=false,leaving=false,lastReveal=null,sweepClones=[],sweepGuard=null,voiceQ=[],wakeLock=null,probeEp=0,autoWarned=false,chatNewId=0,prevT=null;
+let reconnecting=false,leaving=false,lastReveal=null,sweepClones=[],sweepGuard=null,voiceQ=[],wakeLock=null,probeEp=0,autoWarned=false,chatNewId=0,prevT=null,prevDrag=null,prevSwipeAt=0;
 
 /* ---------- هوية مجهولة و أدوات السلامة ---------- */
 const PID_KEY='dmnshk-pid',BLOCK_KEY='dmnshk-block',REPORT_KEY='dmnshk-reports';
@@ -1023,14 +1051,47 @@ function requireTerms(fn){
 function openTerms(){openOv(UGC_TERMS()+`<button class="btn primary" id="ovClose" type="button">${t('تمام','Done')}</button>`,true)}
 
 /* ---------- الإعدادات ---------- */
-let S={confirmDoubt:true,confirmPass:true,sound:true,vol:.7,calm:false,autoVoice:true,haptic:true,wake:true};
+const LOG_POSITIONS=['in-br','in-bl','in-tr','in-tl','out-top','out-bottom'];
+const clampS=(v,d,min,max)=>{const n=Number(v);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):d};
+const logPosValid=p=>LOG_POSITIONS.includes(p)?p:'in-br';
+let S={confirmDoubt:true,confirmPass:true,sound:true,vol:.7,calm:false,autoVoice:true,haptic:true,wake:true,showLog:true,logPos:'in-br',logOpacity:.84,zoom:1};
 try{
   const saved=JSON.parse(localStorage.getItem('dmnshk-set')||'{}');
   Object.assign(S,saved);
   if(!('calm' in saved)&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)S.calm=true;
+  S.showLog=S.showLog!==false;
+  S.logPos=logPosValid(S.logPos);
+  S.logOpacity=clampS(S.logOpacity,.84,.35,1);
+  S.zoom=clampS(S.zoom,1,.75,1.4);
 }catch(e){}
 const saveS=()=>{try{localStorage.setItem('dmnshk-set',JSON.stringify(S))}catch(e){}};
-const applyS=()=>document.body.classList.toggle('calm',!!S.calm);
+function setZoom(v){
+  const target=clampS(v,1,.75,1.4);
+  const label=$('#sZoomVal');if(label)label.textContent=Math.round(target*100)+'%';
+  const root=document.documentElement,css=String(target);
+  if(S.zoom===target&&root.style.zoom===css)return;
+  S.zoom=target;
+  root.style.setProperty('--ui-zoom',css);
+  root.style.zoom=css;
+}
+function applyLogPrefs(){
+  const hist=$('#hist');if(!hist)return;
+  const pos=logPosValid(S.logPos);
+  const dock=pos==='out-top'?$('#logDockTop'):pos==='out-bottom'?$('#logDockBottom'):null;
+  const parent=dock||$('#table');
+  if(parent&&hist.parentElement!==parent)parent.appendChild(hist);
+  hist.hidden=!S.showLog;
+  hist.className=dock?'log-dock':'log-'+pos;
+  hist.style.setProperty('--log-opacity',String(clampS(S.logOpacity,.84,.35,1)));
+  const dockTop=$('#logDockTop'),dockBottom=$('#logDockBottom');
+  if(dockTop)dockTop.classList.toggle('on',!!dock&&S.showLog&&dock===dockTop);
+  if(dockBottom)dockBottom.classList.toggle('on',!!dock&&S.showLog&&dock===dockBottom);
+}
+const applyS=()=>{
+  document.body.classList.toggle('calm',!!S.calm);
+  setZoom(S.zoom);
+  applyLogPrefs();
+};
 
 /* ---------- الأصوات (مولّدة بالكود، من غير ملفات) ---------- */
 const SFX=(()=>{
@@ -1097,17 +1158,47 @@ const stateKey=()=>V?V.gid+':'+(V.log.length?V.log[V.log.length-1].n:0)+':'+V.tu
 function openSettings(){
   const inRoom=!!peer||inSolo();
   const lbl=a=>t(a[0],a[1]);
+  const lp=(v,a,e)=>`<option value="${v}"${S.logPos===v?' selected':''}>${t(a,e)}</option>`;
+  const logPosOpts=[
+    ['in-br','داخل الطاولة — أسفل اليمين','Inside table — bottom right'],
+    ['in-bl','داخل الطاولة — أسفل اليسار','Inside table — bottom left'],
+    ['in-tr','داخل الطاولة — أعلى اليمين','Inside table — top right'],
+    ['in-tl','داخل الطاولة — أعلى اليسار','Inside table — top left'],
+    ['out-top','خارج الطاولة — فوقها','Outside table — above it'],
+    ['out-bottom','خارج الطاولة — تحت الطاولة','Outside table — below it']
+  ];
+  const zp=Math.round(clampS(S.zoom,1,.75,1.4)*100);
   openOv(`<h2>${t('الإعدادات','Settings')}</h2>
-    <label class="sw" data-lang-settings><span data-en="Language">اللغة</span><button id="langBtn" class="langbtn inline" type="button" aria-label="${LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية'}">${LANG==='en'?'ع':'EN'}</button></label>
-    <label class="sw"><span>${lbl(['تأكيد قبل الشك','Confirm before doubting'])}</span><input type="checkbox" id="sCD"${S.confirmDoubt?' checked':''}></label>
-    <label class="sw"><span>${lbl(['تأكيد قبل التخطّي','Confirm before passing'])}</span><input type="checkbox" id="sCP"${S.confirmPass?' checked':''}></label>
-    <label class="sw"><span>${lbl(['التشغيل التلقائي للرسائل الصوتية','Auto-play voice messages'])}</span><input type="checkbox" id="sAV"${S.autoVoice?' checked':''}></label>
-    <label class="sw"><span>${lbl(['الأصوات','Sound'])}</span><input type="checkbox" id="sSnd"${S.sound?' checked':''}></label>
-    <label class="sw"><span>${lbl(['مستوى الصوت','Volume'])}</span><input type="range" id="sVol" min="0" max="100" value="${Math.round(S.vol*100)}"></label>
-    <label class="sw"><span>${lbl(['الاهتزاز','Haptics'])}</span><input type="checkbox" id="sHap"${S.haptic?' checked':''}></label>
-    <label class="sw"><span>${lbl(['إبقاء الشاشة شغالة أثناء اللعب','Keep the screen awake while playing'])}</span><input type="checkbox" id="sWake"${S.wake?' checked':''}></label>
-    <label class="sw"><span>${lbl(['تقليل الحركة','Reduce motion'])}</span><input type="checkbox" id="sCalm"${S.calm?' checked':''}></label>
-    <div class="ugc-row" style="justify-content:center;margin:8px 0">
+    <h3 class="set-sec">${t('اللغة','Language')}</h3>
+    <div class="set-group">
+      <label class="sw" data-lang-settings><span data-en="Language">اللغة</span><button id="langBtn" class="langbtn inline" type="button" aria-label="${LANG==='en'?'Switch language to Arabic':'تبديل اللغة إلى الإنجليزية'}">${LANG==='en'?'ع':'EN'}</button></label>
+    </div>
+    <h3 class="set-sec">${t('اللعب','Gameplay')}</h3>
+    <div class="set-group">
+      <label class="sw"><span>${lbl(['تأكيد قبل الشك','Confirm before doubting'])}</span><input type="checkbox" id="sCD"${S.confirmDoubt?' checked':''}></label>
+      <label class="sw"><span>${lbl(['تأكيد قبل التخطّي','Confirm before passing'])}</span><input type="checkbox" id="sCP"${S.confirmPass?' checked':''}></label>
+      <label class="sw"><span>${lbl(['التشغيل التلقائي للرسائل الصوتية','Auto-play voice messages'])}</span><input type="checkbox" id="sAV"${S.autoVoice?' checked':''}></label>
+      <label class="sw"><span>${lbl(['الأصوات','Sound'])}</span><input type="checkbox" id="sSnd"${S.sound?' checked':''}></label>
+      <label class="sw"><span>${lbl(['مستوى الصوت','Volume'])}</span><input type="range" id="sVol" min="0" max="100" value="${Math.round(S.vol*100)}"></label>
+      <label class="sw"><span>${lbl(['الاهتزاز','Haptics'])}</span><input type="checkbox" id="sHap"${S.haptic?' checked':''}></label>
+      <label class="sw"><span>${lbl(['إبقاء الشاشة شغالة أثناء اللعب','Keep the screen awake while playing'])}</span><input type="checkbox" id="sWake"${S.wake?' checked':''}></label>
+    </div>
+    <h3 class="set-sec">${t('العرض والراحة','Display & comfort')}</h3>
+    <div class="set-group">
+      <label class="sw"><span>${lbl(['تقليل الحركة','Reduce motion'])}</span><input type="checkbox" id="sCalm"${S.calm?' checked':''}></label>
+      <div class="sw"><span>${lbl(['تكبير المحتوى','Content zoom'])}</span><div class="zoomrow">
+        <button class="zbtn" id="zoomOut" type="button" aria-label="${t('تصغير المحتوى','Zoom out')}">−</button>
+        <button class="zbtn" id="zoomIn" type="button" aria-label="${t('تكبير المحتوى','Zoom in')}">+</button>
+        <b class="range-val" id="sZoomVal">${zp}%</b>
+      </div></div>
+      <label class="sw"><span>${lbl(['إظهار السجل','Show log'])}</span><input type="checkbox" id="sShowLog"${S.showLog?' checked':''}></label>
+      <div id="logOpts" class="set-group"${S.showLog?'':' hidden'}>
+        <label class="sw"><span>${lbl(['موضع السجل','Log position'])}</span><select id="sLogPos">${logPosOpts.map(o=>lp(...o)).join('')}</select></label>
+        <label class="sw"><span>${lbl(['شفافية السجل','Log opacity'])}</span><input type="range" id="sLogOp" min="35" max="100" value="${Math.round(clampS(S.logOpacity,.84,.35,1)*100)}"></label>
+      </div>
+    </div>
+    <h3 class="set-sec">${t('المجتمع والخصوصية','Community & privacy')}</h3>
+    <div class="ugc-row" style="justify-content:center;margin:0">
       <button class="ugc-act" id="sTerms" type="button">${t('شروط المجتمع','Community rules')}</button>
       <button class="ugc-act" id="sBlocked" type="button">${t('المحظورين','Blocked')} (${trNum(blocklist.length)})</button>
       <button class="ugc-act" id="sReports" type="button">${t('البلاغات','Reports')} (${trNum(reportsOutbox.length)})</button>
@@ -1124,6 +1215,11 @@ function openSettings(){
   $('#sHap').onchange=e=>{S.haptic=e.target.checked;saveS();if(S.haptic)buzz(40)};
   $('#sWake').onchange=e=>{S.wake=e.target.checked;saveS();if(S.wake&&V)requestWake();else if(wakeLock){try{wakeLock.release()}catch(_){}wakeLock=null}};
   $('#sCalm').onchange=e=>{S.calm=e.target.checked;saveS();applyS()};
+  $('#sShowLog').onchange=e=>{S.showLog=e.target.checked;saveS();$('#logOpts').hidden=!S.showLog;applyS()};
+  $('#sLogPos').onchange=e=>{S.logPos=logPosValid(e.target.value);saveS();applyS();if(V)renderHist()};
+  $('#sLogOp').oninput=e=>{S.logOpacity=e.target.value/100;saveS();applyS()};
+  $('#zoomIn').onclick=()=>{setZoom(clampS(S.zoom+.05,1,.75,1.4));saveS()};
+  $('#zoomOut').onclick=()=>{setZoom(clampS(S.zoom-.05,1,.75,1.4));saveS()};
   $('#sTerms').onclick=openTerms;
   $('#sPrivacy').onclick=openPrivacy;
   $('#sBlocked').onclick=openBlocked;
@@ -2014,7 +2110,8 @@ function captureBoard(){
     if(!r.width||!r.height)return null;
     const c=el.cloneNode(false);
     c.className=el.className.replace('drop','').replace('enter','');
-    c.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;margin:0;z-index:19;pointer-events:none';
+    const z=clampS(S.zoom,1,.75,1.4);
+    c.style.cssText='position:fixed;left:'+(r.left/z)+'px;top:'+(r.top/z)+'px;width:'+(r.width/z)+'px;height:'+(r.height/z)+'px;margin:0;z-index:19;pointer-events:none';
     document.body.appendChild(c);
     return c;
   }).filter(Boolean);
@@ -2024,8 +2121,8 @@ function clearSweep(){sweepClones.forEach(c=>c.remove());sweepClones=[]}
 function seatCenter(i){
   const el=(V&&i===V.me)?document.querySelector('#hand'):document.querySelector('.seat[data-seat="'+i+'"]');
   if(!el)return null;
-  const r=el.getBoundingClientRect();
-  return{x:r.left+r.width/2,y:r.top+r.height/2,el};
+  const r=el.getBoundingClientRect(),z=clampS(S.zoom,1,.75,1.4);
+  return{x:(r.left+r.width/2)/z,y:(r.top+r.height/2)/z,el};
 }
 function shakeTable(){const t=$('#table');t.classList.remove('shake');void t.offsetWidth;t.classList.add('shake')}
 function sweepPile(loser){
@@ -2159,27 +2256,73 @@ function statsHTML(){
     <div class="legend">${t('«كذب وعدّى»: كدب ومحدش قفشه · «قفش كدّاب»: شكّ صح','“Bluffed”: lied and got away with it · “Caught liars”: successful doubts')}</div>`;
 }
 function sessionHTML(){
-  const g=V.session||[];
+  const g=(V.session||[]).filter(x=>x&&x.order&&x.order.length);
   if(!g.length)return '';
-  const tally={};
-  g.forEach(x=>{const w=x.order[0];tally[w]=(tally[w]||0)+1});
-  const rows=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
-  const rowsHTML=rows.map(([n,c])=>`<li><span>${esc(n)} ${t('كسب','won')}</span><b>${c===1?t('مرة واحدة','once'):c===2?t('مرتين','twice'):trNum(c)+t(' مرات',' times')}</b></li>`).join('');
-  const l=g.length>1?`<div class="legend">${g.map(x=>t('لعبة ','Game ')+trNum(x.n)+': '+esc(x.order[0])).join(' · ')}</div>`:'';
-  return `<ul class="tally">${rowsHTML}</ul>${l}`;
+  const maxPlace=Math.max(...g.map(x=>x.order.length));
+  const counts={};
+  g.forEach(x=>x.order.forEach((n,k)=>{
+    const row=counts[n]||(counts[n]={}),p=k+1;
+    row[p]=(row[p]||0)+1;
+  }));
+  const names=Object.keys(counts).sort((a,b)=>
+    ((counts[b][1]||0)-(counts[a][1]||0))||
+    ((counts[b][2]||0)-(counts[a][2]||0))||
+    a.localeCompare(b));
+  const medals=['','🥇','🥈','🥉'];
+  const head=`<tr><th>${t('لاعب','Player')}</th>${Array.from({length:maxPlace},(_,k)=>`<th>${ordWord(k+1)||trNum(k+1)}</th>`).join('')}</tr>`;
+  const rows=names.map((n,i)=>`<tr><td>${medals[i+1]||''}${esc(n)}</td>${Array.from({length:maxPlace},(_,k)=>{
+    const p=k+1,c=counts[n][p]||0;
+    return `<td><span class="plbadge p${p}">${trNum(c)}</span></td>`;
+  }).join('')}</tr>`).join('');
+  const l=g.length>1?`<div class="legend">${g.map(x=>t('لعبة ','Game ')+trNum(x.n)+': '+x.order.map((n,k)=>esc(n)).join(' › ')).join(' · ')}</div>`:'';
+  return `<table class="plc"><thead>${head}</thead><tbody>${rows}</tbody></table>${l}`;
 }
 
 /* =====================================================
    الدردشة
    ===================================================== */
-const PHRASES=['شكّ فيه!','أنا صادق والله','ده كذّاب','يلا بسرعة','لعبة حلوة','حظ سعيد','استحمل بقى','مش هشك فيك','جامد!','هههه'];
-const PHRASES_EN=['Doubt it!','I swear it\u2019s true','That\u2019s a liar','Hurry up','Nice game','Good luck','Hold on then','I won\u2019t doubt you','Solid!','Hahaha'];
+const PHRASES=['شكّ فيه!','أنا صادق','أنت كذاب بس مش هشك','ده كذّاب','يلا بسرعة','لعبة حلوة','حظ سعيد','استحمل بقى','مش هشك فيك','جامد!','هههه'];
+const PHRASES_EN=['Doubt it!','I’m telling the truth','You’re lying but I won’t doubt you','That’s a liar','Hurry up','Nice game','Good luck','Hold on then','I won’t doubt you','Solid!','Hahaha'];
 function renderQuickPhrases(){
   const bar=$('#quickBar');if(!bar)return;
   bar.innerHTML=(LANG==='en'?PHRASES_EN:PHRASES).map(p=>`<button type="button" data-say="${esc(p)}">${esc(p)}</button>`).join('');
 }
 const EMOJIS=['😂','😎','🤔','😱','😡','👏','🔥','👀','🤥','😏','🙏','❤️','👍','🤝','😭','🥱'];
 const isEmoji=t=>/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+$/u.test(t);
+function hidePreview(){const el=$('#cprev');if(!el)return;el.hidden=true;clearTimeout(prevT)}
+function initPreviewSwipe(){
+  const el=$('#cprev');if(!el)return;
+  el.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    prevDrag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};
+    el.classList.add('drag');
+    try{el.setPointerCapture(e.pointerId)}catch(_){}
+  });
+  el.addEventListener('pointermove',e=>{
+    if(!prevDrag||e.pointerId!==prevDrag.id)return;
+    const dx=e.clientX-prevDrag.x,dy=e.clientY-prevDrag.y;
+    if(Math.abs(dx)>8||Math.abs(dy)>8)prevDrag.moved=true;
+    if(Math.abs(dx)>Math.abs(dy)){
+      e.preventDefault();
+      el.style.transform=`translateX(calc(-50% + ${dx}px)) rotate(${dx/24}deg)`;
+      el.style.opacity=String(Math.max(.25,1-Math.abs(dx)/(el.offsetWidth||320)));
+    }
+  });
+  const end=e=>{
+    if(!prevDrag||e.pointerId!==prevDrag.id)return;
+    const dx=e.clientX-prevDrag.x,width=el.offsetWidth||320;
+    const hide=Math.abs(dx)>Math.min(90,width*.28)||(prevDrag.moved&&Math.abs(dx)>45);
+    prevDrag=null;el.classList.remove('drag');
+    if(hide){prevSwipeAt=Date.now();hidePreview()}
+    else{el.style.transform='';el.style.opacity=''}
+  };
+  el.addEventListener('pointerup',end);
+  el.addEventListener('pointercancel',end);
+  el.addEventListener('click',()=>{
+    if(Date.now()-prevSwipeAt<400)return;
+    hidePreview();toggleChat(true);
+  });
+}
 function initChat(){
   renderQuickPhrases();
   $('#emoBar').innerHTML=EMOJIS.map(e=>`<button type="button" data-say="${e}">${e}</button>`).join('');
@@ -2197,7 +2340,7 @@ function initChat(){
     const v=e.target.closest('[data-voice]');if(v)playVoice(+v.dataset.voice);
   });
   $('#micBtn').onclick=startRec;
-  $('#cprev').onclick=()=>{$('#cprev').hidden=true;toggleChat(true)};
+  initPreviewSwipe();
   $('#recCancel').onclick=()=>stopRec(false);
   $('#recSend').onclick=()=>stopRec(true);
   $('#ask').addEventListener('click',e=>{if(e.target.id==='ask')$('#ask').hidden=true});
@@ -2274,6 +2417,7 @@ function showPreview(m,label){
   const el=$('#cprev');
   const nm=V&&V.players[m.from]?V.players[m.from].name:t('لاعب','player');
   el.innerHTML=`${avHTML(m.from,nm,false)}<div><b>${esc(nm)}</b><div>${esc(label)}</div></div>`;
+  el.classList.remove('drag');el.style.transform='';el.style.opacity='';
   el.hidden=false;clearTimeout(prevT);prevT=setTimeout(()=>{el.hidden=true},3200);
 }
 function floatEmoji(text,from){
