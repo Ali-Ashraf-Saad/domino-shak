@@ -30,7 +30,7 @@
 | `assetlinks.json` | **Generated and published 2026-11-25** — `200`, `application/json`, no redirect |
 | Invite link UX (since `1.0.6`) | Browser first, then in-page chooser: open the app or stay on the site |
 | `android:autoVerify` | **Removed** in `1.0.6` so Android shows the page instead of opening the app directly |
-| Play upload / publish | AAB `1.0.10` (code 10) built for internal testing; production not yet released |
+| Play upload / publish | AAB `1.0.10` (code 10) on Closed testing - Alpha (internal track paused); production not yet released |
 
 Consequence: the association file is valid and served correctly to Google, but it is not used for automatic app opening. The app is launched by an explicit `intent://` link from the chooser, which does not require verification.
 
@@ -206,7 +206,7 @@ See `PHASE5_FEATURE_REPORT.md` for the consolidated evidence and emulator-vs-phy
 2. ~~Regenerate with `PLAY_APP_SIGNING_SHA256` set so a real `assetlinks.json` exists.~~ **Done 2026-11-25.**
 3. ~~Publish the real asset file at the exact path.~~ **Done 2026-11-25** (see §3–§4).
 4. ~~Add the browser-first chooser and remove `autoVerify`.~~ **Done in `1.0.6` (2026-11-25).**
-5. ~~Upload `1.0.10` (code 10) to internal testing.~~ **Done 2026-11-25** — published as release «1.0.10 - تحسينات الواجهة والتحكمات», available to internal testers. Also promoted to **Closed testing - Alpha** the same day (under Play review).
+5. ~~Upload `1.0.10` (code 10) to internal testing.~~ **Done 2026-11-25** — published as release «1.0.10 - تحسينات الواجهة والتحكمات». Also promoted to **Closed testing - Alpha** the same day (under Play review); the Internal testing track was then paused so only Alpha serves the app.
 6. Verify on a physical device: open `https://liardominoes.gt.tc/?room=CODE` from WhatsApp, tap «افتح التطبيق», confirm the app opens the table; repeat with «كمّل في الموقع». **Not tested — no device connected.**
 7. Re-test cold start, warm start, background/resume, invalid code, unknown host, and web fallback. **Partially tested on emulator only.**
 8. If Play Console deep links still matter for store presentation, re-run verification; the file is already valid.

@@ -4,11 +4,12 @@ Fastlane Supply uploads AAB/APK files and selects a Play track without opening
 the Play Console. This project runs Supply inside Docker because Ruby is not
 installed on the host. No Google credential is stored in the repository.
 
-Current state (2026-11-25): `1.0.10` is published on internal testing and
-promoted to Closed testing - Alpha (under Play review). Those two steps were
-done in the Console. The service-account key is now in place outside the repo:
-`validate_auth` succeeded and `track_info` reports version code `10` on both
-`internal` and `alpha`, so subsequent uploads can run entirely from the CLI.
+Current state (2026-11-25): `1.0.10` is promoted to Closed testing - Alpha
+(under Play review) and the Internal testing track is **paused**, so Alpha is the
+only track serving the app. The publish and pause were done in the Console; the
+service-account key is now in place outside the repo and `validate_auth`
+succeeded. `track_info` reports version code `10` on both tracks because pausing
+a track does not remove its release. Subsequent uploads can run from the CLI.
 
 ## One-time setup (owner action)
 
@@ -66,3 +67,7 @@ uploaded (`skip_upload_metadata/images/screenshots`). Release notes come from
 `promote_alpha` uses Supply's `track_promote_to`; Google Play deactivates the
 release on the source track when it is promoted. `upload_alpha` instead uploads
 the AAB as a new release on alpha and keeps the internal release active.
+
+Predefined tracks cannot be deleted. To stop a track from serving testers, use
+Play Console → track → **Pause test track** (reversible with **Resume test
+track**). Pausing does not change the version code reported by `track_info`.

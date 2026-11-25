@@ -1,9 +1,10 @@
 # Play release checklist (draft — do not submit)
 
-Status: **web 1.0.10 deployed; AAB 1.0.10 published to Play Internal testing and
-promoted to Closed testing - Alpha on 2026-11-25**. The Alpha release is under
-Play review. Nothing has been rolled out to production. This checklist tracks
-what is ready and what still blocks production release.
+Status: **web 1.0.10 deployed; AAB 1.0.10 promoted to Closed testing - Alpha on
+2026-11-25, with the Internal testing track paused so only Alpha serves the
+app**. The Alpha release is under Play review. Nothing has been rolled out to
+production. This checklist tracks what is ready and what still blocks production
+release.
 
 ## Ready
 
@@ -115,17 +116,22 @@ remaining policy/testing items above.
   explicit FTPS; all 24 live files verified byte-for-byte against
   `domino_shak_web/SHA256SUMS.txt` in the browser.
 - **Published to Play Internal testing on 2026-11-25** as release
-  «1.0.10 - تحسينات الواجهة والتحكمات» (version code 10). Play Console shows it
-  as the latest active release, available to internal testers, with no devices
-  lost from the previous compatibility set.
+  «1.0.10 - تحسينات الواجهة والتحكمات» (version code 10), with no devices lost
+  from the previous compatibility set. The track was then **paused** the same day
+  at the owner's request; Play Console now shows it as «غير نشط», with a
+  «استئناف مسار الاختبار» button to restore it.
 - **Promoted to Closed testing - Alpha on 2026-11-25.** Play Console lists the
   same release there with status «قيد المراجعة» (under review), version code 10,
-  178 countries/regions. The earlier `1.0.6` alpha release remains listed.
+  178 countries/regions. Alpha remains active; the earlier `1.0.6` alpha release
+  is still listed for existing testers.
 - Release notes use Play's `<ar>…</ar>` language-tag format.
 - Future uploads are wired for Fastlane Supply via `./tools/play_supply.sh`
-  (`upload_internal`, `upload_alpha`, `promote_alpha`); the service-account JSON
-  key is held outside the repository and mounted read-only. See
-  `PLAY_CLI_RELEASE.md`. No Play Console credentials are stored in this repo.
+  (`validate_auth`, `track_info`, `upload_internal`, `upload_alpha`,
+  `promote_alpha`); the service-account JSON key is held outside the repository
+  and mounted read-only. See `PLAY_CLI_RELEASE.md`. No Play Console credentials
+  are stored in this repo. Pausing a track is a Console-only action; the Play API
+  cannot delete a predefined track, and halting the release via the API returned
+  a Google 500 while Alpha was under review.
 - Still open before production: real UGC moderation/report intake, content
   rating, Data Safety verification, and completion of the 12-tester/14-day
   closed test.
