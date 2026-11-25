@@ -38,26 +38,58 @@ window.DOMINO_SHAK_WEB_CONFIG = Object.freeze({
 });
 EOF
 
+normalize_fp() {
+  local raw
+  raw="$(printf '%s' "$1" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')"
+  # Accept input with or without colons; always emit colon-separated hex,
+  # which is the format Android's App Links verifier expects.
+  if [[ "$raw" != *:* ]]; then
+    raw="$(printf '%s' "$raw" | sed 's/../&:/g; s/:$//')"
+  fi
+  printf '%s' "$raw"
+}
+valid_fp() {
+  [[ "$1" =~ ^([0-9A-F]{2}:){31}[0-9A-F]{2}$ ]]
+}
+
+fingerprints=()
 if [[ -n "${PLAY_APP_SIGNING_SHA256:-}" ]]; then
-  fingerprint="$(printf '%s' "$PLAY_APP_SIGNING_SHA256" \
-    | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]' \
-    | sed 's/:/ /g')"
-  if [[ ! "$fingerprint" =~ ^([0-9A-F]{2}[[:space:]]){31}[0-9A-F]{2}$ ]]; then
+  fp="$(normalize_fp "$PLAY_APP_SIGNING_SHA256")"
+  if ! valid_fp "$fp"; then
     echo "PLAY_APP_SIGNING_SHA256 is not a 32-byte hex fingerprint" >&2
     exit 1
   fi
-  cat > "$DEST/.well-known/assetlinks.json" <<EOF
-[
+  fingerprints+=("$fp")
+fi
+# Optional: the upload-key fingerprint, so sideloaded/local builds also verify.
+if [[ -n "${UPLOAD_KEY_SHA256:-}" ]]; then
+  fp="$(normalize_fp "$UPLOAD_KEY_SHA256")"
+  if ! valid_fp "$fp"; then
+    echo "UPLOAD_KEY_SHA256 is not a 32-byte hex fingerprint" >&2
+    exit 1
+  fi
+  fingerprints+=("$fp")
+fi
+
+if [[ ${#fingerprints[@]} -gt 0 ]]; then
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.dominoshak.domino_shak",
-      "sha256_cert_fingerprints": ["$fingerprint"]
-    }
-  }
-]
-EOF
+    echo '['
+    echo '  {'
+    echo '    "relation": ["delegate_permission/common.handle_all_urls"],'
+    echo '    "target": {'
+    echo '      "namespace": "android_app",'
+    echo '      "package_name": "com.dominoshak.domino_shak",'
+    printf '      "sha256_cert_fingerprints": ['
+    first=1
+    for fp in "${fingerprints[@]}"; do
+      if [[ $first -eq 1 ]]; then first=0; else printf ', '; fi
+      printf '"%s"' "$fp"
+    done
+    printf ']\n'
+    echo '    }'
+    echo '  }'
+    echo ']'
+  } > "$DEST/.well-known/assetlinks.json"
 else
   # Never generate a placeholder production association file: it could be
   # uploaded by mistake and would be rejected by Android anyway.

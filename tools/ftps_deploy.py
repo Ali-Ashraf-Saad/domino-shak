@@ -45,6 +45,7 @@ BACKUP_ROOT = PROJECT / "deployment_backups"
 
 # Paths we are allowed to change on the host. Everything else is left alone.
 MANAGED_FILES = {
+    ".well-known/assetlinks.json",
     ".well-known/assetlinks.json.template",
     "README.md",
     "SHA256SUMS.txt",
@@ -212,9 +213,10 @@ def do_upload(ftp: FTP_TLS, destination: str) -> int:
     for path in sorted(p for p in BUILD_DIR.rglob("*") if p.is_file()):
         rel = path.relative_to(BUILD_DIR).as_posix()
         if rel.startswith(".well-known/"):
-            # No real assetlinks.json exists without the Play fingerprint; the
-            # template stays local. Do not publish any /.well-known/ content.
-            continue
+            # Publish only a real Android App Links association file. The
+            # template must never reach the live host.
+            if rel != ".well-known/assetlinks.json":
+                continue
         remote_dir = posixpath.join(destination, posixpath.dirname(rel))
         ensure_dir(ftp, remote_dir)
         with path.open("rb") as handle:
