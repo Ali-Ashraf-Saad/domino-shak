@@ -1,8 +1,8 @@
 # Play release checklist (draft — do not submit)
 
-Status: **web 1.0.10 deployed; Play upload pending owner sign-in**. No Play
-Console upload, rollout, or publish has been performed yet. This checklist
-tracks what is ready and what still blocks release.
+Status: **web 1.0.10 deployed; AAB 1.0.10 published to Play Internal testing on
+2026-11-25**. Nothing has been rolled out to closed testing or production. This
+checklist tracks what is ready and what still blocks production release.
 
 ## Ready
 
@@ -23,7 +23,7 @@ tracks what is ready and what still blocks release.
 - [ ] Real UGC moderation/report intake: local outbox only; no reviewer receives reports. `UGC_MODERATION_PLAN.md` design approved but not deployed (deployment needs separate approval). Manual email reports are possible but are not an in-app moderation system.
 - [ ] Content-rating questionnaire answers (expect at least Teen/12+ because of chat and voice with strangers).
 - [ ] Data Safety answers re-verified against the exact final AAB (`DATA_SAFETY_SUBMISSION.md`).
-- [x] Final AAB rebuilt for `1.0.10` with the upload key and the updated web assets; locally verified. Hash recorded below. **Not uploaded yet.**
+- [x] Final AAB rebuilt for `1.0.10` with the upload key and the updated web assets; locally verified. Hash recorded below. **Uploaded and published to Internal testing on 2026-11-25.**
 
 ## Technical verification to repeat on the final build
 
@@ -40,7 +40,9 @@ tracks what is ready and what still blocks release.
 - [x] Play App Signing chosen (`RELEASE_DECISIONS.md`).
 - [x] Local upload keystore generated with a random password in `0600` files outside the project (`~/.config/domino_shak/`), never printed, logged, or committed. Release builds now fail without the properties file instead of falling back to debug signing.
 - [x] Final signed AAB rebuilt with the upload key after URL confirmation: `app-release.aab`, SHA-256 `16d75cd96675b9a6844063b565a109bdd52178c5bd06a103d6eb3f463fc1dbaf`. Signer cert `CN=Domino Shak…`, SHA-256 `83:6A:88:B3:88:B3:13:DD:13:CC:2C:33:3C:52:CA:71:AB:A9:25:C6:73:45:4B:8E:E1:1C:D8:44:A8:93:4A:7C`; `jarsigner -verify` = `jar verified`. Manifest confirms `com.dominoshak.domino_shak`, `1.0.0`, minSdk 24/targetSdk 36, `allowBackup=false`; bundled policy hash matches source and game assets are unchanged.
-- [ ] App-signing key enrollment / first AAB upload still requires the owner to sign in to Play Console in the browser. Owner has approved the upload; no credentials are stored in this project.
+- [x] Play App Signing enrollment and first AAB upload completed in Play Console
+  by the owner's browser session on 2026-11-25. No Play credentials are stored
+  in this repository.
 
 ## Artifacts
 
@@ -77,9 +79,10 @@ tracks what is ready and what still blocks release.
 
 ## Reminder
 
-Building a signed AAB locally is allowed. The owner has now explicitly approved
-uploading and updating all remote targets; Play upload is the only step still
-waiting on an interactive owner sign-in.
+Building a signed AAB locally is allowed. The owner explicitly approved
+uploading and updating all remote targets; the web deployment, GitHub release,
+and Play Internal testing upload are now complete. Production still needs the
+remaining policy/testing items above.
 
 ## Final Play build (2026-11-25)
 
@@ -110,6 +113,12 @@ waiting on an interactive owner sign-in.
 - Website `domino_shak_web/` deployed to `https://liardominoes.gt.tc/` via
   explicit FTPS; all 24 live files verified byte-for-byte against
   `domino_shak_web/SHA256SUMS.txt` in the browser.
-- First Play target remains **Internal testing**. Requires owner sign-in; no
-  Play Console credentials are stored in this repository.
+- **Published to Play Internal testing on 2026-11-25** as release
+  «1.0.10 - تحسينات الواجهة والتحكمات» (version code 10). Play Console shows it
+  as the latest active release, available to internal testers, with no devices
+  lost from the previous compatibility set. No Play Console credentials are
+  stored in this repository.
+- Release notes use Play's `<ar>…</ar>` language-tag format.
+- Still open before production: real UGC moderation/report intake, content
+  rating, Data Safety verification, and the 12-tester/14-day closed test.
 
