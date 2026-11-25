@@ -1,0 +1,64 @@
+# Fastlane Supply lanes for Domino Shak.
+# The Play service-account JSON key is never stored here: it is mounted into
+# the container by tools/play_supply.sh and passed via GOOGLE_JSON_KEY.
+
+opt_out_usage
+
+REPO_ROOT = File.expand_path("..", __dir__)
+PACKAGE_NAME = "com.dominoshak.domino_shak"
+PUBSPEC = File.join(REPO_ROOT, "domino_shak_app", "pubspec.yaml")
+VERSION_NAME = File.read(PUBSPEC)[/^version:\s*([\d.]+)\+/, 1]
+AAB_PATH = File.join(REPO_ROOT, "domino_shak_app", "play_store_assets", "app-release.aab")
+JSON_KEY = ENV.fetch("GOOGLE_JSON_KEY")
+METADATA_PATH = File.join(__dir__, "metadata", "android")
+
+SUPPLY_SHARED = {
+  package_name: PACKAGE_NAME,
+  json_key: JSON_KEY,
+  skip_upload_metadata: true,
+  skip_upload_images: true,
+  skip_upload_screenshots: true
+}.freeze
+
+fastlane_version "2.200.0"
+
+platform :android do
+  desc "Check the service-account key and Play API access"
+  lane :validate_auth do
+    validate_play_store_json_key(json_key: JSON_KEY)
+  end
+
+  desc "Upload the signed AAB to internal testing"
+  lane :upload_internal do
+    supply(
+      **SUPPLY_SHARED,
+      aab: AAB_PATH,
+      version_name: VERSION_NAME,
+      track: "internal",
+      metadata_path: METADATA_PATH,
+      skip_upload_changelogs: false
+    )
+  end
+
+  desc "Upload the signed AAB to closed testing (alpha)"
+  lane :upload_alpha do
+    supply(
+      **SUPPLY_SHARED,
+      aab: AAB_PATH,
+      version_name: VERSION_NAME,
+      track: "alpha",
+      metadata_path: METADATA_PATH,
+      skip_upload_changelogs: false
+    )
+  end
+
+  desc "Promote the active internal-testing release to closed testing (alpha)"
+  lane :promote_alpha do
+    supply(
+      **SUPPLY_SHARED,
+      track: "internal",
+      track_promote_to: "alpha",
+      skip_upload_changelogs: true
+    )
+  end
+end
