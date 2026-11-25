@@ -1,7 +1,7 @@
 # App Links / deep link setup — Domino Shak
 
 **Date:** 2026-11-19 (updated 2026-11-25)  
-**Status:** **Deep-link handling implemented and tested with limitations (emulator cold/warm, local browser).** The real `assetlinks.json` is now generated from the Play App Signing fingerprint and **published live** on 2026-11-25. The host's JavaScript challenge still answers browser-like and plain clients, but Google's verifier and Googlebot user agents receive the JSON directly (`200`, `application/json`, no redirect). Re-verification in Play Console is pending.
+**Status:** **Deep-link handling implemented and tested with limitations (emulator cold/warm, local browser).** The real `assetlinks.json` is generated from the Play App Signing fingerprint and **published live** on 2026-11-25. Since `1.0.6`, invitation links intentionally open in the browser first and show an in-page chooser («افتح التطبيق» / «كمّل في الموقع»); `android:autoVerify` was removed so Android does not bypass that page. The association file stays published for a possible return to verified auto-open.
 
 ---
 
@@ -28,9 +28,11 @@
 | Hosting challenge | Googlebot / App Links verifier agents are served the file directly; browser-like agents still get the JS challenge |
 | Static web build | Deployed to public host 2026-11-19 (`?room=CODE` verified live) |
 | `assetlinks.json` | **Generated and published 2026-11-25** — `200`, `application/json`, no redirect |
-| Play upload / publish | AAB `1.0.5` (code 5) uploaded to internal testing; production not yet released |
+| Invite link UX (since `1.0.6`) | Browser first, then in-page chooser: open the app or stay on the site |
+| `android:autoVerify` | **Removed** in `1.0.6` so Android shows the page instead of opening the app directly |
+| Play upload / publish | AAB `1.0.6` (code 6) built for internal testing; production not yet released |
 
-Consequence: the association file exists and is served correctly to Google. Final confirmation depends on Play Console re-verification and, for on-device behaviour, a physical-device check.
+Consequence: the association file is valid and served correctly to Google, but it is not used for automatic app opening. The app is launched by an explicit `intent://` link from the chooser, which does not require verification.
 
 ---
 
@@ -71,7 +73,7 @@ Otherwise it returns `null` — an invalid invite never creates a room.
 
 ### 2.4 Manifest — `AndroidManifest.xml` — Implemented
 
-A `VIEW` / `BROWSABLE` / `DEFAULT` intent filter with `android:autoVerify="true"` for `https://liardominoes.gt.tc/` is present alongside the `MAIN`/`LAUNCHER` filter. `MODIFY_AUDIO_SETTINGS` (voice fix) is also declared. The matching Asset Links file is now published (§3), so Android can verify the association at install time.
+A `VIEW` / `BROWSABLE` / `DEFAULT` intent filter for `https://liardominoes.gt.tc/` is present alongside the `MAIN`/`LAUNCHER` filter. `MODIFY_AUDIO_SETTINGS` (voice fix) is also declared. Since `1.0.6` the filter **no longer uses `android:autoVerify`**: a shared invite link opens in the browser first, and the page launches the app through an explicit `intent://…;package=com.dominoshak.domino_shak;end` URL. The filter is still required for that explicit intent to resolve.
 
 ### 2.5 WebView join behaviour — `lib/web_shell.dart` + `assets/web/index.html` — Implemented
 
@@ -80,6 +82,26 @@ A `VIEW` / `BROWSABLE` / `DEFAULT` intent filter with `android:autoVerify="true"
 - **Auto-join happens only if a saved name exists** in `localStorage`; otherwise the game shows the manual join screen with the code pre-filled.
 - An invitation **never creates a new room** — it only joins the invited table.
 - Unknown hosts/schemes/malformed codes are ignored and fall back to the home screen.
+
+### 2.6 Browser-first invite chooser — `assets/web/index.html` — Implemented (1.0.6)
+
+Opening `https://liardominoes.gt.tc/?room=CODE` on an Android browser shows a dialog before the join form:
+
+- the room code, in the same brown/gold style as the game overlays;
+- **«افتح التطبيق»** — an `<a>` whose `href` is
+  `intent://liardominoes.gt.tc/?room=CODE#Intent;scheme=https;package=com.dominoshak.domino_shak;S.browser_fallback_url=<current page + appmissing=1>;end`;
+- **«كمّل في الموقع»** — closes the dialog, keeps the code pre-filled and focuses the name field.
+
+Rules:
+
+- shown only when a valid `room` is present, the user agent is Android, and the tab has not already answered (`sessionStorage['dmnshk-app-choice']`);
+- never shown inside the app's WebView, which loads the page with `auto=1`;
+- never shown when the link already came back with `appmissing=1` (app not installed); that case shows a toast and the normal prefilled join form;
+- if the app does not open within ~2.2 s, a toast suggests continuing on the site;
+- desktop and iOS browsers never see the dialog (there is no desktop/iOS app);
+- Arabic and English strings both covered; RTL/LTR follow the saved language.
+
+Because `autoVerify` is off, Android 12+ resolves the link to the default browser instead of the app, so this page is what the recipient sees.
 
 ---
 
@@ -164,8 +186,15 @@ The live file's SHA-256 is `54e8a84317ab7fc989fb99a5d7b0dedf6cb5e2b51d4102299c6b
 | Live JSON serving | Public host | `200`, `application/json`, 0 redirects for Googlebot and App Links verifier UAs | Tested successfully |
 | Live JSON integrity | Public host | SHA-256 `54e8a843…68cc` matches local file | Tested successfully |
 | Browser-like / plain client | Public host | JS challenge page / connection reset | Blocked by hosting |
-| Play Console deep-link re-verification | Play Console | Not run yet | Pending |
-| Verified App Links on a device | Android verifier | No physical device connected | **Not verified — must not be claimed** |
+| Invite chooser shown on Android | Headless Chrome, Android UA, local + live | Overlay opens, code shown, `intent://` href correct | Tested successfully |
+| Invite chooser hidden on desktop | Headless Chrome, desktop UA | No overlay | Tested successfully |
+| Invite chooser hidden inside the app (`auto=1`) | Headless Chrome, Android UA | No overlay | Tested successfully |
+| «كمّل في الموقع» | Headless Chrome via CDP | Overlay closes, name focused, choice stored, reload does not re-prompt | Tested successfully |
+| App-not-installed fallback (`appmissing=1`) | Headless Chrome via CDP | Toast shown, chooser suppressed, code pre-filled | Tested successfully |
+| English chooser text / LTR | Headless Chrome via CDP | “Open the app” / “Stay on the site”, `dir=ltr` | Tested successfully |
+| `1.0.6` AAB | Local build | `1.0.6`/6, minSdk 24, targetSdk 36, no `autoVerify`, `jar verified` | Tested successfully |
+| Play Console deep-link re-verification | Play Console | Not required for the browser-first flow; file still valid | Optional |
+| Verified App Links on a device | Android verifier | Not used by design since `1.0.6` | **Not claimed** |
 
 See `PHASE5_FEATURE_REPORT.md` for the consolidated evidence and emulator-vs-physical-device split.
 
@@ -176,20 +205,20 @@ See `PHASE5_FEATURE_REPORT.md` for the consolidated evidence and emulator-vs-phy
 1. ~~Obtain the production Play App Signing SHA-256 fingerprint.~~ **Done 2026-11-25.**
 2. ~~Regenerate with `PLAY_APP_SIGNING_SHA256` set so a real `assetlinks.json` exists.~~ **Done 2026-11-25.**
 3. ~~Publish the real asset file at the exact path.~~ **Done 2026-11-25** (see §3–§4).
-4. Re-run the deep-link verification in Play Console. **Pending — do this now.**
-5. Verify on a physical device: install the Play build, open `https://liardominoes.gt.tc/?room=CODE` from another app, and confirm the app opens the table. **Not tested — no device connected.**
-6. Re-test cold start, warm start, background/resume, invalid code, unknown host, and web fallback with a verifiable link. **Partially tested on emulator only.**
-7. If Play Console still fails because of the host's challenge, move the site to a challenge-free host and rebuild with the new host. **Fallback, not started.**
-8. Only after all checks pass may App Links be described as verified.
+4. ~~Add the browser-first chooser and remove `autoVerify`.~~ **Done in `1.0.6` (2026-11-25).**
+5. Upload `1.0.6` (code 6) to internal testing. **Pending — owner action.**
+6. Verify on a physical device: open `https://liardominoes.gt.tc/?room=CODE` from WhatsApp, tap «افتح التطبيق», confirm the app opens the table; repeat with «كمّل في الموقع». **Not tested — no device connected.**
+7. Re-test cold start, warm start, background/resume, invalid code, unknown host, and web fallback. **Partially tested on emulator only.**
+8. If Play Console deep links still matter for store presentation, re-run verification; the file is already valid.
 
 ---
 
 ## 7. Limitations and blockers
 
-- Deep-link URL handling is implemented and emulator-tested; **on-device App Links verification is not confirmed**.
-- The real association file is live and served correctly to Google's agents; **browser-like and plain HTTP clients still receive the InfinityFree JavaScript challenge**, which is the main remaining risk for on-device verification.
+- Deep-link URL handling is implemented and emulator-tested; **on-device behaviour of the new chooser is not confirmed** (no physical device connected).
+- The real association file is live and served correctly to Google's agents, but **browser-like and plain HTTP clients still receive the InfinityFree JavaScript challenge**. The chooser page itself is reached normally by real browsers (they solve the challenge automatically).
+- `intent://` launching is Chrome-family behaviour; Firefox on Android may ignore it, in which case the ~2.2 s toast tells the user to continue on the site.
 - The static web build is deployed by the maintainer via the hidden-prompt FTPS tool; publishing `assetlinks.json` required a small fix to `tools/ftps_deploy.py`, which previously skipped `/.well-known/` entirely.
-- No physical Android device is connected, so end-to-end link behaviour is unverified.
 - App Links are Android-only in this project; iOS is out of scope.
 
 ---

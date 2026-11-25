@@ -335,6 +335,12 @@ body.calm *,body.calm *::before,body.calm *::after{animation:none!important;tran
 #overlay{display:none}
 #overlay.on{display:block}
 .ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(12,8,4,.8)}
+/* app-or-site chooser shown for invitation links on Android browsers */
+.chooser-code{font:800 32px 'Reem Kufi',sans-serif;letter-spacing:.14em;color:var(--brass);direction:ltr;unicode-bidi:isolate}
+.chooser-note{font-size:14px;line-height:1.75;opacity:.9}
+.chooser-actions{display:flex;flex-direction:column;gap:10px}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+@media (min-width:460px){.chooser-actions{flex-direction:row}.chooser-actions .btn{flex:1}}
 .card{width:min(460px,100%);max-height:92dvh;overflow:auto;background:linear-gradient(#3f2a17,#2d1c0e);border:3px solid var(--brass);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px;text-align:center}
 .card h2{font-size:26px;line-height:1.3}
 .card ol,.card ul.rules{text-align:start;padding-inline-start:22px;display:flex;flex-direction:column;gap:8px;line-height:1.6}
@@ -1171,6 +1177,39 @@ let toastT;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
 function openOv(html,dismiss){$('#overlay').innerHTML=`<div class="ov"${dismiss?' data-dismiss="1"':''}><div class="card">${html}</div></div>`;$('#overlay').classList.add('on');applyI18n($('#overlay'))}
 function closeOv(){$('#overlay').classList.remove('on');$('#overlay').innerHTML='';revealOpen=false;overOpen=false;clearTimeout(revealTimer);rvTimers.forEach(clearTimeout);rvTimers=[];clearSweep()}
+
+/* =====================================================
+   رابط دعوة: اختيار التطبيق أم الموقع
+   ===================================================== */
+const APP_PACKAGE='com.dominoshak.domino_shak';
+const APP_CHOICE_KEY='dmnshk-app-choice';
+function isAndroidBrowser(){return /Android/i.test(navigator.userAgent)}
+function appChoiceRemembered(){try{return sessionStorage.getItem(APP_CHOICE_KEY)==='1'}catch(e){return false}}
+function rememberAppChoice(){try{sessionStorage.setItem(APP_CHOICE_KEY,'1')}catch(e){}}
+function appIntentUrl(room){
+  const base=location.href.split('#')[0];
+  const sep=base.indexOf('?')>=0?'&':'?';
+  const fallback=base+sep+'appmissing=1';
+  return 'intent://liardominoes.gt.tc/?room='+encodeURIComponent(room)+
+    '#Intent;scheme=https;package='+APP_PACKAGE+
+    ';S.browser_fallback_url='+encodeURIComponent(fallback)+';end';
+}
+function maybeOfferApp(room){
+  if(!room||!isAndroidBrowser()||appChoiceRemembered())return false;
+  openOv(`<h2>${t('افتح الطاولة','Open the table')}</h2>
+    <div class="chooser-code">${esc(room)}</div>
+    <p class="chooser-note">${t('عندك تطبيق دومينو شك؟ تقدر تفتح الطاولة جوه التطبيق، أو تكمّل هنا في المتصفح من غير ما تنزّل حاجة.','Have the Domino Shak app? Open the table in the app, or keep playing here in the browser — no install needed.')}</p>
+    <div class="chooser-actions">
+      <button class="btn ghost" id="stayWeb" type="button">${t('كمّل في الموقع','Stay on the site')}</button>
+      <a class="btn primary" id="openApp" href="${esc(appIntentUrl(room))}" rel="noopener">${t('افتح التطبيق','Open the app')}</a>
+    </div>`,false);
+  $('#stayWeb').onclick=()=>{rememberAppChoice();closeOv();const n=$('#nameIn');if(n)n.focus()};
+  $('#openApp').addEventListener('click',()=>{
+    rememberAppChoice();
+    setTimeout(()=>{if(document.visibilityState==='visible')toast(t('لو التطبيق مش مثبت، كمّل من هنا في الموقع.','If the app is not installed, continue here on the site.'))},2200);
+  });
+  return true;
+}
 const goHome=()=>{location.href=location.href.split(/[?#]/)[0]};
 
 const RULES=()=>LANG==='en'?`<h2>How to play</h2>
@@ -1236,6 +1275,13 @@ const RULES=()=>LANG==='en'?`<h2>How to play</h2>
       },300);
     }
   }
+  if(inviteParams.get('appmissing')==='1'){
+    setTimeout(()=>toast(t('التطبيق مش مثبت على الجهاز — تقدر تكمّل في الموقع.','The app is not installed on this device — you can keep playing on the site.')),500);
+  }
+  // Public invite links open in the browser first and let the player choose
+  // between the Android app and the site. Inside the app's WebView the native
+  // shell adds auto=1, so this never appears there.
+  if(urlRoom&&inviteParams.get('auto')!=='1'&&inviteParams.get('appmissing')!=='1')maybeOfferApp(urlRoom);
   $('#sizeSeg').addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
     document.querySelectorAll('#sizeSeg button').forEach(x=>x.classList.toggle('on',x===b));

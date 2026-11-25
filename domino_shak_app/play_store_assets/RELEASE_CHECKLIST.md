@@ -48,7 +48,7 @@ performed. This checklist tracks what is ready and what still blocks release.
 | `icon.png` | 512x512 Play icon (owner-updated appearance) | `8beec35d2d78564cfaff65c497bfbd981f58236c796fd0600eeecfc8df625abd` |
 | `feature_graphic.png` | 1024x500 feature graphic (owner-updated appearance) | `039b7eb0f9b09538a57de452ceee94a9efbfe97f95865af657b647ca5c78f3e8` |
 | `screenshots/*.png` | 7 real phone screenshots, 1080x1920 | See `SHA256SUMS.txt` |
-| `app-release.aab` | Final upload-key-signed AAB (42.7 MB, rebuilt with the live policy) | `16d75cd96675b9a6844063b565a109bdd52178c5bd06a103d6eb3f463fc1dbaf` |
+| `app-release.aab` | Final upload-key-signed AAB, version `1.0.6` (`versionCode 6`) | `a12411f4cee54f4b59f869b8060828d749a9c3ea2e09ea58719ea19fa66ce1c1` |
 | `listings/` | Arabic and English listing drafts | — |
 | `PRIVACY_POLICY.html` | Privacy policy copy (confirmed contact + target URL) | `8a652aab2dc9edc398b5aaaa103f79a41ce6022438ba6ef508411773f2d755fd` |
 
@@ -79,14 +79,16 @@ performed. This checklist tracks what is ready and what still blocks release.
 Building a signed AAB locally is allowed by the recorded decision; **uploading
 it to Google Play is not**. Publishing requires a new explicit approval.
 
-## Final Play build (2026-11-21)
+## Final Play build (2026-11-25)
 
-- Version: `1.0.5` (`versionCode 5`, from `pubspec.yaml` `version: 1.0.5+5`).
+- Version: `1.0.6` (`versionCode 6`, from `pubspec.yaml` `version: 1.0.6+6`).
 - Built with `flutter build appbundle --release` and `DOMINO_UPLOAD_KEY_PROPERTIES` outside the project.
-- `app-release.aab` SHA-256: `8ad5effa4b9e07a89487ed19531e14887cf99ca3a4709d28b91efc6235233df6`; `jarsigner -verify` = `jar verified`.
-- Package `com.dominoshak.domino_shak`; minSdk 24; targetSdk 36.
-- Bundled web build includes the v1.0.5 voice fix and the zoom-safe background.
+- `app-release.aab` SHA-256: `a12411f4cee54f4b59f869b8060828d749a9c3ea2e09ea58719ea19fa66ce1c1`; `jarsigner -verify` = `jar verified`.
+- Package `com.dominoshak.domino_shak`; minSdk 24; targetSdk 36; signer SHA-256 `83:6A:88:…:4A:7C`.
 - `flutter analyze`: no issues. `flutter test`: 11/11 passed.
-- This supersedes the 2026-11-18 AAB. First upload target: **Internal testing**.
+- Bundled `assets/web/index.html` matches the canonical source byte for byte (`8004bc8f…71e0`).
+- **Change:** invitation links now open in the browser first and show an in-page chooser — «افتح التطبيق» (`intent://…;package=com.dominoshak.domino_shak;end`) or «كمّل في الموقع». `android:autoVerify` was removed from the HTTPS intent filter so Android no longer bypasses the page; the filter stays so the explicit intent can launch the app.
+- `assetlinks.json` remains published for a possible future return to verified auto-open.
+- This supersedes the 2026-11-21 AAB. First upload target: **Internal testing**.
 - Still open before production: real UGC moderation/report intake, content-rating questionnaire, Data Safety verification.
 

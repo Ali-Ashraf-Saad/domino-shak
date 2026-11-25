@@ -42,9 +42,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- Verified HTTPS App Links for room invitations. assetlinks.json
-                 must be published before Android will verify this host. -->
-            <intent-filter android:autoVerify="true">
+            <!-- HTTPS link filter for room invitations. Verification is
+                 intentionally NOT automatic: the public invite link opens in
+                 the browser first, and the page offers "Open the app" or
+                 "Stay on the site". The app is launched by an explicit
+                 intent:// URL (package-targeted), which does not need App
+                 Links verification. assetlinks.json stays published so
+                 auto-open can be re-enabled later by restoring autoVerify. -->
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
