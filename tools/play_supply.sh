@@ -5,7 +5,9 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 IMAGE="${PLAY_SUPPLY_IMAGE:-domino-supply:latest}"
-LANE="${1:-validate_auth}"
+if [[ $# -eq 0 ]]; then
+  set -- android validate_auth
+fi
 KEY="${GOOGLE_JSON_KEY:-/home/ali/.config/domino_shak/play-service-account.json}"
 
 if [[ ! -f "$KEY" ]]; then
@@ -32,4 +34,4 @@ exec docker run --rm -i \
   -e FASTLANE_DISABLE_ANONYMOUS_REPORTING=1 \
   -w /workspace \
   "$IMAGE" \
-  fastlane "$LANE"
+  fastlane "$@"

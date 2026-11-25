@@ -6,8 +6,9 @@ installed on the host. No Google credential is stored in the repository.
 
 Current state (2026-11-25): `1.0.10` is published on internal testing and
 promoted to Closed testing - Alpha (under Play review). Those two steps were
-done in the Console; the CLI below is ready for subsequent uploads once the
-service-account JSON key exists.
+done in the Console. The service-account key is now in place outside the repo:
+`validate_auth` succeeded and `track_info` reports version code `10` on both
+`internal` and `alpha`, so subsequent uploads can run entirely from the CLI.
 
 ## One-time setup (owner action)
 
@@ -34,15 +35,19 @@ docker build -t domino-supply:latest tools/fastlane
 
 # Check the key / API access
 GOOGLE_JSON_KEY=/home/ali/.config/domino_shak/play-service-account.json \
-  ./tools/play_supply.sh validate_auth
+  ./tools/play_supply.sh android validate_auth
+
+# Read the version codes currently on internal and alpha
+GOOGLE_JSON_KEY=/home/ali/.config/domino_shak/play-service-account.json \
+  ./tools/play_supply.sh android track_info
 
 # Upload the current signed AAB to a track (internal | alpha | production)
 GOOGLE_JSON_KEY=/home/ali/.config/domino_shak/play-service-account.json \
-  ./tools/play_supply.sh upload_alpha
+  ./tools/play_supply.sh android upload_alpha
 
 # Promote the active internal-testing release to closed testing (alpha)
 GOOGLE_JSON_KEY=/home/ali/.config/domino_shak/play-service-account.json \
-  ./tools/play_supply.sh promote_alpha
+  ./tools/play_supply.sh android promote_alpha
 ```
 
 The wrapper mounts the key read-only at `/keys/play.json` and passes only that
