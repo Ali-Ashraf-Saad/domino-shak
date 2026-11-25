@@ -1,7 +1,7 @@
 # App Links / deep link setup — Domino Shak
 
-**Date:** 2026-11-19  
-**Status:** **Deep-link handling implemented and tested with limitations (emulator cold/warm, local browser). Verified Android App Links are NOT available** — the production Asset Links file cannot be generated without the Play App Signing fingerprint and direct `/.well-known/` JSON serving is blocked by the host's JavaScript challenge. The static web build was deployed to the public host on 2026-11-19 (see `WEB_DEPLOYMENT_GUIDE.md`), but **no `assetlinks.json` was uploaded**, no hosting setting was changed, and no Play Console action was performed.
+**Date:** 2026-11-19 (updated 2026-11-25)  
+**Status:** **Deep-link handling implemented and tested with limitations (emulator cold/warm, local browser).** The real `assetlinks.json` is now generated from the Play App Signing fingerprint and **published live** on 2026-11-25. The host's JavaScript challenge still answers browser-like and plain clients, but Google's verifier and Googlebot user agents receive the JSON directly (`200`, `application/json`, no redirect). Re-verification in Play Console is pending.
 
 ---
 
@@ -24,13 +24,13 @@
 | Invitation / universal link | `https://liardominoes.gt.tc/?room=CODE` |
 | Timing | Build deep-link handling now; verify App Links later |
 | Signing | Play App Signing selected |
-| Production fingerprint | **Not available yet** — must not be invented |
-| Hosting challenge | Direct JSON serving for `/.well-known/assetlinks.json` is **Blocked by hosting** |
+| Production fingerprint | **Available** — Play App Signing SHA-256 recorded in §3 |
+| Hosting challenge | Googlebot / App Links verifier agents are served the file directly; browser-like agents still get the JS challenge |
 | Static web build | Deployed to public host 2026-11-19 (`?room=CODE` verified live) |
-| `assetlinks.json` | Intentionally **not** uploaded — no real fingerprint and `/.well-known/` serves a JS challenge |
-| Play upload / publish | Not performed / not authorized |
+| `assetlinks.json` | **Generated and published 2026-11-25** — `200`, `application/json`, no redirect |
+| Play upload / publish | AAB `1.0.5` (code 5) uploaded to internal testing; production not yet released |
 
-Consequence: deep links were built and tested locally, but **verified Android App Links must not be claimed as working**.
+Consequence: the association file exists and is served correctly to Google. Final confirmation depends on Play Console re-verification and, for on-device behaviour, a physical-device check.
 
 ---
 
@@ -71,7 +71,7 @@ Otherwise it returns `null` — an invalid invite never creates a room.
 
 ### 2.4 Manifest — `AndroidManifest.xml` — Implemented
 
-A `VIEW` / `BROWSABLE` / `DEFAULT` intent filter with `android:autoVerify="true"` for `https://liardominoes.gt.tc/` is present alongside the `MAIN`/`LAUNCHER` filter. `MODIFY_AUDIO_SETTINGS` (voice fix) is also declared. **The filter is present; App Links verification still depends on Asset Links (§3).**
+A `VIEW` / `BROWSABLE` / `DEFAULT` intent filter with `android:autoVerify="true"` for `https://liardominoes.gt.tc/` is present alongside the `MAIN`/`LAUNCHER` filter. `MODIFY_AUDIO_SETTINGS` (voice fix) is also declared. The matching Asset Links file is now published (§3), so Android can verify the association at install time.
 
 ### 2.5 WebView join behaviour — `lib/web_shell.dart` + `assets/web/index.html` — Implemented
 
@@ -83,15 +83,13 @@ A `VIEW` / `BROWSABLE` / `DEFAULT` intent filter with `android:autoVerify="true"
 
 ---
 
-## 3. Asset Links template — NOT GENERATED as a real file
+## 3. Asset Links file — generated and published
 
-Publish path (only when a real file exists):
+Publish path:
 
 `https://liardominoes.gt.tc/.well-known/assetlinks.json`
 
-Template present in the generated web project:
-
-`domino_shak_web/.well-known/assetlinks.json.template`
+Generated file (also committed at `domino_shak_web/.well-known/assetlinks.json`):
 
 ```json
 [
@@ -101,44 +99,52 @@ Template present in the generated web project:
       "namespace": "android_app",
       "package_name": "com.dominoshak.domino_shak",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_PLAY_APP_SIGNING_SHA256_CERTIFICATE_FINGERPRINT"
+        "47:23:91:28:46:C2:5D:AB:A6:6E:C8:42:13:86:D1:E8:33:20:28:18:B5:F6:89:63:10:40:F8:59:A3:38:4B:EF",
+        "83:6A:88:B3:88:B3:13:DD:13:CC:2C:33:3C:52:CA:71:AB:A9:25:C6:73:45:4B:8E:E1:1C:D8:44:A8:93:4A:7C"
       ]
     }
   }
 ]
 ```
 
-### Important — no placeholder file is present
+- First fingerprint — **Play App Signing** certificate (from Play Console → App integrity → App signing). This is the one Google verifies for Play-installed builds.
+- Second fingerprint — **upload key** certificate, so local/sideloaded release builds also verify.
 
-**Status: Requires approval or external config.**
+### How it is regenerated
 
-`tools/sync_web_assets.sh` writes a real `assetlinks.json` **only** when `PLAY_APP_SIGNING_SHA256` is supplied and validates as a 32-byte hex fingerprint. When the variable is absent, the script **removes any existing `assetlinks.json`** and warns that only `assetlinks.json.template` is present. There is deliberately **no placeholder `assetlinks.json`** in `domino_shak_web/.well-known/`. Do not create one by hand, do not upload the template as `assetlinks.json`, and do not upload a placeholder — Android would reject it and it could be mistaken for a configured file.
+```bash
+PLAY_APP_SIGNING_SHA256="47:23:91:28:46:C2:5D:AB:A6:6E:C8:42:13:86:D1:E8:33:20:28:18:B5:F6:89:63:10:40:F8:59:A3:38:4B:EF" \
+UPLOAD_KEY_SHA256="83:6A:88:B3:88:B3:13:DD:13:CC:2C:33:3C:52:CA:71:AB:A9:25:C6:73:45:4B:8E:E1:1C:D8:44:A8:93:4A:7C" \
+bash tools/sync_web_assets.sh
+python3 tools/ftps_deploy.py --deploy --credentials-file /home/ali/.config/domino_shak/ftps-credentials
+```
+
+`tools/sync_web_assets.sh` validates that each value is a 32-byte hex fingerprint, accepts input with or without colons, and always emits colon-separated uppercase hex (the format Android expects). `UPLOAD_KEY_SHA256` is optional. With neither variable set the script removes any existing `assetlinks.json` and warns — it never writes a placeholder. `tools/ftps_deploy.py` publishes only a real `.well-known/assetlinks.json`; the `.template` file never reaches the live host.
+
+These fingerprints are public data (they appear in the live file) and are safe to keep in the repository. Private keys and keystore passwords are never stored here.
 
 Do not:
 
 - invent a Play App Signing fingerprint;
 - copy a fingerprint from another app or tutorial;
-- use the debug or upload-key fingerprint as the production fingerprint;
-- publish the template as a real association file.
+- publish `assetlinks.json.template` as the real association file.
 
 ---
 
-## 4. Hosting requirement — Blocked by hosting
+## 4. Hosting behaviour — verified 2026-11-25
 
-The Phase 0 audit found:
+Live checks against `https://liardominoes.gt.tc/.well-known/assetlinks.json`:
 
-- a request to `/.well-known/assetlinks.json` first hits the JavaScript cookie challenge;
-- after the challenge cookie is set, the path resolves to an InfinityFree 404 page;
-- no asset file is deployed.
+| Client | Result |
+|---|---|
+| `Google-Android-App-Links-Verifier/1.0` | `200`, `Content-Type: application/json`, 0 redirects, exact JSON body |
+| `Googlebot/2.1` | `200`, `Content-Type: application/json`, 0 redirects, exact JSON body |
+| Browser-like User-Agent | `200`, `text/html` — InfinityFree `aes.js` cookie challenge page |
+| Plain `curl` / `python-requests` (no or generic UA) | Connection reset by the host's bot protection |
 
-Google's verifier does not solve a JavaScript challenge. Required before verification is possible:
+So Google's verifier is served the file correctly. The remaining risk is on-device verification by Google Play services if it presents a non-whitelisted agent and receives the challenge page. If Play Console re-verification passes but links still open in the browser on a device, the durable fix is to move the site to a host without a JavaScript challenge (e.g. GitHub Pages or Cloudflare Pages) and rebuild with the new host in the manifest and `kPublicGameOrigin`.
 
-1. Host confirms `/.well-known/` can bypass the challenge.
-2. The file is served with `application/json` content type.
-3. A browser and a plain HTTP client both receive the exact JSON body without a challenge page.
-4. The URL is reachable over HTTPS with the valid certificate.
-
-**Status: Blocked by hosting until all four checks pass.** No hosting change has been made and no verification is claimed.
+The live file's SHA-256 is `54e8a84317ab7fc989fb99a5d7b0dedf6cb5e2b51d4102299c6b2711554168cc` and matches the local generated file byte for byte.
 
 ---
 
@@ -153,37 +159,37 @@ Google's verifier does not solve a JavaScript challenge. Required before verific
 | Warm start with `WARM88` | Emulator `emulator-5554` | `WARM88` pre-filled | **Tested with limitations** |
 | `?room=TEST12` prefill in browser | Local `python3 -m http.server 8765` | `TEST12` pre-filled | **Tested with limitations** (local server, not public host) |
 | Auto-join only when a saved name exists | Code path / local checks | Invite never creates a room; manual join otherwise | Implemented (no dedicated gameplay test recorded) |
-| Production Play App Signing fingerprint | Play Console | Not available | Requires approval or external config |
-| Real `assetlinks.json` generated | `domino_shak_web/` | Not generated; only `.template` present | Requires approval or external config |
-| Direct JSON serving without challenge | Public host | Unconfirmed / absent | Blocked by hosting |
-| Verified App Links | Android verifier | Not verified | **Not verified — must not be claimed** |
+| Production Play App Signing fingerprint | Play Console → App integrity | `47:23:91:…:4B:EF` recorded | Tested successfully |
+| Real `assetlinks.json` generated | `domino_shak_web/` | Generated with app-signing + upload-key fingerprints, JSON validated | Tested successfully |
+| Live JSON serving | Public host | `200`, `application/json`, 0 redirects for Googlebot and App Links verifier UAs | Tested successfully |
+| Live JSON integrity | Public host | SHA-256 `54e8a843…68cc` matches local file | Tested successfully |
+| Browser-like / plain client | Public host | JS challenge page / connection reset | Blocked by hosting |
+| Play Console deep-link re-verification | Play Console | Not run yet | Pending |
+| Verified App Links on a device | Android verifier | No physical device connected | **Not verified — must not be claimed** |
 
 See `PHASE5_FEATURE_REPORT.md` for the consolidated evidence and emulator-vs-physical-device split.
 
 ---
 
-## 6. Remaining steps (all blocked or pending)
+## 6. Remaining steps
 
-1. Obtain the production Play App Signing SHA-256 fingerprint. **Blocked — not available.**
-2. Regenerate with `PLAY_APP_SIGNING_SHA256` set so a real `assetlinks.json` exists. **Pending.**
-3. Get hosting to exempt `/.well-known/` from the cookie challenge and serve JSON directly. **Blocked by hosting.**
-4. Publish the real asset file at the exact path. **Pending — asset file intentionally not uploaded** (the static web build was deployed via the hidden-prompt FTPS tool, but no `assetlinks.json` exists to publish).
-5. Verify with Google's App Links assistant / `adb` and by opening a link from an external app (chat, browser, notes). **Not tested.**
+1. ~~Obtain the production Play App Signing SHA-256 fingerprint.~~ **Done 2026-11-25.**
+2. ~~Regenerate with `PLAY_APP_SIGNING_SHA256` set so a real `assetlinks.json` exists.~~ **Done 2026-11-25.**
+3. ~~Publish the real asset file at the exact path.~~ **Done 2026-11-25** (see §3–§4).
+4. Re-run the deep-link verification in Play Console. **Pending — do this now.**
+5. Verify on a physical device: install the Play build, open `https://liardominoes.gt.tc/?room=CODE` from another app, and confirm the app opens the table. **Not tested — no device connected.**
 6. Re-test cold start, warm start, background/resume, invalid code, unknown host, and web fallback with a verifiable link. **Partially tested on emulator only.**
-7. Only after all checks pass may App Links be described as verified.
-
-No step above has been completed for verified App Links.
+7. If Play Console still fails because of the host's challenge, move the site to a challenge-free host and rebuild with the new host. **Fallback, not started.**
+8. Only after all checks pass may App Links be described as verified.
 
 ---
 
 ## 7. Limitations and blockers
 
-- Deep-link URL handling is implemented and emulator-tested; **verified App Links are not available**.
-- The production `assetlinks.json` cannot be finalized without the Play app-signing fingerprint; **no placeholder file is present** and none should be uploaded.
-- The host's JavaScript challenge likely blocks Google's verifier; treated as blocked, not as a small fix.
-- The static web build was deployed by the maintainer via the hidden-prompt FTPS tool; no `assetlinks.json` was uploaded and no hosting setting was changed.
-- No Play upload or AAB publish was performed.
-- Until verification succeeds, treat links as ordinary deep links for local testing only.
+- Deep-link URL handling is implemented and emulator-tested; **on-device App Links verification is not confirmed**.
+- The real association file is live and served correctly to Google's agents; **browser-like and plain HTTP clients still receive the InfinityFree JavaScript challenge**, which is the main remaining risk for on-device verification.
+- The static web build is deployed by the maintainer via the hidden-prompt FTPS tool; publishing `assetlinks.json` required a small fix to `tools/ftps_deploy.py`, which previously skipped `/.well-known/` entirely.
+- No physical Android device is connected, so end-to-end link behaviour is unverified.
 - App Links are Android-only in this project; iOS is out of scope.
 
 ---

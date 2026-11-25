@@ -21,10 +21,14 @@ stored in this repository.
 8. Confirm `https://liardominoes.gt.tc/` and
    `https://liardominoes.gt.tc/.well-known/assetlinks.json` behaviour.
 
-Current blockers:
+Current notes:
 
-- FTP credentials were not available at audit time.
-- Direct JSON serving for `.well-known/` is blocked by the current JavaScript
-  cookie challenge until the host is configured or verified otherwise.
-- The production `assetlinks.json` needs the real Play App Signing fingerprint,
-  which is not available until Play enrollment.
+- FTP credentials are supplied through the owner-only credentials file, never
+  through chat or arguments.
+- `tools/ftps_deploy.py` now publishes `.well-known/assetlinks.json`; the
+  `.template` file is never uploaded.
+- The live association file returns `200`, `application/json`, and no redirect
+  for Googlebot and the Android App Links verifier user agents. Browser-like
+  and plain clients still receive the InfinityFree JavaScript challenge.
+- The Play App Signing fingerprint is recorded in `APP_LINKS_SETUP.md`; the
+  upload-key fingerprint is included so sideloaded builds verify too.

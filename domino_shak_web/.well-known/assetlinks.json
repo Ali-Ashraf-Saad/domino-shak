@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.dominoshak.domino_shak",
+      "sha256_cert_fingerprints": ["47:23:91:28:46:C2:5D:AB:A6:6E:C8:42:13:86:D1:E8:33:20:28:18:B5:F6:89:63:10:40:F8:59:A3:38:4B:EF", "83:6A:88:B3:88:B3:13:DD:13:CC:2C:33:3C:52:CA:71:AB:A9:25:C6:73:45:4B:8E:E1:1C:D8:44:A8:93:4A:7C"]
+    }
+  }
+]

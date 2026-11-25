@@ -14,9 +14,10 @@ The historical original `../index.html` is never read or modified by the sync.
 - `vendor/peerjs/peerjs.min.js` — PeerJS 1.5.4, same version as the Android app.
 - `PRIVACY_POLICY.html` — policy page used by in-app links.
 - `config.js` — informational constants only; the game does not depend on it.
-- `.well-known/assetlinks.json` — generated from the template until the real
-  Play App Signing fingerprint is supplied. It must not be treated as valid
-  while it contains `REPLACE_WITH_PLAY_APP_SIGNING_SHA256`.
+- `.well-known/assetlinks.json` — real Android App Links association file with
+  the Play App Signing fingerprint and the upload-key fingerprint. It is served
+  with `application/json` at
+  `https://liardominoes.gt.tc/.well-known/assetlinks.json`.
 - `SHA256SUMS.txt` — generated checksum manifest.
 
 ## Regenerate after source changes
@@ -26,13 +27,18 @@ cd /home/ali/Documents/DominoGame
 bash tools/sync_web_assets.sh
 ```
 
-To generate a real App Links file:
+To regenerate the App Links file:
 
 ```bash
-PLAY_APP_SIGNING_SHA256="AA:BB:..." bash tools/sync_web_assets.sh
+PLAY_APP_SIGNING_SHA256="47:23:91:..." \
+UPLOAD_KEY_SHA256="83:6A:88:..." \
+bash tools/sync_web_assets.sh
 ```
 
-Do not upload the placeholder as a production association file.
+Fingerprints must be 32-byte hex; colons are optional on input and always
+emitted colon-separated. Without `PLAY_APP_SIGNING_SHA256` the script removes
+`assetlinks.json` rather than writing a placeholder, so never deploy in that
+state.
 
 ## Hosting restrictions
 

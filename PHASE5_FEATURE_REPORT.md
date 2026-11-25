@@ -3,6 +3,8 @@
 **Date:** 2026-11-19  
 **Scope:** documentation report only. No source, HTML, Dart, Kotlin, config, or deployment file was changed while writing this report. It consolidates the implementation and test evidence completed in this phase and separates **emulator**, **local/browser**, and **physical-device** results honestly.
 
+> **Update 2026-11-25:** the App Links blocker described below was resolved. The Play App Signing fingerprint was obtained, a real `assetlinks.json` was generated and deployed, and it is served with `200`, `application/json`, no redirect to Googlebot and the App Links verifier. See `APP_LINKS_SETUP.md` §3–§4 for current state. Play Console re-verification and on-device testing are still pending.
+
 ---
 
 ## 1. Status categories
