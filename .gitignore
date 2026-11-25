@@ -23,6 +23,7 @@ upload-keystore.jks
 .netrc
 .npmrc
 service-account*.json
+play-service-account.json
 google-services.json
 GoogleService-Info.plist
 
@@ -67,6 +68,9 @@ node_modules/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Fastlane generated reports (lanes live in fastlane/Fastfile)
+fastlane/report.xml
 
 # Logs, backups, and temporary files
 *.log
