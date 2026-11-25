@@ -4,6 +4,11 @@ Fastlane Supply uploads AAB/APK files and selects a Play track without opening
 the Play Console. This project runs Supply inside Docker because Ruby is not
 installed on the host. No Google credential is stored in the repository.
 
+Current state (2026-11-25): `1.0.10` is published on internal testing and
+promoted to Closed testing - Alpha (under Play review). Those two steps were
+done in the Console; the CLI below is ready for subsequent uploads once the
+service-account JSON key exists.
+
 ## One-time setup (owner action)
 
 1. In [Play Console → Account details](https://play.google.com/console/u/0/developers/6581168313428577008/account-details?hl=en),

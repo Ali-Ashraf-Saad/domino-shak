@@ -1,8 +1,9 @@
 # Play release checklist (draft — do not submit)
 
-Status: **web 1.0.10 deployed; AAB 1.0.10 published to Play Internal testing on
-2026-11-25**. Nothing has been rolled out to closed testing or production. This
-checklist tracks what is ready and what still blocks production release.
+Status: **web 1.0.10 deployed; AAB 1.0.10 published to Play Internal testing and
+promoted to Closed testing - Alpha on 2026-11-25**. The Alpha release is under
+Play review. Nothing has been rolled out to production. This checklist tracks
+what is ready and what still blocks production release.
 
 ## Ready
 
@@ -116,9 +117,16 @@ remaining policy/testing items above.
 - **Published to Play Internal testing on 2026-11-25** as release
   «1.0.10 - تحسينات الواجهة والتحكمات» (version code 10). Play Console shows it
   as the latest active release, available to internal testers, with no devices
-  lost from the previous compatibility set. No Play Console credentials are
-  stored in this repository.
+  lost from the previous compatibility set.
+- **Promoted to Closed testing - Alpha on 2026-11-25.** Play Console lists the
+  same release there with status «قيد المراجعة» (under review), version code 10,
+  178 countries/regions. The earlier `1.0.6` alpha release remains listed.
 - Release notes use Play's `<ar>…</ar>` language-tag format.
+- Future uploads are wired for Fastlane Supply via `./tools/play_supply.sh`
+  (`upload_internal`, `upload_alpha`, `promote_alpha`); the service-account JSON
+  key is held outside the repository and mounted read-only. See
+  `PLAY_CLI_RELEASE.md`. No Play Console credentials are stored in this repo.
 - Still open before production: real UGC moderation/report intake, content
-  rating, Data Safety verification, and the 12-tester/14-day closed test.
+  rating, Data Safety verification, and completion of the 12-tester/14-day
+  closed test.
 

@@ -206,7 +206,7 @@ See `PHASE5_FEATURE_REPORT.md` for the consolidated evidence and emulator-vs-phy
 2. ~~Regenerate with `PLAY_APP_SIGNING_SHA256` set so a real `assetlinks.json` exists.~~ **Done 2026-11-25.**
 3. ~~Publish the real asset file at the exact path.~~ **Done 2026-11-25** (see §3–§4).
 4. ~~Add the browser-first chooser and remove `autoVerify`.~~ **Done in `1.0.6` (2026-11-25).**
-5. ~~Upload `1.0.10` (code 10) to internal testing.~~ **Done 2026-11-25** — published as release «1.0.10 - تحسينات الواجهة والتحكمات», available to internal testers.
+5. ~~Upload `1.0.10` (code 10) to internal testing.~~ **Done 2026-11-25** — published as release «1.0.10 - تحسينات الواجهة والتحكمات», available to internal testers. Also promoted to **Closed testing - Alpha** the same day (under Play review).
 6. Verify on a physical device: open `https://liardominoes.gt.tc/?room=CODE` from WhatsApp, tap «افتح التطبيق», confirm the app opens the table; repeat with «كمّل في الموقع». **Not tested — no device connected.**
 7. Re-test cold start, warm start, background/resume, invalid code, unknown host, and web fallback. **Partially tested on emulator only.**
 8. If Play Console deep links still matter for store presentation, re-run verification; the file is already valid.
